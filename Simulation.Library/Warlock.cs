@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using HtmlAgilityPack;
 
 namespace Simulation.Library
 {
@@ -43,30 +44,6 @@ namespace Simulation.Library
         #endregion Stats
 
         #region Spells
-        private Spell[] LifeTaps = new Spell[]
-        {
-            new LifeTap1(),
-            new LifeTap2(),
-            new LifeTap3(),
-            new LifeTap4(),
-            new LifeTap5(),
-            new LifeTap6(),
-            new LifeTap7()
-        };
-        private Spell[] shadowBolts = new Spell[]
-        {
-            new ShadowBolt1(),
-            new ShadowBolt2(),
-            new ShadowBolt3(),
-            new ShadowBolt4(),
-            new ShadowBolt5(),
-            new ShadowBolt6(),
-            new ShadowBolt7(),
-            new ShadowBolt8(),
-            new ShadowBolt9(),
-            new ShadowBolt10(),
-            new ShadowBolt11(),
-        };
         public Spell lastSpelledCasted { get; private set; }
         #endregion Spells
 
@@ -166,41 +143,68 @@ namespace Simulation.Library
         #endregion AddStats
 
         #region CastSpells
-        public bool CanCastShadowBolt(int rank)
+        public bool CanCastShadowBolt(Spell shadowbolt)
         {
-            return shadowBolts.First(x => x.Rank == rank).Mana < Mana;
+            return shadowbolt.Cost < Mana;
         }
-        public void CastLifeTap(int rank = 0, Report report = null)
+        public void CastLifeTap(Spell lifetap, Report report = null)
         {
             if (report is null) report = new();
+            if (lifetap.Name != "Life Tap") return;
+            int manaFromLT = ManaGainedFromLifetap(lifetap);
             int ManaGained = 0;
-            lastSpelledCasted = rank == 0 ? LifeTaps.First(x => x.Rank == LifeTaps.Max(y => y.Rank)) : LifeTaps.First(x => x.Rank == rank);
-            if(mana - lastSpelledCasted.Mana > MaxMana)
+            lastSpelledCasted = lifetap;
+            if(mana + manaFromLT > MaxMana)
             {
                 ManaGained = MaxMana - mana;
             }
             else
             {
-                ManaGained = -lastSpelledCasted.Mana;
+                ManaGained = manaFromLT;
             }
             report.ReportManaGained(ManaGained, $"Life Tap{lastSpelledCasted.Rank}");
-            this.mana -= lastSpelledCasted.Mana;
+            this.mana += ManaGained;
             if (this.mana > MaxMana) this.mana = MaxMana;
         }
-        public double CastShadowBolt(int rank = 0, Report report = null)
+        private int ManaGainedFromLifetap(Spell lifetap)
+        {
+            return int.Parse(lifetap.ToolTipText.Split(' ')[1]);
+        }
+        public double CastShadowBolt(Spell shadowbolt, Report report = null)
         {
             if (report is null) report = new();
+            if (shadowbolt.Name != "Shadow Bolt") return 0;
             double dmg;
             Random rnd = new();
             bool isCrit = rnd.Next(100) <= Crit;
-            lastSpelledCasted = rank == 0 ? shadowBolts.First(x => x.Rank == shadowBolts.Max(y => y.Rank)) : shadowBolts.First(x => x.Rank == rank);
-            dmg = rnd.Next(lastSpelledCasted.MinDmg, lastSpelledCasted.MaxDmg);
-            dmg = dmg + ((SpellPower + ShadowPower) * lastSpelledCasted.SpellMultiplier);
-            mana -= lastSpelledCasted.Mana;
+            lastSpelledCasted = shadowbolt;
+            dmg = rnd.Next(GetShadowboltMinDmg(shadowbolt), GetShadowboltMaxDmg(shadowbolt));
+            dmg = dmg + ((SpellPower + ShadowPower) * GetShadowboltSPMod(shadowbolt));
+            mana -= shadowbolt.Cost;
             if (!DidHit(lastSpelledCasted)) dmg = 0;
             dmg = isCrit ? dmg * 1.5 : dmg;
             report.ReportDamage(dmg, lastSpelledCasted, dmg > 0, isCrit);
             return dmg;
+        }
+        private int GetShadowboltMinDmg(Spell shadowbolt)
+        {
+            return int.Parse(shadowbolt.ToolTipText.Split(' ')[8]);
+        }
+
+        private int GetShadowboltMaxDmg(Spell shadowbolt)
+        {
+            return int.Parse(shadowbolt.ToolTipText.Split(' ')[10]);
+        }
+
+        private double GetShadowboltSPMod(Spell shadowbolt)
+        {
+            int start = shadowbolt.Effects[0].IndexOf("SP mod");
+            int end = shadowbolt.Effects[0].IndexOf(")PVP");
+            int lenght = end - start;
+            string str = shadowbolt.Effects[0];
+            string sub = str.Substring(start, lenght);
+            sub = sub.Split(' ')[2];
+            return double.Parse(sub);
         }
         private bool DidHit(Spell spell)
         {
@@ -258,252 +262,4 @@ namespace Simulation.Library
         #endregion EquipGear
 
     }
-
-    public class Spell
-    {
-        public String Name { get; set; }
-        public int ID { get; set; }
-        public int Rank { get; set; }
-        public double CastTime { get; protected set; }
-        public int Range { get; protected set; }
-        public int Mana { get; protected set; }
-        public double SpellMultiplier { get; protected set; }
-        public double GCD { get; protected set; }
-        public int MaxDmg { get; protected set; }
-        public int MinDmg { get; protected set; }
-    }
-    #region ShadowBolts
-    public class ShadowBolt : Spell
-    {
-        public ShadowBolt()
-        {
-            Name = "Shadow Bolt";
-            Range = 30;
-            GCD = 1500;
-        }
-    }
-    public class ShadowBolt1 : ShadowBolt
-    {
-        public ShadowBolt1()
-        {
-            ID = 686;
-            Rank = 1;
-            Mana = 25;
-            CastTime = 1700;
-            SpellMultiplier = 0.14;
-            MinDmg = 13;
-            MaxDmg = 18;
-        }
-    }
-    public class ShadowBolt2 : ShadowBolt
-    {
-        public ShadowBolt2()
-        {
-            ID = 695;
-            Rank = 2;
-            Mana = 40;
-            CastTime = 2200;
-            SpellMultiplier = 0.299;
-            MinDmg = 26;
-            MaxDmg = 32;
-        }
-    }
-    public class ShadowBolt3 : ShadowBolt
-    {
-        public ShadowBolt3()
-        {
-            ID = 705;
-            Rank = 3;
-            Mana = 70;
-            CastTime = 2800;
-            SpellMultiplier = 0.56;
-            MinDmg = 52;
-            MaxDmg = 61;
-        }
-    }
-    public class ShadowBolt4 : ShadowBolt
-    {
-        public ShadowBolt4()
-        {
-            ID = 1088;
-            Rank = 4;
-            Mana = 110;
-            CastTime = 3000;
-            SpellMultiplier = 0.857;
-            MinDmg = 92;
-            MaxDmg = 104;
-        }
-    }
-    public class ShadowBolt5 : ShadowBolt
-    {
-        public ShadowBolt5()
-        {
-            ID = 1106;
-            Rank = 5;
-            Mana = 160;
-            CastTime = 3000;
-            SpellMultiplier = 0.857;
-            MinDmg = 150;
-            MaxDmg = 170;
-        }
-    }
-    public class ShadowBolt6 : ShadowBolt
-    {
-        public ShadowBolt6()
-        {
-            ID = 11659;
-            Rank = 6;
-            Mana = 210;
-            CastTime = 3000;
-            SpellMultiplier = 0.857;
-            MinDmg = 213;
-            MaxDmg = 240;
-        }
-    }
-    public class ShadowBolt7 : ShadowBolt
-    {
-        public ShadowBolt7()
-        {
-            ID = 11659;
-            Rank = 7;
-            Mana = 265;
-            CastTime = 3000;
-            SpellMultiplier = 0.857;
-            MinDmg = 292;
-            MaxDmg = 327;
-        }
-    }
-    public class ShadowBolt8 : ShadowBolt
-    {
-        public ShadowBolt8()
-        {
-            ID = 11660;
-            Rank = 8;
-            CastTime = 3000;
-            Mana = 315;
-            SpellMultiplier = 0.857;
-            MaxDmg = 415;
-            MinDmg = 373;
-        }
-    }
-    public class ShadowBolt9 : ShadowBolt
-    {
-        public ShadowBolt9()
-        {
-            ID = 11661;
-            Rank = 9;
-            Mana = 370;
-            CastTime = 3000;
-            SpellMultiplier = 0.857;
-            MinDmg = 470;
-            MaxDmg = 522;
-        }
-    }
-    public class ShadowBolt10 : ShadowBolt
-    {
-        public ShadowBolt10()
-        {
-            ID = 25307;
-            Rank = 10;
-            Mana = 380;
-            CastTime = 3000;
-            SpellMultiplier = 0.857;
-            MinDmg = 497;
-            MaxDmg = 554;
-        }
-    }
-    public class ShadowBolt11 : ShadowBolt
-    {
-        public ShadowBolt11()
-        {
-            ID = 27209;
-            Rank = 11;
-            Mana = 420;
-            CastTime = 3000;
-            SpellMultiplier = 0.857;
-            MinDmg = 544;
-            MaxDmg = 607;
-        }
-    }
-    #endregion ShadowBolts
-
-    #region LifeTaps
-    public class LifeTap : Spell
-    {
-        public LifeTap()
-        {
-            Name = "Life Tap";
-            Range = -1;
-            CastTime = 0;
-            GCD = 0;
-            SpellMultiplier = 0;
-            MinDmg = 0;
-            MaxDmg = 0;
-        }
-    }
-    public class LifeTap1 : LifeTap
-    {
-        public LifeTap1()
-        {
-            ID = 1454;
-            Rank = 1;
-            Mana = -30;
-        }
-    }
-    public class LifeTap2 : LifeTap
-    {
-        public LifeTap2()
-        {
-            ID = 1455;
-            Rank = 2;
-            Mana = -75;
-        }
-    }
-    public class LifeTap3 : LifeTap
-    {
-        public LifeTap3()
-        {
-            ID = 1456;
-            Rank = 3;
-            Mana = -140;
-        }
-    }
-    public class LifeTap4 : LifeTap
-    {
-        public LifeTap4()
-        {
-            ID = 11687;
-            Rank = 4;
-            Mana = -220;
-        }
-    }
-    public class LifeTap5 : LifeTap
-    {
-        public LifeTap5()
-        {
-            ID = 11688;
-            Rank = 5;
-            Mana = -310;
-        }
-    }
-    public class LifeTap6 : LifeTap
-    {
-        public LifeTap6()
-        {
-            ID = 11689;
-            Rank = 6;
-            Mana = -430;
-        }
-    }
-    public class LifeTap7 : LifeTap
-    {
-        public LifeTap7()
-        {
-            ID = 27222;
-            Rank = 7;
-            Mana = -582;
-        }
-    }
-
-    #endregion LifeTaps
 }

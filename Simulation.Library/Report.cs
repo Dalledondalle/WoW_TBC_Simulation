@@ -52,7 +52,7 @@ namespace Simulation.Library
 
     public class SpellReport
     {
-        public int SpellId { get; set; }
+        public string SpellId { get; set; }
         public bool Hit { get; set; }
         public bool Crit { get; set; }
         public bool Tick { get; set; }

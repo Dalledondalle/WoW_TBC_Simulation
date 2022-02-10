@@ -19,9 +19,11 @@ namespace Simulation.Tests
                 FightLength = 10000
             };
             Warlock wl = new();
-            dmgDone += wl.CastShadowBolt(11, report);
-            dmgDone += wl.CastShadowBolt(11, report);
-            dmgDone += wl.CastShadowBolt(11, report);
+            Wowhead wh = new();
+            Spell shadowbolt = wh.GetSpell(27209);
+            dmgDone += wl.CastShadowBolt(shadowbolt, report);
+            dmgDone += wl.CastShadowBolt(shadowbolt, report);
+            dmgDone += wl.CastShadowBolt(shadowbolt, report);
             double dps = dmgDone / (report.FightLength / 1000);
 
             Assert.Equal(dps, report.DPS);

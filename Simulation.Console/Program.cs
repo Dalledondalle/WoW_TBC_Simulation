@@ -12,6 +12,7 @@ namespace Simulation.Console
         static void Main(string[] args)
         {
             Wowhead wh = new();
+            wh.GetSpell(27222);
         }
 
         private static void Run()
@@ -72,23 +73,26 @@ namespace Simulation.Console
             Stopwatch sw = new();
             sw.Start();
             Report[] array = new Report[itterations];
+            Wowhead wh = new();
+            var shadowbolt = wh.GetSpell(27209);
+            var lifetap = wh.GetSpell(27222);
             for (int i = 0; i < itterations; i++)
             {
                 Report report = new Report()
                 {
                     FightLength = fightLength,
-                    FightNo = i,                    
+                    FightNo = i,
                 };
                 double currentFight = 0;
                 while (fightLength > currentFight)
                 {
-                    if (wl.CanCastShadowBolt(11))
+                    if (wl.CanCastShadowBolt(shadowbolt))
                     {
-                        wl.CastShadowBolt(11, report);
+                        wl.CastShadowBolt(shadowbolt, report);
                     }
                     else
                     {
-                        wl.CastLifeTap(7, report);
+                        wl.CastLifeTap(lifetap, report);
                     }
                     currentFight += wl.WaitForNextCast();
                 }

@@ -45,8 +45,10 @@ namespace Simulation.Tests
         public void ShadowBoltHasteRatingTests(int hasteRating, double expectedWait)
         {
             Warlock wl = new();
+            Wowhead wh = new();
+            var shadowbolt = wh.GetSpell(27209);
             wl.AddHasteRating(hasteRating);
-            wl.CastShadowBolt();
+            wl.CastShadowBolt(shadowbolt);
 
             Assert.Equal(expectedWait, Math.Round(wl.WaitForNextCast()));
         }
@@ -69,8 +71,10 @@ namespace Simulation.Tests
         public void LifeTapHasteRatingTests(int hasteRating, double expectedWait)
         {
             Warlock wl = new();
+            Wowhead wh = new();
+            var lifetap = wh.GetSpell(27222);
             wl.AddHasteRating(hasteRating);
-            wl.CastLifeTap();
+            wl.CastLifeTap(lifetap);
 
             Assert.Equal(expectedWait, Math.Round(wl.WaitForNextCast()));
         }
@@ -103,8 +107,10 @@ namespace Simulation.Tests
         public void ShadowBoltHasteTests(double haste, double expectedWait)
         {
             Warlock wl = new();
+            Wowhead wh = new();
+            var shadowbolt = wh.GetSpell(27209);
             wl.AddHaste(haste);
-            wl.CastShadowBolt();
+            wl.CastShadowBolt(shadowbolt);
 
             Assert.Equal(expectedWait, Math.Round(wl.WaitForNextCast()));
         }
@@ -123,8 +129,10 @@ namespace Simulation.Tests
         public void LifeTapHasteTests(double haste, double expectedWait)
         {
             Warlock wl = new();
+            Wowhead wh = new();
+            var lifetap = wh.GetSpell(27222);
             wl.AddHaste(haste);
-            wl.CastLifeTap();
+            wl.CastLifeTap(lifetap);
 
             Assert.Equal(expectedWait, Math.Round(wl.WaitForNextCast()));
         }
@@ -142,9 +150,11 @@ namespace Simulation.Tests
         public void ShadowBoltHasteAndHasteRatingTests(int hasteRating, int haste, double expectedWait)
         {
             Warlock wl = new();
+            Wowhead wh = new();
+            var shadowbolt = wh.GetSpell(27209);
             wl.AddHaste(haste);
             wl.AddHasteRating(hasteRating);
-            wl.CastShadowBolt();
+            wl.CastShadowBolt(shadowbolt);
 
             Assert.Equal(expectedWait, Math.Round(wl.WaitForNextCast()));
         }
