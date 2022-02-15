@@ -11,9 +11,12 @@ namespace Simulation.Console
     {
         static void Main(string[] args)
         {
+            Warlock wl = new();
             Wowhead wh = new();
-            var spell = wh.GetSpell(27222);
+            wl.BaneRank = 5;
+            var spell = wh.GetSpell(27209);
             //var spell = wh.GetSpell(686);
+            wl.CastShadowBolt(spell);
             System.Console.WriteLine(spell.Name);
         }
 

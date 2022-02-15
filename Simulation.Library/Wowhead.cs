@@ -343,9 +343,18 @@ namespace Simulation.Library
     public enum Modify
     {
         Casttime,
-        Damage,
+        CasttimePercent,
+        DamagePercent,
+        DamageFlat,
+        SpellPowerPercent,
+        PeriodicDamagePercent,
         Hitchance,
-        Critchance
+        Critchance,
+        CritDamagePercent,
+        ManaPercent,
+        ProcOnHit,
+        Cooldown,
+        LearnSpell
     }
     public enum AuraType
     {
