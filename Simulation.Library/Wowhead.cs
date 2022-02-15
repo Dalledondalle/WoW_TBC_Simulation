@@ -20,17 +20,8 @@ namespace Simulation.Library
         public Spell GetSpell(int id)
         {
             Spell spell = GetSpellFromFolder(id);
-            HtmlWeb web = new();
-            HtmlDocument doc = web.Load($"https://tbc.wowhead.com/spell={id}");
-            var SpellName = doc.DocumentNode.SelectSingleNode("//b[@class='whtt-name']").InnerText;
-            var HeadersNames = doc.GetElementbyId("spelldetails");
-            var ToolTipText = doc.DocumentNode.SelectSingleNode("//div[@class='q']").InnerText;
-            List<string> informationTable = HeadersNames.InnerText.Split('\n').Select(x => x.Trim()).Where(x => !string.IsNullOrWhiteSpace(x) && !string.IsNullOrEmpty(x)).ToList();
-            string rank = doc.DocumentNode.SelectSingleNode("//b[@class='q0']").InnerText.Split(' ')[1];
-            spell = new();
-            spell.Setup(id.ToString(), SpellName, ToolTipText, rank, informationTable);
-            SaveSpellToLocalFolder(spell);
-            return spell;
+            if (spell is not null) return spell;
+            return GetSpellFromWowhead(id);
         }
 
         private string XmlStringToJson(string xmlPath)
@@ -82,6 +73,21 @@ namespace Simulation.Library
             if(!string.IsNullOrEmpty(jsonString))
                 return JsonConvert.DeserializeObject<Spell>(jsonString);
             return null;
+        }
+
+        private Spell GetSpellFromWowhead(int id)
+        {
+            Spell spell = new();
+            HtmlWeb web = new();
+            HtmlDocument doc = web.Load($"https://tbc.wowhead.com/spell={id}");
+            var SpellName = doc.DocumentNode.SelectSingleNode("//b[@class='whtt-name']").InnerText;
+            var HeadersNames = doc.GetElementbyId("spelldetails");
+            var ToolTipText = doc.DocumentNode.SelectSingleNode("//div[@class='q']").InnerText;
+            List<string> informationTable = HeadersNames.InnerText.Split('\n').Select(x => x.Trim()).Where(x => !string.IsNullOrWhiteSpace(x) && !string.IsNullOrEmpty(x)).ToList();
+            spell = new();
+            spell.Setup(id.ToString(), SpellName, ToolTipText, informationTable);
+            SaveSpellToLocalFolder(spell);
+            return spell;
         }
     }
 
@@ -161,7 +167,6 @@ namespace Simulation.Library
 
     public class Spell
     {
-        public int Rank { get; set; }
         public string ToolTipText { get; set; }
         public string ID { get; set; }
         public string Name { get; set; }
@@ -179,9 +184,8 @@ namespace Simulation.Library
         public string Flags { get; set; }
         public List<string> Effects { get; set; }
 
-        public void Setup(string id, string spellName, string tooltipText, string rank, List<string> info)
+        public void Setup(string id, string spellName, string tooltipText, List<string> info)
         {
-            Rank = int.Parse(rank.Replace("Level", ""));
             ToolTipText = tooltipText;
             ID = id;
             Name = spellName;
@@ -279,5 +283,72 @@ namespace Simulation.Library
             }
             return (double.Parse(intS) * 3600) + (double.Parse(decS) * 3600);
         }
+    }
+
+    public class Aura
+    {
+        public string SpellID { get; set; }
+        public string Name { get; set; }
+        public AuraType AuraType { get; set; }
+        public int FlatSpellMod { get; set; }
+        public int FlatShadowMod { get; set; }
+        public int FlatArcaneMod { get; set; }
+        public int FlatFireMod { get; set; }
+        public int FlatFrostMod { get; set; }
+        public int FlatNatureMod { get; set; }
+        public int FlatHolyMod { get; set; }
+        public int SpellHasteRatingMod { get; set; }
+        public int SpellCritRatingMod { get; set; }
+        public int SpellHitRatingMod { get; set; }
+        public int FlatManaRegenMod { get; set; }
+        public int FlatIntMod { get; set; }
+        public double IntModifer { get; set; }
+        public double SpellModifer { get; set; }
+        public double ShadowModifer { get; set; }
+        public double FrostModifer { get; internal set; }
+        public double ArcaneModifer { get; set; }
+        public double FireModifer { get; set; }
+        public double NatureModifer { get; set; }
+        public double HolyModifer { get; set; }
+        public double SpellHasteModifer { get; set; }
+        public double SpellCritModifer { get; set; }
+        public double SpellHitModifer { get; set; }
+        public double Duration { get; set; }
+        public double EndTimer { get; set; }
+        public double NextTick { get; set; }
+
+        public Aura(string spellID, string name, AuraType auraType)
+        {
+            SpellID = spellID;
+            Name = name;
+            AuraType = auraType;
+        }
+    }
+
+    public class Talent
+    {
+        public string ID { get; set; }
+        public string Name { get; set; }
+        public int Level { get; set; }
+        public List<Effect> Effects { get; set; }
+    }
+
+    public class Effect
+    {
+        public Modify Modify { get; set; }
+        public int Value { get; set; }
+        public List<string> AffectedSpells { get; set; }
+    }
+
+    public enum Modify
+    {
+        Casttime,
+        Damage,
+        Hitchance,
+        Critchance
+    }
+    public enum AuraType
+    {
+        Buff, Debuff
     }
 }

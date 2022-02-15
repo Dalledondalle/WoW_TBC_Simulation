@@ -9,43 +9,67 @@ namespace Simulation.Library
     public class Warlock
     {
         #region Stats
-        public int MP5 => GetAllGear().Where(e => e is not null).Select(e => e.ManaRegn).Sum() + mp5;
+        public int MP5 => GetAllGear().Where(e => e is not null).Select(e => e.ManaRegn).Sum() + mp5 + auras.Select(e => e.FlatManaRegenMod).Sum();
         private int mp5 = 0;
-        public int HitRating => GetAllGear().Where(e => e is not null).Select(e => e.SpellHitRating).Sum() + hitRating;
-        private int hitRating = 0;
-        public double Hit => (HitRating / 12.6) + hit;
-        private double hit = 0;
-        public int CritRating => GetAllGear().Where(e => e is not null).Select(e => e.SpellCritRating).Sum() + critRating;
-        public int critRating = 0;
-        public int Intellect => intellect + GetAllGear().Where(e => e is not null).Select(e => e.Intellect).Sum();
+        public int SpellHitRating => GetAllGear().Where(e => e is not null).Select(e => e.SpellHitRating).Sum() + spellHitRating + auras.Select(e => e.SpellHitRatingMod).Sum();
+        private int spellHitRating = 0;
+        public double SpellHit => (SpellHitRating / 12.6) + spellHit + auras.Select(e => e.SpellHitModifer).Sum();
+        private double spellHit = 0;
+        public int SpellCritRating => GetAllGear().Where(e => e is not null).Select(e => e.SpellCritRating).Sum() + spellCritRating + auras.Select(e => e.SpellCritRatingMod).Sum();
+        public int spellCritRating = 0;
+        public int Intellect => (int)((intellect +
+                                GetAllGear().Where(e => e is not null).Select(e => e.Intellect).Sum()+
+                                auras.Select(e => e.FlatIntMod).Sum()) *
+                                (1 + (auras.Select(e => e.IntModifer).Sum()/100)));
 
         private int intellect = 131;
-        public double Crit => crit + (Intellect / 81.9) + (CritRating / 22.1);
-        private double crit = 1.7;
-        public int SpellPower => GetAllGear().Where(e => e is not null).Select(e => e.SpellPower).Sum() + spellPower;
+        public double SpellCrit => spellCrit + (Intellect / 81.9) + (SpellCritRating / 22.1) + auras.Select(e => e.SpellCritModifer).Sum();
+        private double spellCrit = 1.7;
+        public int SpellPower =>    (int)((GetAllGear().Where(e => e is not null).Select(e => e.SpellPower).Sum() +
+                                    spellPower +
+                                    auras.Select(e => e.FlatSpellMod).Sum()) *
+                                    (1 + (auras.Select(e => e.SpellModifer).Sum()/100)));
         private int spellPower = 0;
-        public int ShadowPower => GetAllGear().Where(e => e is not null).Select(e => e.ShadowSpellPower).Sum() + shadowPower;
+        public int ShadowPower =>   (int)((GetAllGear().Where(e => e is not null).Select(e => e.ShadowSpellPower).Sum() +
+                                    shadowPower +
+                                    auras.Select(e => e.FlatShadowMod).Sum()) *
+                                    (1 + (auras.Select(e => e.ShadowModifer).Sum()/100)));
         private int shadowPower = 0;
-        public int FirePower => GetAllGear().Where(e => e is not null).Select(e => e.FireSpellPower).Sum() + firePower;
+        public int FirePower =>     (int)((GetAllGear().Where(e => e is not null).Select(e => e.FireSpellPower).Sum() +
+                                    firePower +
+                                    auras.Select(e => e.FlatFireMod).Sum()) *
+                                    (1 + (auras.Select(e => e.FireModifer).Sum()/100)));
         private int firePower = 0;
-        public int ArcanePower => GetAllGear().Where(e => e is not null).Select(e => e.ArcaneSpellPower).Sum() + arcanePower;
+        public int ArcanePower =>   (int)((GetAllGear().Where(e => e is not null).Select(e => e.ArcaneSpellPower).Sum() +
+                                    arcanePower +
+                                    auras.Select(e => e.FlatArcaneMod).Sum()) *
+                                    (1 + (auras.Select(e => e.ArcaneModifer).Sum()/100)));
         private int arcanePower = 0;
-        public int FrostPower => GetAllGear().Where(e => e is not null).Select(e => e.FrostSpellPower).Sum() + frostPower;
+        public int FrostPower =>    (int)((GetAllGear().Where(e => e is not null).Select(e => e.FrostSpellPower).Sum() +
+                                    frostPower +
+                                    auras.Select(e => e.FlatFrostMod).Sum()) *
+                                    (1 + (auras.Select(e => e.FrostModifer).Sum()/100)));
         private int frostPower;
-        public int HasteRating => GetAllGear().Where(e => e is not null).Select(e => e.SpellHasteRating).Sum() + hasteRating;
-        public int hasteRating = 0;
+        public int SpellHasteRating => GetAllGear().Where(e => e is not null).Select(e => e.SpellHasteRating).Sum() + spellHasteRating + auras.Select(e => e.SpellHasteRatingMod).Sum();
+        public int spellHasteRating = 0;
         //Hasted Cast Time = Base Cast Time / (1 + ( Spell Haste Rating / 1577 ) )
-        public double Haste => (HasteRating / 15.77) + haste;
-        private double haste = 0;
+        public double SpellHaste => (SpellHasteRating / 15.77) + spellHaste + auras.Select(e => e.SpellHasteModifer).Sum();
+        private double spellHaste = 0;
         public int Mana => mana;
         private int mana = 0;
         private int baseMana = 2615;
         public int MaxMana => (Math.Min(20, Intellect) + 15 * (Intellect - Math.Min(20, Intellect))) + baseMana;
         #endregion Stats
 
-        #region Spells
+        #region SpellsAndAuras
         public Spell lastSpelledCasted { get; private set; }
-        #endregion Spells
+        private List<Aura> auras => Buffs.Concat(Debuffs).ToList();
+        public List<Aura> Buffs => buffs.OrderBy(x => x.EndTimer).ToList();
+        private List<Aura> buffs = new();
+
+        public List<Aura> Debuffs => debuffs;
+        private List<Aura> debuffs = new();
+        #endregion SpellsAndAuras
 
         #region Equipment
         private Equipment head;
@@ -65,6 +89,7 @@ namespace Simulation.Library
         private Equipment mainhand;
         private Equipment offhand;
         private Equipment ranged;
+
 
         public Equipment Head => head;
         public Equipment Neck => neck;
@@ -86,6 +111,36 @@ namespace Simulation.Library
         public Equipment[] Equipment => GetAllGear();
         #endregion Equipment
 
+        #region Talents
+        public List<Talent> Talents { get; set; } = new();
+        public int BaneRank { set
+            {
+                if(value < 1 )
+                {
+                    Talents.RemoveAll(t => t.Name == "Bane");
+                }
+                else if(value < 6)
+                {
+                    Talents.Add(banes.First(b => b.Level == value));
+                }
+                else
+                {
+                    Talents.Add(banes.First(b => b.Level == 5));
+                }
+            }
+        }
+
+
+        private Talent[] banes = new Talent[]
+        {
+            new(){ ID = "17788", Level = 1, Name = "Bane", Effects = new() { new(){ AffectedSpells = new(){ "Immolate", "Shadow Bolt"}, Modify = Modify.Casttime, Value = -100 }, new(){AffectedSpells = new(){ "Soul Fire"}, Modify = Modify.Casttime, Value = -400 } } },
+            new(){ ID = "17789", Level = 2, Name = "Bane", Effects = new() { new(){ AffectedSpells = new(){ "Immolate", "Shadow Bolt"}, Modify = Modify.Casttime, Value = -200 }, new(){AffectedSpells = new(){ "Soul Fire"}, Modify = Modify.Casttime, Value = -800 } } },
+            new(){ ID = "17790", Level = 3, Name = "Bane", Effects = new() { new(){ AffectedSpells = new(){ "Immolate", "Shadow Bolt"}, Modify = Modify.Casttime, Value = -300 }, new(){AffectedSpells = new(){ "Soul Fire"}, Modify = Modify.Casttime, Value = -1200 } } },
+            new(){ ID = "17791", Level = 4, Name = "Bane", Effects = new() { new(){ AffectedSpells = new(){ "Immolate", "Shadow Bolt"}, Modify = Modify.Casttime, Value = -400 }, new(){AffectedSpells = new(){ "Soul Fire"}, Modify = Modify.Casttime, Value = -1600 } } },
+            new(){ ID = "17792", Level = 5, Name = "Bane", Effects = new() { new(){ AffectedSpells = new(){ "Immolate", "Shadow Bolt"}, Modify = Modify.Casttime, Value = -500 }, new(){AffectedSpells = new(){ "Soul Fire"}, Modify = Modify.Casttime, Value = -2000 } } }
+        };
+        #endregion Talents
+
         public Warlock()
         {
             mana = MaxMana;
@@ -95,6 +150,23 @@ namespace Simulation.Library
         {
             return new Equipment[] { head, neck, shoulders, back, chest, wrist, hands, waist, legs, feet, ring1, ring2, trinket1, trinket2, mainhand, offhand, ranged };
         }
+        #region Auras
+        public void AddAura(Aura Aura)
+        {
+            if (Aura is null) return;
+            if (Aura.AuraType == AuraType.Buff) buffs.Add(Aura);
+            if (Aura.AuraType == AuraType.Debuff) debuffs.Add(Aura);
+        }
+        public void CastFelArmor(Aura Aura)
+        {
+            if (Aura is null || Aura.Name != "Fel Armor") return;
+            if (!Buffs.Where(a => a.Name == Aura.Name).Any()) Buffs.Add(Aura);
+        }
+        public void CheckBuffs(double timestamp)
+        {
+            buffs.RemoveAll(b => b.EndTimer < timestamp);
+        }
+        #endregion Auras
 
         #region AddStats
         public void AddMana(int mana)
@@ -110,15 +182,15 @@ namespace Simulation.Library
         }
         public void AddHasteRating(int hasteRating)
         {
-            this.hasteRating += hasteRating;
+            this.spellHasteRating += hasteRating;
         }
         public void AddHaste(double haste)
         {
-            this.haste += haste;
+            this.spellHaste += haste;
         }
         public void AddCritRating(int critRating)
         {
-            this.critRating += critRating;
+            this.spellCritRating += critRating;
         }
         public void AddShadowSpellPower(int shadowPower)
         {
@@ -162,7 +234,7 @@ namespace Simulation.Library
             {
                 ManaGained = manaFromLT;
             }
-            report.ReportManaGained(ManaGained, $"Life Tap{lastSpelledCasted.Rank}");
+            report.ReportManaGained(ManaGained, $"Life Tap");
             this.mana += ManaGained;
             if (this.mana > MaxMana) this.mana = MaxMana;
         }
@@ -176,7 +248,11 @@ namespace Simulation.Library
             if (shadowbolt.Name != "Shadow Bolt") return 0;
             double dmg;
             Random rnd = new();
-            bool isCrit = rnd.Next(100) <= Crit;
+            var talentsToModSB = Talents.Where(x => x.Effects.Any(e => e.AffectedSpells.Contains(shadowbolt.Name))).Select(x => x.Effects);
+            List<Effect> SBEffects = new();
+            foreach (var effect in talentsToModSB) SBEffects.Concat(effect);
+            var CritMod = SBEffects.Where(x => x.Modify == Modify.Critchance).Select(x => x.Value).Sum();
+            bool isCrit = rnd.Next(100) <= SpellCrit + CritMod;
             lastSpelledCasted = shadowbolt;
             dmg = rnd.Next(GetShadowboltMinDmg(shadowbolt), GetShadowboltMaxDmg(shadowbolt));
             dmg = dmg + ((SpellPower + ShadowPower) * GetShadowboltSPMod(shadowbolt));
@@ -206,19 +282,19 @@ namespace Simulation.Library
             sub = sub.Split(' ')[2];
             return double.Parse(sub);
         }
-        private bool DidHit(Spell spell)
+        private bool DidHit(Spell spell, double hitmodifier = 0)
         {
             Random rnd = new();
-            return rnd.Next(0) < 83 + Hit;
+            return rnd.Next(0) < 83 + SpellHit + hitmodifier;
         }
         public double WaitForNextCast()
         {
             if (lastSpelledCasted is null) return 0;
             else
             {
-                double gcd = (lastSpelledCasted.GCD) / (1 + (Haste / 100));
+                double gcd = (lastSpelledCasted.GCD) / (1 + (SpellHaste / 100));
                 if (gcd < 1000) gcd = 1000;
-                double castTime = (lastSpelledCasted.CastTime) / (1 + (Haste / 100));
+                double castTime = (lastSpelledCasted.CastTime) / (1 + (SpellHaste / 100));
                 return Math.Max(gcd, castTime);
             }
         }

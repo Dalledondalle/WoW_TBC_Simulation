@@ -12,7 +12,9 @@ namespace Simulation.Console
         static void Main(string[] args)
         {
             Wowhead wh = new();
-            wh.GetSpell(27222);
+            var spell = wh.GetSpell(27222);
+            //var spell = wh.GetSpell(686);
+            System.Console.WriteLine(spell.Name);
         }
 
         private static void Run()
@@ -30,12 +32,12 @@ namespace Simulation.Console
             System.Console.WriteLine($"Max mana: {wl.MaxMana}");
             System.Console.WriteLine($"Intellect: {wl.Intellect}");
             System.Console.WriteLine($"Spell Damage: {wl.SpellPower}");
-            System.Console.WriteLine($"Spell Crit Rating: {wl.CritRating}");
-            System.Console.WriteLine($"Spell Crit: {wl.Crit}");
-            System.Console.WriteLine($"Spell Hit Rating: {wl.HitRating}");
-            System.Console.WriteLine($"Spell Hit: {wl.Hit}");
-            System.Console.WriteLine($"Spell Haste Rating: {wl.HasteRating}");
-            System.Console.WriteLine($"Spell Haste: {wl.Haste}");
+            System.Console.WriteLine($"Spell Crit Rating: {wl.SpellCritRating}");
+            System.Console.WriteLine($"Spell Crit: {wl.SpellCrit}");
+            System.Console.WriteLine($"Spell Hit Rating: {wl.SpellHitRating}");
+            System.Console.WriteLine($"Spell Hit: {wl.SpellHit}");
+            System.Console.WriteLine($"Spell Haste Rating: {wl.SpellHasteRating}");
+            System.Console.WriteLine($"Spell Haste: {wl.SpellHaste}");
         }
 
         private static Warlock CreateWarlock()
@@ -103,7 +105,7 @@ namespace Simulation.Console
             double bestFight = array.Max(r => r.DPS);
             double avg = array.Average(r => r.DPS);
             sw.Stop();
-            System.Console.WriteLine($"Worst fight: {worstFight.ToString("0.###")}\nBest fight: {bestFight.ToString("0.###")}\nOn average: {avg.ToString("0.###")}\nTime elapsed: {sw.Elapsed}\nCrit %: {wl.Crit.ToString("0.##")}%");
+            System.Console.WriteLine($"Worst fight: {worstFight.ToString("0.###")}\nBest fight: {bestFight.ToString("0.###")}\nOn average: {avg.ToString("0.###")}\nTime elapsed: {sw.Elapsed}\nCrit %: {wl.SpellCrit.ToString("0.##")}%");
         }
     }
 }

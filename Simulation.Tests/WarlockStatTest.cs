@@ -23,8 +23,8 @@ namespace Simulation.Tests
             Warlock wl = new();
             wl.AddHasteRating(hasteRating);
 
-            Assert.Equal(expectedHasteRating, wl.HasteRating);
-            Assert.Equal(expectedHaste, Math.Round(wl.Haste, 2));
+            Assert.Equal(expectedHasteRating, wl.SpellHasteRating);
+            Assert.Equal(expectedHaste, Math.Round(wl.SpellHaste, 2));
         }
 
         [Theory]
@@ -90,7 +90,7 @@ namespace Simulation.Tests
             Warlock wl = new();
             wl.AddHaste(haste);
 
-            Assert.Equal(expectedHaste, wl.Haste);
+            Assert.Equal(expectedHaste, wl.SpellHaste);
         }
 
         [Theory]
@@ -170,8 +170,8 @@ namespace Simulation.Tests
             wl.AddCritRating(critRating);
             wl.AddIntellect(intellect);
 
-            Assert.Equal(expectedCritRating, wl.CritRating);
-            Assert.Equal(expectedCritChance, Math.Round(wl.Crit, 2));
+            Assert.Equal(expectedCritRating, wl.SpellCritRating);
+            Assert.Equal(expectedCritChance, Math.Round(wl.SpellCrit, 2));
         }
 
         [Theory]
@@ -199,6 +199,99 @@ namespace Simulation.Tests
             wl.AddIntellect(intellect);
 
             Assert.Equal(expectedMaxMana, wl.MaxMana);
+        }
+
+        [Fact]
+        public void DrumsOfBattleTests()
+        {
+            Warlock wl = new();
+            wl.AddHasteRating(150);
+
+            Aura DrumsOfBattle = new("35476", "Drums Of Battle", AuraType.Buff);
+            DrumsOfBattle.SpellHasteRatingMod = 80;
+            wl.AddAura(DrumsOfBattle);
+
+            Assert.Equal(230, wl.SpellHasteRating);
+        }
+
+        [Fact]
+        public void BloodlustTests()
+        {
+            Warlock wl = new();
+            wl.AddHasteRating(158);
+
+            Aura Bloodlust = new("2825", "Bloodlust", AuraType.Buff);
+            Bloodlust.SpellHasteModifer = 30;
+            wl.AddAura(Bloodlust);
+
+            Assert.Equal(40.02, Math.Round(wl.SpellHaste, 2));
+        }
+
+        [Fact]
+        public void BlessingOfKingsTests()
+        {
+            Warlock wl = new();
+            wl.AddIntellect(123); //254 since warlock starts with 131 int base
+
+            Aura BlessingOfKings = new("25898", "Greater Blessing of Kings", AuraType.Buff);
+            BlessingOfKings.IntModifer = 10;
+            wl.AddAura(BlessingOfKings);
+
+            Assert.Equal(279, wl.Intellect);
+        }
+
+        [Fact]
+        public void FelArmorUntalentedTests()
+        {
+            Warlock wl = new();
+            wl.AddSpellPower(123);
+
+            Aura FelArmor = new("28189", "Fel Armor", AuraType.Buff);
+            FelArmor.FlatSpellMod = 100;
+            wl.AddAura(FelArmor);
+
+            Assert.Equal(223, wl.SpellPower);
+        }
+
+        [Fact]
+        public void BlessingOfWisdomTests()
+        {
+            Warlock wl = new();
+            wl.AddIntellect(123); //254 since warlock starts with 131 int base
+
+            Aura BlessingOfWisdom = new("27143", "Greater Blessing of Wisdom", AuraType.Buff);
+            BlessingOfWisdom.FlatManaRegenMod = 41;
+            wl.AddAura(BlessingOfWisdom);
+
+            Assert.Equal(41, wl.MP5);
+        }
+
+        [Fact]
+        public void ArcaneIntellectTests()
+        {
+            Warlock wl = new();
+            wl.AddIntellect(123); //254 since warlock starts with 131 int base
+
+            Aura ArcaneIntellect = new("3738", "Arcane Brilliance", AuraType.Buff);
+            ArcaneIntellect.FlatIntMod = 40;
+            wl.AddAura(ArcaneIntellect);
+
+            Assert.Equal(294, wl.Intellect);
+        }
+
+        [Fact]
+        public void TotemOfWrathTests()
+        {
+            Warlock wl = new();
+            wl.AddIntellect(123); //254 since warlock starts with 131 int base
+
+            Aura TotemOfWrath = new("30706", "Totem Of Wrath", AuraType.Buff);
+            TotemOfWrath.SpellHitModifer = 3;
+            TotemOfWrath.SpellCritModifer = 3;
+            wl.AddAura(TotemOfWrath);
+
+            Assert.Equal(3, wl.SpellHit);
+            Assert.Equal(7.80, Math.Round(wl.SpellCrit,2));
         }
     }
 }
