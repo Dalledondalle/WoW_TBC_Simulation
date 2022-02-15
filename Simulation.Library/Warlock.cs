@@ -416,7 +416,245 @@ namespace Simulation.Library
         #endregion DestructionTalents
 
         #region AfflictionTalents
+        public int SuppressionRank
+        {
+            set
+            {
+                RemoveTalent(suppressionStr);
+                if (value <= suppressions.Length && value > 0)
+                {
+                    Talents.Add(suppressions.First(b => b.Level == value));
+                }
+                else if (value > suppressions.Length)
+                {
+                    Talents.Add(suppressions.First(b => b.Level == suppressions.Length));
+                }
+            }
+        }
+        public int CorruptionRank
+        {
+            set
+            {
+                RemoveTalent(improvedCorruptionStr);
+                if (value <= improvedCorruptions.Length && value > 0)
+                {
+                    Talents.Add(improvedCorruptions.First(b => b.Level == value));
+                }
+                else if (value > improvedCorruptions.Length)
+                {
+                    Talents.Add(improvedCorruptions.First(b => b.Level == improvedCorruptions.Length));
+                }
+            }
+        }
+        public int ImprovedLifeTapRank
+        {
+            set
+            {
+                RemoveTalent(improvedLifeTapStr);
+                if (value <= improvedLifeTaps.Length && value > 0)
+                {
+                    Talents.Add(improvedLifeTaps.First(b => b.Level == value));
+                }
+                else if (value > improvedLifeTaps.Length)
+                {
+                    Talents.Add(improvedLifeTaps.First(b => b.Level == improvedLifeTaps.Length));
+                }
+            }
+        }
+        public int SoulSiphonRank
+        {
+            set
+            {
+                RemoveTalent(soulSiphonStr);
+                if (value <= soulSiphons.Length && value > 0)
+                {
+                    Talents.Add(soulSiphons.First(b => b.Level == value));
+                }
+                else if (value > soulSiphons.Length)
+                {
+                    Talents.Add(soulSiphons.First(b => b.Level == soulSiphons.Length));
+                }
+            }
+        }
+        public int ImprovedCurseOfAgonyRank
+        {
+            set
+            {
+                RemoveTalent(improvedCurseOfAgonyStr);
+                if (value <= improvedCurseOfAgonys.Length && value > 0)
+                {
+                    Talents.Add(improvedCurseOfAgonys.First(b => b.Level == value));
+                }
+                else if (value > improvedCurseOfAgonys.Length)
+                {
+                    Talents.Add(improvedCurseOfAgonys.First(b => b.Level == improvedCurseOfAgonys.Length));
+                }
+            }
+        }
+        public int AmplifyCurseRank
+        {
+            set
+            {
+                RemoveTalent(amplifyCurseStr);
+                if (value > 0)
+                {
+                    Talents.Add(amplifyCurse);
+                }
+            }
+        }
+        public int SiphoneLifeRank
+        {
+            set
+            {
+                RemoveTalent(siphoneLifeStr);
+                if (value > 0)
+                {
+                    Talents.Add(siphoneLife);
+                }
+            }
+        }
+        public int UnstableAfflictionRank
+        {
+            set
+            {
+                RemoveTalent(unstableAfflictionStr);
+                if (value > 0)
+                {
+                    Talents.Add(unstableAffliction);
+                }
+            }
+        }
+        public int NightfallRank
+        {
+            set
+            {
+                RemoveTalent(nightfallStr);
+                if (value <= nightfalls.Length && value > 0)
+                {
+                    Talents.Add(nightfalls.First(b => b.Level == value));
+                }
+                else if (value > nightfalls.Length)
+                {
+                    Talents.Add(nightfalls.First(b => b.Level == nightfalls.Length));
+                }
+            }
+        }
+        public int EmpoweredCorruptionRank
+        {
+            set
+            {
+                RemoveTalent(empoweredCorruptionStr);
+                if (value <= empoweredCorruptions.Length && value > 0)
+                {
+                    Talents.Add(empoweredCorruptions.First(b => b.Level == value));
+                }
+                else if (value > empoweredCorruptions.Length)
+                {
+                    Talents.Add(empoweredCorruptions.First(b => b.Level == empoweredCorruptions.Length));
+                }
+            }
+        }
+        public int ContagionRank
+        {
+            set
+            {
+                RemoveTalent(contagionStr);
+                if (value <= contagions.Length && value > 0)
+                {
+                    Talents.Add(contagions.First(b => b.Level == value));
+                }
+                else if (value > contagions.Length)
+                {
+                    Talents.Add(contagions.First(b => b.Level == contagions.Length));
+                }
+            }
+        }
 
+        private static string[] suppressionAffectedSpells = new[] { "Corruption", "Drain Life", "Curse of Weakness", "Curse of Tongues", "Fear", "Curse of Doom", "Curse of Agony", "Drain Soul", "Drain Mana", "Curse of Recklessness", "Curse of the Elements", "Howl of Terror", "Seed of Corruption", "Curse of Exhaustion", "Curse of Exhaustion", "Death Coil", "Shadow Embrace", "Unstable Affliction" };
+        private static string suppressionStr = "Suppression";
+        private Talent[] suppressions = new Talent[]
+        {
+            new(){ ID = "18174", Level = 1, Name = suppressionStr, Effects = new() { new(){ AffectedSpells = suppressionAffectedSpells.ToList() , Modify = Modify.Hitchance, Value = 2 } } },
+            new(){ ID = "18175", Level = 2, Name = suppressionStr, Effects = new() { new(){ AffectedSpells = suppressionAffectedSpells.ToList() , Modify = Modify.Hitchance, Value = 4 } } },
+            new(){ ID = "18176", Level = 3, Name = suppressionStr, Effects = new() { new(){ AffectedSpells = suppressionAffectedSpells.ToList() , Modify = Modify.Hitchance, Value = 6 } } },
+            new(){ ID = "18177", Level = 4, Name = suppressionStr, Effects = new() { new(){ AffectedSpells = suppressionAffectedSpells.ToList() , Modify = Modify.Hitchance, Value = 8 } } },
+            new(){ ID = "18178", Level = 5, Name = suppressionStr, Effects = new() { new(){ AffectedSpells = suppressionAffectedSpells.ToList() , Modify = Modify.Hitchance, Value = 10 } } }
+        };
+
+        private static string[] improvedCorruptionAffectedSpells = new[] { "Corruption" };
+        private static string improvedCorruptionStr = "Improved Corruption";
+        private Talent[] improvedCorruptions = new Talent[]
+        {
+            new(){ ID = "17810", Level = 1, Name = improvedCorruptionStr, Effects = new() { new(){ AffectedSpells = improvedCorruptionAffectedSpells.ToList() , Modify = Modify.Casttime, Value = -400 } } },
+            new(){ ID = "17811", Level = 2, Name = improvedCorruptionStr, Effects = new() { new(){ AffectedSpells = improvedCorruptionAffectedSpells.ToList() , Modify = Modify.Casttime, Value = -800 } } },
+            new(){ ID = "17812", Level = 3, Name = improvedCorruptionStr, Effects = new() { new(){ AffectedSpells = improvedCorruptionAffectedSpells.ToList() , Modify = Modify.Casttime, Value = -1200 } } },
+            new(){ ID = "17813", Level = 4, Name = improvedCorruptionStr, Effects = new() { new(){ AffectedSpells = improvedCorruptionAffectedSpells.ToList() , Modify = Modify.Casttime, Value = -1600 } } },
+            new(){ ID = "17814", Level = 5, Name = improvedCorruptionStr, Effects = new() { new(){ AffectedSpells = improvedCorruptionAffectedSpells.ToList() , Modify = Modify.Casttime, Value = -2000 } } }
+        };
+
+        private static string[] improvedLifeTapAffectedSpells = new[] { "Life Tap" };
+        private static string improvedLifeTapStr = "Improved Life Tap";
+        private Talent[] improvedLifeTaps = new Talent[]
+        {
+            new(){ ID = "18182", Level = 1, Name = improvedLifeTapStr, Effects = new() { new(){ AffectedSpells = improvedLifeTapAffectedSpells.ToList() , Modify = Modify.Unique, Value = 10 } } },
+            new(){ ID = "18183", Level = 2, Name = improvedLifeTapStr, Effects = new() { new(){ AffectedSpells = improvedLifeTapAffectedSpells.ToList() , Modify = Modify.Unique, Value = 20 } } }
+        };
+
+        private static string[] soulSiphonAffectedSpells = new[] { "Drain Life" };
+        private static string soulSiphonStr = "Soul Siphon";
+        private Talent[] soulSiphons = new Talent[]
+        {
+            new(){ ID = "18182", Level = 1, Name = soulSiphonStr, Effects = new() { new(){ AffectedSpells = soulSiphonAffectedSpells.ToList() , Modify = Modify.Unique, Value = 2 } } },
+            new(){ ID = "18183", Level = 2, Name = soulSiphonStr, Effects = new() { new(){ AffectedSpells = soulSiphonAffectedSpells.ToList() , Modify = Modify.Unique, Value = 4 } } }
+        };
+
+        private static string[] improvedCurseOfAgonyAffectedSpells = new[] { "Curse of Agony" };
+        private static string improvedCurseOfAgonyStr = "Improved Curse of Agony";
+        private Talent[] improvedCurseOfAgonys = new Talent[]
+        {
+            new(){ ID = "18827", Level = 1, Name = improvedCurseOfAgonyStr, Effects = new() { new(){ AffectedSpells = improvedCurseOfAgonyAffectedSpells.ToList() , Modify = Modify.PeriodicDamagePercent, Value = 5 } } },
+            new(){ ID = "18829", Level = 2, Name = improvedCurseOfAgonyStr, Effects = new() { new(){ AffectedSpells = improvedCurseOfAgonyAffectedSpells.ToList() , Modify = Modify.PeriodicDamagePercent, Value = 10 } } }
+        };
+
+        private static string[] amplifyCurseAffectedSpells = new[] { "Amplify Curse" };
+        private static string amplifyCurseStr = "Amplify Curse";
+        private Talent amplifyCurse = new() { ID = "18827", Level = 1, Name = amplifyCurseStr, Effects = new() { new() { AffectedSpells = amplifyCurseAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 18288 } } };
+
+        private static string[] nightfallAffectedSpells = new[] { "Drain Life", "Corruption" };
+        private static string nightfallStr = "Nightfall";
+        private Talent[] nightfalls = new Talent[]
+        {
+            new(){ ID = "18094", Level = 1, Name = nightfallStr, Effects = new() { new(){ AffectedSpells = improvedCurseOfAgonyAffectedSpells.ToList() , Modify = Modify.PeriodicProc, Value = 2 } } },
+            new(){ ID = "18095", Level = 2, Name = nightfallStr, Effects = new() { new(){ AffectedSpells = improvedCurseOfAgonyAffectedSpells.ToList() , Modify = Modify.PeriodicProc, Value = 4 } } }
+        };
+
+        private static string[] empoweredCorruptionSpells = new[] { "Corruption" };
+        private static string empoweredCorruptionStr = "Empowered Corruption";
+        private Talent[] empoweredCorruptions = new Talent[]
+        {
+            new(){ ID = "32381", Level = 1, Name = empoweredCorruptionStr, Effects = new() { new(){ AffectedSpells = empoweredCorruptionSpells.ToList() , Modify = Modify.SpellPowerPercent, Value = 12 } } },
+            new(){ ID = "32382", Level = 2, Name = empoweredCorruptionStr, Effects = new() { new(){ AffectedSpells = empoweredCorruptionSpells.ToList() , Modify = Modify.SpellPowerPercent, Value = 24 } } },
+            new(){ ID = "32383", Level = 3, Name = empoweredCorruptionStr, Effects = new() { new(){ AffectedSpells = empoweredCorruptionSpells.ToList() , Modify = Modify.SpellPowerPercent, Value = 36 } } }
+        };
+
+        private static string[] siphoneLifeAffectedSpells = new[] { "Siphone Life" };
+        private static string siphoneLifeStr = "Siphone Life";
+        private Talent siphoneLife = new() { ID = "18827", Level = 1, Name = siphoneLifeStr, Effects = new() { new() { AffectedSpells = siphoneLifeAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 18265 } } };
+
+        private static string[] contagionAffectedSpells = new[] { "Corruption", "Curse of Agony", "Seed of Corruption" };
+        private static string contagionStr = "Contagion";
+        private Talent[] contagions = new Talent[]
+        {
+            new(){ ID = "30060", Level = 1, Name = contagionStr, Effects = new() { new(){ AffectedSpells = contagionAffectedSpells.ToList() , Modify = Modify.PeriodicDamagePercent, Value = 1 } } },
+            new(){ ID = "30061", Level = 2, Name = contagionStr, Effects = new() { new(){ AffectedSpells = contagionAffectedSpells.ToList() , Modify = Modify.PeriodicDamagePercent, Value = 2 } } },
+            new(){ ID = "30062", Level = 3, Name = contagionStr, Effects = new() { new(){ AffectedSpells = contagionAffectedSpells.ToList() , Modify = Modify.PeriodicDamagePercent, Value = 3 } } },
+            new(){ ID = "30063", Level = 4, Name = contagionStr, Effects = new() { new(){ AffectedSpells = contagionAffectedSpells.ToList() , Modify = Modify.PeriodicDamagePercent, Value = 4 } } },
+            new(){ ID = "30064", Level = 5, Name = contagionStr, Effects = new() { new(){ AffectedSpells = contagionAffectedSpells.ToList() , Modify = Modify.PeriodicDamagePercent, Value = 5 } } }
+        };
+
+        private static string[] unstableAfflictionAffectedSpells = new[] { "Unstable Affliction" };
+        private static string unstableAfflictionStr = "Unstable Affliction";
+        private Talent unstableAffliction = new() { ID = "30108", Level = 1, Name = unstableAfflictionStr, Effects = new() { new() { AffectedSpells = unstableAfflictionAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 30108 } } };
         #endregion AfflictionTalents
 
         #region DemonologyTalents

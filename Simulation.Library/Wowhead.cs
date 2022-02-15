@@ -353,8 +353,10 @@ namespace Simulation.Library
         CritDamagePercent,
         ManaPercent,
         ProcOnHit,
+        PeriodicProc,
         Cooldown,
-        LearnSpell
+        LearnSpell,
+        Unique
     }
     public enum AuraType
     {
