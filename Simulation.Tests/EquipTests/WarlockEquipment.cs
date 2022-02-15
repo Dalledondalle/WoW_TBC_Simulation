@@ -3,9 +3,9 @@ using System;
 using Xunit;
 
 
-namespace Simulation.Tests
+namespace EquipTests
 {
-    public class WarlockEquipTest
+    public class WarlockEquipment
     {
         [Theory]
         [InlineData(31051)] //Hood of the malefic

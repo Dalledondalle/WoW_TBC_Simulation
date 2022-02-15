@@ -2,9 +2,9 @@
 using System;
 using Xunit;
 
-namespace Simulation.Tests
+namespace CastTests
 {
-    public class WarlockCastTest
+    public class WarlockCasts
     {
         [Theory]
         [InlineData(1454, 1030)]

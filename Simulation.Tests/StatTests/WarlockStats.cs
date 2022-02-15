@@ -2,9 +2,9 @@ using Simulation.Library;
 using System;
 using Xunit;
 
-namespace Simulation.Tests
+namespace StatTests
 {
-    public class WarlockStatTest
+    public class WarlockStats
     {
         [Theory]
         [InlineData(100, 100, 6.34)]

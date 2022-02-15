@@ -119,11 +119,11 @@ namespace Simulation.Library
             set
             {
                 RemoveTalent(baneStr);
-                if (value <= banes.Length)
+                if (value <= banes.Length && value > 0)
                 {
                     Talents.Add(banes.First(b => b.Level == value));
                 }
-                else
+                else if(value > banes.Length)
                 {
                     Talents.Add(banes.First(b => b.Level == banes.Length));
                 }
@@ -134,11 +134,11 @@ namespace Simulation.Library
             set
             {
                 RemoveTalent(cataclysmStr);
-                if (value <= cataclysms.Length)
+                if (value <= cataclysms.Length && value > 0)
                 {
                     Talents.Add(cataclysms.First(b => b.Level == value));
                 }
-                else
+                else if(value > cataclysms.Length)
                 {
                     Talents.Add(cataclysms.First(b => b.Level == cataclysms.Length));
                 }
@@ -149,11 +149,11 @@ namespace Simulation.Library
             set
             {
                 RemoveTalent(improvedShadowBoltStr);
-                if (value <= improvedShadowBolts.Length)
+                if (value <= improvedShadowBolts.Length && value > 0)
                 {
                     Talents.Add(improvedShadowBolts.First(b => b.Level == value));
                 }
-                else
+                else if(value > improvedShadowBolts.Length)
                 {
                     Talents.Add(improvedShadowBolts.First(b => b.Level == improvedShadowBolts.Length));
                 }
@@ -164,26 +164,26 @@ namespace Simulation.Library
             set
             {
                 RemoveTalent(improvedFireboltStr);
-                if (value <= improvedFirebolts.Length)
+                if (value <= improvedFirebolts.Length && value > 0)
                 {
                     Talents.Add(improvedFirebolts.First(b => b.Level == value));
                 }
-                else
+                else if(value > improvedFirebolts.Length)
                 {
                     Talents.Add(improvedFirebolts.First(b => b.Level == improvedFirebolts.Length));
                 }
             }
         }
-        public int ImproveLashOfPaindRank
+        public int ImprovedLashOfPainRank
         {
             set
             {
                 RemoveTalent(improvedLashOfPainStr);
-                if (value <= improvedLastOfPain.Length)
+                if (value <= improvedLastOfPain.Length && value > 0)
                 {
                     Talents.Add(improvedLastOfPain.First(b => b.Level == value));
                 }
-                else
+                else if (value > improvedLastOfPain.Length)
                 {
                     Talents.Add(improvedLastOfPain.First(b => b.Level == improvedLastOfPain.Length));
                 }
@@ -194,11 +194,11 @@ namespace Simulation.Library
             set
             {
                 RemoveTalent(devastationStr);
-                if (value <= devasations.Length)
+                if (value <= devasations.Length && value > 0)
                 {
                     Talents.Add(devasations.First(b => b.Level == value));
                 }
-                else
+                else if (value > devasations.Length)
                 {
                     Talents.Add(devasations.First(b => b.Level == devasations.Length));
                 }
@@ -242,11 +242,11 @@ namespace Simulation.Library
             set
             {
                 RemoveTalent(improvedSearingPainStr);
-                if (value <= improvedSearingPain.Length)
+                if (value <= improvedSearingPain.Length && value > 0)
                 {
                     Talents.Add(improvedSearingPain.First(b => b.Level == value));
                 }
-                else
+                else if (value > improvedSearingPain.Length)
                 {
                     Talents.Add(improvedSearingPain.First(b => b.Level == improvedSearingPain.Length));
                 }
@@ -257,11 +257,11 @@ namespace Simulation.Library
             set
             {
                 RemoveTalent(improvedImmolateStr);
-                if (value <= improvedImmolate.Length)
+                if (value <= improvedImmolate.Length && value > 0)
                 {
                     Talents.Add(improvedImmolate.First(b => b.Level == value));
                 }
-                else
+                else if (value > improvedImmolate.Length)
                 {
                     Talents.Add(improvedImmolate.First(b => b.Level == improvedImmolate.Length));
                 }
@@ -272,11 +272,11 @@ namespace Simulation.Library
             set
             {
                 RemoveTalent(emberstormStr);
-                if (value <= emberstorms.Length)
+                if (value <= emberstorms.Length && value > 0)
                 {
                     Talents.Add(emberstorms.First(b => b.Level == value));
                 }
-                else
+                else if (value > emberstorms.Length)
                 {
                     Talents.Add(emberstorms.First(b => b.Level == emberstorms.Length));
                 }
@@ -287,11 +287,11 @@ namespace Simulation.Library
             set
             {
                 RemoveTalent(shadowAndFlameStr);
-                if (value <= shadowAndFlames.Length)
+                if (value <= shadowAndFlames.Length && value > 0)
                 {
                     Talents.Add(shadowAndFlames.First(b => b.Level == value));
                 }
-                else
+                else if (value > shadowAndFlames.Length)
                 {
                     Talents.Add(shadowAndFlames.First(b => b.Level == shadowAndFlames.Length));
                 }
@@ -368,8 +368,8 @@ namespace Simulation.Library
         private Talent[] improvedSearingPain = new Talent[]
         {
             new() { ID = "17927", Level = 1, Name = improvedSearingPainStr, Effects = new() { new() { AffectedSpells = improvedSearingPainAffectedSpells.ToList(), Modify = Modify.Critchance, Value = 4 } } },
-            new() { ID = "17929", Level = 1, Name = improvedSearingPainStr, Effects = new() { new() { AffectedSpells = improvedSearingPainAffectedSpells.ToList(), Modify = Modify.Critchance, Value = 7 } } },
-            new() { ID = "17930", Level = 1, Name = improvedSearingPainStr, Effects = new() { new() { AffectedSpells = improvedSearingPainAffectedSpells.ToList(), Modify = Modify.Critchance, Value = 10 } } }
+            new() { ID = "17929", Level = 2, Name = improvedSearingPainStr, Effects = new() { new() { AffectedSpells = improvedSearingPainAffectedSpells.ToList(), Modify = Modify.Critchance, Value = 7 } } },
+            new() { ID = "17930", Level = 3, Name = improvedSearingPainStr, Effects = new() { new() { AffectedSpells = improvedSearingPainAffectedSpells.ToList(), Modify = Modify.Critchance, Value = 10 } } }
         };
 
         private static string[] improvedImmolateAffectedSpells = new[] { "Immolate" };

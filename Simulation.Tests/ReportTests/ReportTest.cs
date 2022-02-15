@@ -6,12 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Simulation.Tests
+namespace ReportTests
 {
-    public class ReportTest
+    public class ShadowBolt
     {
         [Fact]
-        public void ReportShadowBolt()
+        public void DPSOver10000Milis()
         {
             double dmgDone = 0;
             Report report = new()
