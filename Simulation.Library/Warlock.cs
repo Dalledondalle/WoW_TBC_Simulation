@@ -658,7 +658,275 @@ namespace Simulation.Library
         #endregion AfflictionTalents
 
         #region DemonologyTalents
+        public int ImprovedImpRank
+        {
+            set
+            {
+                RemoveTalent(improvedImpStr);
+                if (value <= improvedImps.Length && value > 0)
+                {
+                    Talents.Add(improvedImps.First(b => b.Level == value));
+                }
+                else if (value > improvedImps.Length)
+                {
+                    Talents.Add(improvedImps.First(b => b.Level == improvedImps.Length));
+                }
+            }
+        }
+        public int FelIntellectRank
+        {
+            set
+            {
+                RemoveTalent(felIntellectStr);
+                if (value <= felIntellects.Length && value > 0)
+                {
+                    Talents.Add(felIntellects.First(b => b.Level == value));
+                }
+                else if (value > felIntellects.Length)
+                {
+                    Talents.Add(felIntellects.First(b => b.Level == felIntellects.Length));
+                }
+            }
+        }
+        public int ImprovedSayaadRank { set
+            {
+                RemoveTalent(improvedSayaadStr);
+                if(value <= improvedSayaads.Length && value > 0)
+                {
+                    Talents.Add(improvedSayaads.First(b => b.Level == value));
+                }
+                else if (value > improvedSayaads.Length)
+                {
+                    Talents.Add(improvedSayaads.First(b => b.Level == improvedSayaads.Length));
+                }
+            }
+        }
+        public int DemonicAegisRank
+        {
+            set
+            {
+                RemoveTalent(demonicAegisStr);
+                if (value <= demonicAegiss.Length && value > 0)
+                {
+                    Talents.Add(demonicAegiss.First(b => b.Level == value));
+                }
+                else if (value > demonicAegiss.Length)
+                {
+                    Talents.Add(demonicAegiss.First(b => b.Level == demonicAegiss.Length));
+                }
+            }
+        }
+        public int UnholyPowerRank
+        {
+            set
+            {
+                RemoveTalent(unholyPowerStr);
+                if (value <= unholyPowers.Length && value > 0)
+                {
+                    Talents.Add(unholyPowers.First(b => b.Level == value));
+                }
+                else if (value > unholyPowers.Length)
+                {
+                    Talents.Add(unholyPowers.First(b => b.Level == unholyPowers.Length));
+                }
+            }
+        }
+        public int DemonicSacrificeRank
+        {
+            set
+            {
+                RemoveTalent(demonicSacrificeStr);
+                if (value > 0)
+                {
+                    Talents.Add(demonicSacrifice);
+                }
+            }
+        }
+        public int SoulLinkRank
+        {
+            set
+            {
+                RemoveTalent(soulLinkStr);
+                if (value > 0)
+                {
+                    Talents.Add(soulLink);
+                }
+            }
+        }
+        public int FelguardRank
+        {
+            set
+            {
+                RemoveTalent(felguardStr);
+                if (value > 0)
+                {
+                    Talents.Add(felguard);
+                }
+            }
+        }
+        public int MasterConjurorRank
+        {
+            set
+            {
+                RemoveTalent(masterConjurorStr);
+                if (value <= masterConjurors.Length && value > 0)
+                {
+                    Talents.Add(masterConjurors.First(b => b.Level == value));
+                }
+                else if (value > masterConjurors.Length)
+                {
+                    Talents.Add(masterConjurors.First(b => b.Level == masterConjurors.Length));
+                }
+            }
+        }
+        public int MasterDemonologistRank
+        {
+            set
+            {
+                RemoveTalent(masterDemonologistStr);
+                if (value <= masterDemonologists.Length && value > 0)
+                {
+                    Talents.Add(masterDemonologists.First(b => b.Level == value));
+                }
+                else if (value > masterDemonologists.Length)
+                {
+                    Talents.Add(masterDemonologists.First(b => b.Level == masterDemonologists.Length));
+                }
+            }
+        }
+        public int DemonKnowledgeRank
+        {
+            set
+            {
+                RemoveTalent(demonKnowledgeStr);
+                if (value <= masterDemonologists.Length && value > 0)
+                {
+                    Talents.Add(demonKnowledges.First(b => b.Level == value));
+                }
+                else if (value > demonKnowledges.Length)
+                {
+                    Talents.Add(demonKnowledges.First(b => b.Level == demonKnowledges.Length));
+                }
+            }
+        }
+        public int DemonicTaticsRank
+        {
+            set
+            {
+                RemoveTalent(demonicTaticsStr);
+                if (value <= demonicTaticss.Length && value > 0)
+                {
+                    Talents.Add(demonicTaticss.First(b => b.Level == value));
+                }
+                else if (value > demonicTaticss.Length)
+                {
+                    Talents.Add(demonicTaticss.First(b => b.Level == demonicTaticss.Length));
+                }
+            }
+        }
 
+        private static string[] pets = new[] { "Felhunter", "Voidwalker", "Imp", "Succubus", "Incubus", "Felguard" };
+
+        private static string[] improvedImpAffectedSpells = new[] { "Fire Shield", "Firebolt", "Blood Pact" };
+        private static string improvedImpStr = "Improved Imp";
+        private Talent[] improvedImps = new Talent[]
+        {
+            new(){ ID = "18694", Level = 1, Name = improvedImpStr, Effects = new() { new(){ AffectedSpells = improvedImpAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 10 } } },
+            new(){ ID = "18695", Level = 2, Name = improvedImpStr, Effects = new() { new(){ AffectedSpells = improvedImpAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 20 } } },
+            new(){ ID = "18696", Level = 3, Name = improvedImpStr, Effects = new() { new(){ AffectedSpells = improvedImpAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 30 } } }
+        };
+
+        private static string[] felIntellectAffectedSpells => pets;
+        private static string felIntellectStr = "Fel Intellect";
+        private Talent[] felIntellects = new Talent[]
+        {
+            new(){ ID = "18731", Level = 1, Name = felIntellectStr, Effects = new() { new(){ AffectedSpells = felIntellectAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 5 }, new() { AffectedSpells = new(){ "Mana" }, Modify = Modify.MaxMana, Value = 1} } },
+            new(){ ID = "18743", Level = 2, Name = felIntellectStr, Effects = new() { new(){ AffectedSpells = felIntellectAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 10 }, new() { AffectedSpells = new(){ "Mana" }, Modify = Modify.MaxMana, Value = 2} } },
+            new(){ ID = "18744", Level = 3, Name = felIntellectStr, Effects = new() { new(){ AffectedSpells = felIntellectAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 15 }, new() { AffectedSpells = new(){ "Mana" }, Modify = Modify.MaxMana, Value = 3} } }
+        };
+
+        private static string[] improvedSayaadAffectedSpellsEffectiveness = new[] { "Soothing Kiss", "Lash of Pain"};
+        private static string[] improvedSayaadAffectedSpellsBuffDuration= new[] { "Lesser Invisibility", "Seduction" };
+        private static string improvedSayaadStr = "Improved Sayaad";
+        private Talent[] improvedSayaads = new Talent[]
+        {
+            new(){ ID = "18754", Level = 1, Name = improvedSayaadStr, Effects = new() { new(){ AffectedSpells = improvedSayaadAffectedSpellsEffectiveness.ToList() , Modify = Modify.SpellEffectiveness, Value = 10 }, new() { AffectedSpells = improvedSayaadAffectedSpellsBuffDuration.ToList(), Modify = Modify.AuraDuration, Value = 10} } },
+            new(){ ID = "18755", Level = 2, Name = improvedSayaadStr, Effects = new() { new(){ AffectedSpells = improvedSayaadAffectedSpellsEffectiveness.ToList() , Modify = Modify.SpellEffectiveness, Value = 20 }, new() { AffectedSpells = improvedSayaadAffectedSpellsBuffDuration.ToList(), Modify = Modify.AuraDuration, Value = 20} } },
+            new(){ ID = "18756", Level = 3, Name = improvedSayaadStr, Effects = new() { new(){ AffectedSpells = improvedSayaadAffectedSpellsEffectiveness.ToList() , Modify = Modify.SpellEffectiveness, Value = 30 }, new() { AffectedSpells = improvedSayaadAffectedSpellsBuffDuration.ToList(), Modify = Modify.AuraDuration, Value = 30} } }
+        };
+
+        private static string[] demonicAegisAffectedSpells = new[] { "Demon Armor", "Fel Armor"};
+        private static string demonicAegisStr = "Demonic Aegis";
+        private Talent[] demonicAegiss = new Talent[]
+        {
+            new(){ ID = "30143", Level = 1, Name = demonicAegisStr, Effects = new() { new(){ AffectedSpells = demonicAegisAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 10 } } },
+            new(){ ID = "30144", Level = 2, Name = demonicAegisStr, Effects = new() { new(){ AffectedSpells = demonicAegisAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 20 } } },
+            new(){ ID = "30145", Level = 3, Name = demonicAegisStr, Effects = new() { new(){ AffectedSpells = demonicAegisAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 30 } } }
+        };
+
+        private static string[] unholyPowerAffectedSpells => pets;
+        private static string unholyPowerStr = "Unholy Power";
+        private Talent[] unholyPowers = new Talent[]
+        {
+            new(){ ID = "18769", Level = 1, Name = unholyPowerStr, Effects = new() { new(){ AffectedSpells = unholyPowerAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 4 } } },
+            new(){ ID = "18770", Level = 2, Name = unholyPowerStr, Effects = new() { new(){ AffectedSpells = unholyPowerAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 8 } } },
+            new(){ ID = "18771", Level = 3, Name = unholyPowerStr, Effects = new() { new(){ AffectedSpells = unholyPowerAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 12 } } },
+            new(){ ID = "18772", Level = 4, Name = unholyPowerStr, Effects = new() { new(){ AffectedSpells = unholyPowerAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 16 } } },
+            new(){ ID = "18773", Level = 5, Name = unholyPowerStr, Effects = new() { new(){ AffectedSpells = unholyPowerAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 20 } } }
+        };
+
+        private static string[] demonicSacrificeAffectedSpells = new[] { "Demonic Sacrifice" };
+        private static string demonicSacrificeStr = "Demonic Sacrifice";
+        private Talent demonicSacrifice = new() { ID = "18788", Level = 1, Name = demonicSacrificeStr, Effects = new() { new() { AffectedSpells = demonicSacrificeAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 18788 } } };
+
+        private static string[] soulLinkAffectedSpells = new[] { "Soul Link" };
+        private static string soulLinkStr = "Soul Link";
+        private Talent soulLink = new() { ID = "19028", Level = 1, Name = soulLinkStr, Effects = new() { new() { AffectedSpells = soulLinkAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 19028 } } };
+
+        private static string[] felguardSpells = new[] { "Felguard" };
+        private static string felguardStr = "Felguard";
+        private Talent felguard = new() { ID = "30146", Level = 1, Name = soulLinkStr, Effects = new() { new() { AffectedSpells = soulLinkAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 30146 } } };
+
+        private static string[] masterConjurorAffectedSpells = new[] { "Spellstone", "Firestone" };
+        private static string masterConjurorStr = "Master Conjuror";
+        private Talent[] masterConjurors = new Talent[]
+        {
+            new(){ ID = "18767", Level = 1, Name = masterConjurorStr, Effects = new() { new(){ AffectedSpells = masterConjurorAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 15 } } },
+            new(){ ID = "18768", Level = 2, Name = masterConjurorStr, Effects = new() { new(){ AffectedSpells = masterConjurorAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 30 } } },
+        };
+
+        private static string[] masterDemonologistAffectedSpells => pets;
+        private static string masterDemonologistStr = "Master Demonologist";
+        private Talent[] masterDemonologists = new Talent[]
+        {
+            new(){ ID = "23785", Level = 1, Name = masterDemonologistStr, Effects = new() { new(){ AffectedSpells = masterDemonologistAffectedSpells.ToList() , Modify = Modify.Unique, Value = 1 } } },
+            new(){ ID = "23822", Level = 2, Name = masterDemonologistStr, Effects = new() { new(){ AffectedSpells = masterDemonologistAffectedSpells.ToList() , Modify = Modify.Unique, Value = 2 } } },
+            new(){ ID = "23823", Level = 3, Name = masterDemonologistStr, Effects = new() { new(){ AffectedSpells = masterDemonologistAffectedSpells.ToList() , Modify = Modify.Unique, Value = 3 } } },
+            new(){ ID = "23824", Level = 4, Name = masterDemonologistStr, Effects = new() { new(){ AffectedSpells = masterDemonologistAffectedSpells.ToList() , Modify = Modify.Unique, Value = 4 } } },
+            new(){ ID = "23825", Level = 5, Name = masterDemonologistStr, Effects = new() { new(){ AffectedSpells = masterDemonologistAffectedSpells.ToList() , Modify = Modify.Unique, Value = 5 } } }
+        };
+
+        private static string[] demonKnowledgeAffectedSpells => pets;
+        private static string demonKnowledgeStr = "Demon Knowledge";
+        private Talent[] demonKnowledges = new Talent[]
+        {
+            new(){ ID = "35691", Level = 1, Name = demonKnowledgeStr, Effects = new() { new(){ AffectedSpells = demonKnowledgeAffectedSpells.ToList() , Modify = Modify.Unique, Value = 4 } } },
+            new(){ ID = "35692", Level = 2, Name = demonKnowledgeStr, Effects = new() { new(){ AffectedSpells = demonKnowledgeAffectedSpells.ToList() , Modify = Modify.Unique, Value = 8 } } },
+            new(){ ID = "35693", Level = 3, Name = demonKnowledgeStr, Effects = new() { new(){ AffectedSpells = demonKnowledgeAffectedSpells.ToList() , Modify = Modify.Unique, Value = 12 } } }
+
+        };
+
+        private static string[] demonicTaticsAffectedSpellsPets => pets;
+        private static string[] demonicTaticsAffectedSpellsPlayer => new[] {"Spell Crit"};
+        private static string demonicTaticsStr = "Demonic Tactics";
+        private Talent[] demonicTaticss = new Talent[]
+        {
+            new(){ ID = "30242", Level = 1, Name = demonicTaticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 1 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 1 } } },
+            new(){ ID = "30245", Level = 2, Name = demonicTaticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 2 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 2 } } },
+            new(){ ID = "30246", Level = 3, Name = demonicTaticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 3 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 3 } } },
+            new(){ ID = "30247", Level = 4, Name = demonicTaticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 4 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 4 } } },
+            new(){ ID = "30248", Level = 5, Name = demonicTaticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 5 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 5 } } }
+        };
         #endregion DemonologyTalents
 
         private void RemoveTalent(string talentName)

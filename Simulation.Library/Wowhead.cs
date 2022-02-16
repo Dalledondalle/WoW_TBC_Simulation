@@ -356,7 +356,10 @@ namespace Simulation.Library
         PeriodicProc,
         Cooldown,
         LearnSpell,
-        Unique
+        Unique,
+        SpellEffectiveness,
+        MaxMana,
+        AuraDuration
     }
     public enum AuraType
     {
