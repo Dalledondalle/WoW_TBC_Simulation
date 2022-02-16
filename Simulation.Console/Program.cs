@@ -14,9 +14,11 @@ namespace Simulation.Console
             Warlock wl = new();
             Wowhead wh = new();
             wl.BaneRank = 5;
-            var spell = wh.GetSpell(27209);
+            var spell = wh.GetSpell(28189);
+            wl.DemonicAegisRank = 3;
+            wl.CastFelArmor(spell);
             //var spell = wh.GetSpell(686);
-            wl.CastShadowBolt(spell);
+            //wl.CastShadowBolt(spell);
             System.Console.WriteLine(spell.Name);
         }
 
@@ -91,7 +93,7 @@ namespace Simulation.Console
                 double currentFight = 0;
                 while (fightLength > currentFight)
                 {
-                    if (wl.CanCastShadowBolt(shadowbolt))
+                    if (wl.HaveManaForSpell(shadowbolt))
                     {
                         wl.CastShadowBolt(shadowbolt, report);
                     }

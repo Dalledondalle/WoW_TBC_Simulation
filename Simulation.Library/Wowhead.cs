@@ -213,6 +213,7 @@ namespace Simulation.Library
 
             string gcdtxt = info[info.IndexOf("GCD") + 1];
             if (gcdtxt == "n/a") GCD = 0;
+            if (gcdtxt.Contains("milisecond")) GCD = ParseFromMiliToMiliSecDouble(gcdtxt.Split(' ')[0]);
             if (gcdtxt.Contains("second")) GCD = ParseFromSecondsToMiliSecDouble(gcdtxt.Split(' ')[0]);
             if (gcdtxt.Contains("minute")) GCD = ParseFromMinutesToMiliSecDouble(gcdtxt.Split(' ')[0]);
             if (gcdtxt.Contains("hour")) GCD = ParseFromHoursToMiliSecDouble(gcdtxt.Split(' ')[0]);
@@ -220,68 +221,24 @@ namespace Simulation.Library
             Effects = info.Where(x => x.Contains("Effect")).ToList();
             Flags = info[info.IndexOf("Flags") + 1];
         }
+        private double ParseFromMiliToMiliSecDouble(string str)
+        {
+            return double.Parse(str.Replace(",", "").Replace(".", ""));
+        }
 
         private double ParseFromSecondsToMiliSecDouble(string str)
         {
-            string intS = string.Empty;
-            string decS = string.Empty;
-            if(str.Contains(','))
-            {
-                intS = str.Split(',')[0];
-                decS = str.Split(',')[1];
-            }
-            if (str.Contains('.'))
-            {
-                intS = str.Split('.')[0];
-                decS = str.Split('.')[1];
-            }
-            while(decS.Length < 3)
-            {
-                decS += "0";
-            }
-            return double.Parse(intS + decS);
+            return double.Parse(str.Replace(",", "").Replace(".", "")) * 1000;
         }
 
         private double ParseFromMinutesToMiliSecDouble(string str)
         {
-            string intS = string.Empty;
-            string decS = string.Empty;
-            if (str.Contains(','))
-            {
-                intS = str.Split(',')[0];
-                decS = str.Split(',')[1];
-            }
-            if (str.Contains('.'))
-            {
-                intS = str.Split('.')[0];
-                decS = str.Split('.')[1];
-            }
-            while (decS.Length < 3)
-            {
-                decS += "0";
-            }
-            return (double.Parse(intS) * 60) + (double.Parse(decS) * 60);
+            return double.Parse(str.Replace(",", "").Replace(".", "")) * 60 * 1000;
         }
 
         private double ParseFromHoursToMiliSecDouble(string str)
         {
-            string intS = string.Empty;
-            string decS = string.Empty;
-            if (str.Contains(','))
-            {
-                intS = str.Split(',')[0];
-                decS = str.Split(',')[1];
-            }
-            if (str.Contains('.'))
-            {
-                intS = str.Split('.')[0];
-                decS = str.Split('.')[1];
-            }
-            while (decS.Length < 3)
-            {
-                decS += "0";
-            }
-            return (double.Parse(intS) * 3600) + (double.Parse(decS) * 3600);
+            return double.Parse(str.Replace(",", "").Replace(".", "")) * 60 * 60 * 1000;
         }
     }
 

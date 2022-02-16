@@ -6,113 +6,9 @@ using HtmlAgilityPack;
 
 namespace Simulation.Library
 {
-    public class Warlock
+    public class Warlock : PlayerClass
     {
-        #region Stats
-        public int MP5 => GetAllGear().Where(e => e is not null).Select(e => e.ManaRegn).Sum() + mp5 + auras.Select(e => e.FlatManaRegenMod).Sum();
-        private int mp5 = 0;
-        public int SpellHitRating => GetAllGear().Where(e => e is not null).Select(e => e.SpellHitRating).Sum() + spellHitRating + auras.Select(e => e.SpellHitRatingMod).Sum();
-        private int spellHitRating = 0;
-        public double SpellHit => (SpellHitRating / 12.6) + spellHit + auras.Select(e => e.SpellHitModifer).Sum();
-        private double spellHit = 0;
-        public int SpellCritRating => GetAllGear().Where(e => e is not null).Select(e => e.SpellCritRating).Sum() + spellCritRating + auras.Select(e => e.SpellCritRatingMod).Sum();
-        public int spellCritRating = 0;
-        public int Intellect => (int)((intellect +
-                                GetAllGear().Where(e => e is not null).Select(e => e.Intellect).Sum() +
-                                auras.Select(e => e.FlatIntMod).Sum()) *
-                                (1 + (auras.Select(e => e.IntModifer).Sum() / 100)));
-
-        private int intellect = 131;
-        public double SpellCrit => spellCrit + (Intellect / 81.9) + (SpellCritRating / 22.1) + auras.Select(e => e.SpellCritModifer).Sum();
-        private double spellCrit = 1.7;
-        public int SpellPower => (int)((GetAllGear().Where(e => e is not null).Select(e => e.SpellPower).Sum() +
-                                    spellPower +
-                                    auras.Select(e => e.FlatSpellMod).Sum()) *
-                                    (1 + (auras.Select(e => e.SpellModifer).Sum() / 100)));
-        private int spellPower = 0;
-        public int ShadowPower => (int)((GetAllGear().Where(e => e is not null).Select(e => e.ShadowSpellPower).Sum() +
-                                    shadowPower +
-                                    auras.Select(e => e.FlatShadowMod).Sum()) *
-                                    (1 + (auras.Select(e => e.ShadowModifer).Sum() / 100)));
-        private int shadowPower = 0;
-        public int FirePower => (int)((GetAllGear().Where(e => e is not null).Select(e => e.FireSpellPower).Sum() +
-                                    firePower +
-                                    auras.Select(e => e.FlatFireMod).Sum()) *
-                                    (1 + (auras.Select(e => e.FireModifer).Sum() / 100)));
-        private int firePower = 0;
-        public int ArcanePower => (int)((GetAllGear().Where(e => e is not null).Select(e => e.ArcaneSpellPower).Sum() +
-                                    arcanePower +
-                                    auras.Select(e => e.FlatArcaneMod).Sum()) *
-                                    (1 + (auras.Select(e => e.ArcaneModifer).Sum() / 100)));
-        private int arcanePower = 0;
-        public int FrostPower => (int)((GetAllGear().Where(e => e is not null).Select(e => e.FrostSpellPower).Sum() +
-                                    frostPower +
-                                    auras.Select(e => e.FlatFrostMod).Sum()) *
-                                    (1 + (auras.Select(e => e.FrostModifer).Sum() / 100)));
-        private int frostPower;
-        public int SpellHasteRating => GetAllGear().Where(e => e is not null).Select(e => e.SpellHasteRating).Sum() + spellHasteRating + auras.Select(e => e.SpellHasteRatingMod).Sum();
-        public int spellHasteRating = 0;
-        //Hasted Cast Time = Base Cast Time / (1 + ( Spell Haste Rating / 1577 ) )
-        public double SpellHaste => (SpellHasteRating / 15.77) + spellHaste + auras.Select(e => e.SpellHasteModifer).Sum();
-        private double spellHaste = 0;
-        public int Mana => mana;
-        private int mana = 0;
-        private int baseMana = 2615;
-        public int MaxMana => (Math.Min(20, Intellect) + 15 * (Intellect - Math.Min(20, Intellect))) + baseMana;
-        #endregion Stats
-
-        #region SpellsAndAuras
-        public Spell lastSpelledCasted { get; private set; }
-        private List<Aura> auras => Buffs.Concat(Debuffs).ToList();
-        public List<Aura> Buffs => buffs.OrderBy(x => x.EndTimer).ToList();
-        private List<Aura> buffs = new();
-
-        public List<Aura> Debuffs => debuffs;
-        private List<Aura> debuffs = new();
-        #endregion SpellsAndAuras
-
-        #region Equipment
-        private Equipment head;
-        private Equipment neck;
-        private Equipment shoulders;
-        private Equipment back;
-        private Equipment chest;
-        private Equipment wrist;
-        private Equipment hands;
-        private Equipment waist;
-        private Equipment legs;
-        private Equipment feet;
-        private Equipment ring1;
-        private Equipment ring2;
-        private Equipment trinket1;
-        private Equipment trinket2;
-        private Equipment mainhand;
-        private Equipment offhand;
-        private Equipment ranged;
-
-
-        public Equipment Head => head;
-        public Equipment Neck => neck;
-        public Equipment Shoulders => shoulders;
-        public Equipment Back => back;
-        public Equipment Chest => chest;
-        public Equipment Wrist => wrist;
-        public Equipment Hands => hands;
-        public Equipment Waist => waist;
-        public Equipment Legs => legs;
-        public Equipment Feet => feet;
-        public Equipment Ring1 => ring1;
-        public Equipment Ring2 => ring2;
-        public Equipment Trinket1 => trinket1;
-        public Equipment Trinket2 => trinket2;
-        public Equipment Mainhand => mainhand;
-        public Equipment Offhand => offhand;
-        public Equipment Ranged => ranged;
-        public Equipment[] Equipment => GetAllGear();
-        #endregion Equipment
-
         #region Talents
-        public List<Talent> Talents { get; set; } = new();
         #region DestructionTalents
         public int BaneRank
         {
@@ -431,7 +327,7 @@ namespace Simulation.Library
                 }
             }
         }
-        public int CorruptionRank
+        public int ImprovedCorruptionRank
         {
             set
             {
@@ -502,14 +398,14 @@ namespace Simulation.Library
                 }
             }
         }
-        public int SiphoneLifeRank
+        public int SiphonLifeRank
         {
             set
             {
-                RemoveTalent(siphoneLifeStr);
+                RemoveTalent(siphonLifeStr);
                 if (value > 0)
                 {
-                    Talents.Add(siphoneLife);
+                    Talents.Add(siphonLife);
                 }
             }
         }
@@ -569,6 +465,21 @@ namespace Simulation.Library
                 }
             }
         }
+        public int ShadowMasteryRank
+        {
+            set
+            {
+                RemoveTalent(shadowMasteryStr);
+                if (value <= shadowMasterys.Length && value > 0)
+                {
+                    Talents.Add(shadowMasterys.First(b => b.Level == value));
+                }
+                else if (value > shadowMasterys.Length)
+                {
+                    Talents.Add(shadowMasterys.First(b => b.Level == shadowMasterys.Length));
+                }
+            }
+        }
 
         private static string[] suppressionAffectedSpells = new[] { "Corruption", "Drain Life", "Curse of Weakness", "Curse of Tongues", "Fear", "Curse of Doom", "Curse of Agony", "Drain Soul", "Drain Mana", "Curse of Recklessness", "Curse of the Elements", "Howl of Terror", "Seed of Corruption", "Curse of Exhaustion", "Curse of Exhaustion", "Death Coil", "Shadow Embrace", "Unstable Affliction" };
         private static string suppressionStr = "Suppression";
@@ -596,8 +507,8 @@ namespace Simulation.Library
         private static string improvedLifeTapStr = "Improved Life Tap";
         private Talent[] improvedLifeTaps = new Talent[]
         {
-            new(){ ID = "18182", Level = 1, Name = improvedLifeTapStr, Effects = new() { new(){ AffectedSpells = improvedLifeTapAffectedSpells.ToList() , Modify = Modify.Unique, Value = 10 } } },
-            new(){ ID = "18183", Level = 2, Name = improvedLifeTapStr, Effects = new() { new(){ AffectedSpells = improvedLifeTapAffectedSpells.ToList() , Modify = Modify.Unique, Value = 20 } } }
+            new(){ ID = "18182", Level = 1, Name = improvedLifeTapStr, Effects = new() { new(){ AffectedSpells = improvedLifeTapAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 10 } } },
+            new(){ ID = "18183", Level = 2, Name = improvedLifeTapStr, Effects = new() { new(){ AffectedSpells = improvedLifeTapAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 20 } } }
         };
 
         private static string[] soulSiphonAffectedSpells = new[] { "Drain Life" };
@@ -624,8 +535,8 @@ namespace Simulation.Library
         private static string nightfallStr = "Nightfall";
         private Talent[] nightfalls = new Talent[]
         {
-            new(){ ID = "18094", Level = 1, Name = nightfallStr, Effects = new() { new(){ AffectedSpells = improvedCurseOfAgonyAffectedSpells.ToList() , Modify = Modify.PeriodicProc, Value = 2 } } },
-            new(){ ID = "18095", Level = 2, Name = nightfallStr, Effects = new() { new(){ AffectedSpells = improvedCurseOfAgonyAffectedSpells.ToList() , Modify = Modify.PeriodicProc, Value = 4 } } }
+            new(){ ID = "18094", Level = 1, Name = nightfallStr, Effects = new() { new(){ AffectedSpells = nightfallAffectedSpells.ToList() , Modify = Modify.PeriodicProc, Value = 2 } } },
+            new(){ ID = "18095", Level = 2, Name = nightfallStr, Effects = new() { new(){ AffectedSpells = nightfallAffectedSpells.ToList() , Modify = Modify.PeriodicProc, Value = 4 } } }
         };
 
         private static string[] empoweredCorruptionSpells = new[] { "Corruption" };
@@ -637,9 +548,21 @@ namespace Simulation.Library
             new(){ ID = "32383", Level = 3, Name = empoweredCorruptionStr, Effects = new() { new(){ AffectedSpells = empoweredCorruptionSpells.ToList() , Modify = Modify.SpellPowerPercent, Value = 36 } } }
         };
 
-        private static string[] siphoneLifeAffectedSpells = new[] { "Siphone Life" };
-        private static string siphoneLifeStr = "Siphone Life";
-        private Talent siphoneLife = new() { ID = "18827", Level = 1, Name = siphoneLifeStr, Effects = new() { new() { AffectedSpells = siphoneLifeAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 18265 } } };
+        private static string[] siphonLifeAffectedSpells = new[] { "Siphon Life" };
+        private static string siphonLifeStr = "Siphon Life";
+        private Talent siphonLife = new() { ID = "18827", Level = 1, Name = siphonLifeStr, Effects = new() { new() { AffectedSpells = siphonLifeAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 18265 } } };
+
+        private static string[] shadowMasteryAffectedSpellsDamage = new[] { "Seed of Corruption", "Unstable Affliction" };
+        private static string[] shadowMasteryAffectedSpellsPeriodic= new[] { "Seed of Corruption", "Unstable Affliction", "Corruption", "Drain Life", "Drain Soul", "Curse of Agony", "Siphon Life" };
+        private static string shadowMasteryStr = "Shadow Mastery";
+        private Talent[] shadowMasterys = new Talent[]
+        {
+            new(){ ID = "18271", Level = 1, Name = shadowMasteryStr, Effects = new() { new(){ AffectedSpells = shadowMasteryAffectedSpellsPeriodic.ToList() , Modify = Modify.PeriodicDamagePercent, Value = 2 }, new(){ AffectedSpells = shadowMasteryAffectedSpellsDamage.ToList() , Modify = Modify.DamagePercent, Value = 2 } } },
+            new(){ ID = "18272", Level = 2, Name = shadowMasteryStr, Effects = new() { new(){ AffectedSpells = shadowMasteryAffectedSpellsPeriodic.ToList() , Modify = Modify.PeriodicDamagePercent, Value = 4 }, new(){ AffectedSpells = shadowMasteryAffectedSpellsDamage.ToList() , Modify = Modify.DamagePercent, Value = 4 } } },
+            new(){ ID = "18273", Level = 3, Name = shadowMasteryStr, Effects = new() { new(){ AffectedSpells = shadowMasteryAffectedSpellsPeriodic.ToList() , Modify = Modify.PeriodicDamagePercent, Value = 6 }, new(){ AffectedSpells = shadowMasteryAffectedSpellsDamage.ToList() , Modify = Modify.DamagePercent, Value = 6 } } },
+            new(){ ID = "18274", Level = 4, Name = shadowMasteryStr, Effects = new() { new(){ AffectedSpells = shadowMasteryAffectedSpellsPeriodic.ToList() , Modify = Modify.PeriodicDamagePercent, Value = 8 }, new(){ AffectedSpells = shadowMasteryAffectedSpellsDamage.ToList() , Modify = Modify.DamagePercent, Value = 8 } } },
+            new(){ ID = "18275", Level = 5, Name = shadowMasteryStr, Effects = new() { new(){ AffectedSpells = shadowMasteryAffectedSpellsPeriodic.ToList() , Modify = Modify.PeriodicDamagePercent, Value = 10 }, new(){ AffectedSpells = shadowMasteryAffectedSpellsDamage.ToList() , Modify = Modify.DamagePercent, Value = 10 } } }
+        };
 
         private static string[] contagionAffectedSpells = new[] { "Corruption", "Curse of Agony", "Seed of Corruption" };
         private static string contagionStr = "Contagion";
@@ -794,33 +717,33 @@ namespace Simulation.Library
                 }
             }
         }
-        public int DemonKnowledgeRank
+        public int DemonicKnowledgeRank
         {
             set
             {
-                RemoveTalent(demonKnowledgeStr);
-                if (value <= masterDemonologists.Length && value > 0)
+                RemoveTalent(demonicKnowledgeStr);
+                if (value <= demonicKnowledges.Length && value > 0)
                 {
-                    Talents.Add(demonKnowledges.First(b => b.Level == value));
+                    Talents.Add(demonicKnowledges.First(b => b.Level == value));
                 }
-                else if (value > demonKnowledges.Length)
+                else if (value > demonicKnowledges.Length)
                 {
-                    Talents.Add(demonKnowledges.First(b => b.Level == demonKnowledges.Length));
+                    Talents.Add(demonicKnowledges.First(b => b.Level == demonicKnowledges.Length));
                 }
             }
         }
-        public int DemonicTaticsRank
+        public int DemonicTacticsRank
         {
             set
             {
-                RemoveTalent(demonicTaticsStr);
-                if (value <= demonicTaticss.Length && value > 0)
+                RemoveTalent(demonicTacticsStr);
+                if (value <= demonicTacticss.Length && value > 0)
                 {
-                    Talents.Add(demonicTaticss.First(b => b.Level == value));
+                    Talents.Add(demonicTacticss.First(b => b.Level == value));
                 }
-                else if (value > demonicTaticss.Length)
+                else if (value > demonicTacticss.Length)
                 {
-                    Talents.Add(demonicTaticss.First(b => b.Level == demonicTaticss.Length));
+                    Talents.Add(demonicTacticss.First(b => b.Level == demonicTacticss.Length));
                 }
             }
         }
@@ -885,7 +808,7 @@ namespace Simulation.Library
 
         private static string[] felguardSpells = new[] { "Felguard" };
         private static string felguardStr = "Felguard";
-        private Talent felguard = new() { ID = "30146", Level = 1, Name = soulLinkStr, Effects = new() { new() { AffectedSpells = soulLinkAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 30146 } } };
+        private Talent felguard = new() { ID = "30146", Level = 1, Name = felguardStr, Effects = new() { new() { AffectedSpells = felguardSpells.ToList(), Modify = Modify.LearnSpell, Value = 30146 } } };
 
         private static string[] masterConjurorAffectedSpells = new[] { "Spellstone", "Firestone" };
         private static string masterConjurorStr = "Master Conjuror";
@@ -907,111 +830,61 @@ namespace Simulation.Library
         };
 
         private static string[] demonKnowledgeAffectedSpells => pets;
-        private static string demonKnowledgeStr = "Demon Knowledge";
-        private Talent[] demonKnowledges = new Talent[]
+        private static string demonicKnowledgeStr = "Demonic Knowledge";
+        private Talent[] demonicKnowledges = new Talent[]
         {
-            new(){ ID = "35691", Level = 1, Name = demonKnowledgeStr, Effects = new() { new(){ AffectedSpells = demonKnowledgeAffectedSpells.ToList() , Modify = Modify.Unique, Value = 4 } } },
-            new(){ ID = "35692", Level = 2, Name = demonKnowledgeStr, Effects = new() { new(){ AffectedSpells = demonKnowledgeAffectedSpells.ToList() , Modify = Modify.Unique, Value = 8 } } },
-            new(){ ID = "35693", Level = 3, Name = demonKnowledgeStr, Effects = new() { new(){ AffectedSpells = demonKnowledgeAffectedSpells.ToList() , Modify = Modify.Unique, Value = 12 } } }
+            new(){ ID = "35691", Level = 1, Name = demonicKnowledgeStr, Effects = new() { new(){ AffectedSpells = demonKnowledgeAffectedSpells.ToList() , Modify = Modify.Unique, Value = 4 } } },
+            new(){ ID = "35692", Level = 2, Name = demonicKnowledgeStr, Effects = new() { new(){ AffectedSpells = demonKnowledgeAffectedSpells.ToList() , Modify = Modify.Unique, Value = 8 } } },
+            new(){ ID = "35693", Level = 3, Name = demonicKnowledgeStr, Effects = new() { new(){ AffectedSpells = demonKnowledgeAffectedSpells.ToList() , Modify = Modify.Unique, Value = 12 } } }
 
         };
 
         private static string[] demonicTaticsAffectedSpellsPets => pets;
         private static string[] demonicTaticsAffectedSpellsPlayer => new[] {"Spell Crit"};
-        private static string demonicTaticsStr = "Demonic Tactics";
-        private Talent[] demonicTaticss = new Talent[]
+        private static string demonicTacticsStr = "Demonic Tactics";
+        private Talent[] demonicTacticss = new Talent[]
         {
-            new(){ ID = "30242", Level = 1, Name = demonicTaticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 1 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 1 } } },
-            new(){ ID = "30245", Level = 2, Name = demonicTaticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 2 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 2 } } },
-            new(){ ID = "30246", Level = 3, Name = demonicTaticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 3 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 3 } } },
-            new(){ ID = "30247", Level = 4, Name = demonicTaticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 4 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 4 } } },
-            new(){ ID = "30248", Level = 5, Name = demonicTaticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 5 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 5 } } }
+            new(){ ID = "30242", Level = 1, Name = demonicTacticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 1 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 1 } } },
+            new(){ ID = "30245", Level = 2, Name = demonicTacticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 2 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 2 } } },
+            new(){ ID = "30246", Level = 3, Name = demonicTacticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 3 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 3 } } },
+            new(){ ID = "30247", Level = 4, Name = demonicTacticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 4 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 4 } } },
+            new(){ ID = "30248", Level = 5, Name = demonicTacticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 5 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 5 } } }
         };
         #endregion DemonologyTalents
 
-        private void RemoveTalent(string talentName)
-        {
-            Talents.RemoveAll(x => x.Name == talentName);
-        }
         #endregion Talents
 
         public Warlock()
         {
+            spellCrit = 1.7;
+            intellect = 131;
+            baseMana = 2615;
             mana = MaxMana;
         }
-
-        private Equipment[] GetAllGear()
-        {
-            return new Equipment[] { head, neck, shoulders, back, chest, wrist, hands, waist, legs, feet, ring1, ring2, trinket1, trinket2, mainhand, offhand, ranged };
-        }
-        #region Auras
-        public void AddAura(Aura Aura)
-        {
-            if (Aura is null) return;
-            if (Aura.AuraType == AuraType.Buff) buffs.Add(Aura);
-            if (Aura.AuraType == AuraType.Debuff) debuffs.Add(Aura);
-        }
-        public void CastFelArmor(Aura Aura)
-        {
-            if (Aura is null || Aura.Name != "Fel Armor") return;
-            if (!Buffs.Where(a => a.Name == Aura.Name).Any()) Buffs.Add(Aura);
-        }
-        public void CheckBuffs(double timestamp)
-        {
-            buffs.RemoveAll(b => b.EndTimer < timestamp);
-        }
-        #endregion Auras
-
-        #region AddStats
-        public void AddMana(int mana)
-        {
-            this.mana += mana;
-            if (this.mana < 0) this.mana = 0;
-            if (this.mana > MaxMana) this.mana = MaxMana;
-        }
-        public void AddIntellect(int intellect)
-        {
-            this.intellect += intellect;
-            if (this.intellect < 0) this.intellect = 0;
-        }
-        public void AddHasteRating(int hasteRating)
-        {
-            this.spellHasteRating += hasteRating;
-        }
-        public void AddHaste(double haste)
-        {
-            this.spellHaste += haste;
-        }
-        public void AddCritRating(int critRating)
-        {
-            this.spellCritRating += critRating;
-        }
-        public void AddShadowSpellPower(int shadowPower)
-        {
-            this.shadowPower += shadowPower;
-        }
-        public void AddFireSpellPower(int firePower)
-        {
-            this.firePower += firePower;
-        }
-        public void AddSpellPower(int spellPower)
-        {
-            this.spellPower += spellPower;
-        }
-        public void AddArcanePower(int arcanePower)
-        {
-            this.arcanePower += arcanePower;
-        }
-        public void AddFrostPower(int frostPower)
-        {
-            this.frostPower = frostPower;
-        }
-        #endregion AddStats
-
         #region CastSpells
-        public bool CanCastShadowBolt(Spell shadowbolt)
+        public void CastFelArmor(Spell spell)
         {
-            return shadowbolt.Cost < Mana;
+            Aura a = new(spell.ID, spell.Name, AuraType.Buff);
+            a.FlatSpellMod = GetFelArmorSP(spell);
+            if(!buffs.Any(x => x.Name == spell.Name))
+            {
+                a.FlatSpellMod = (int)(a.FlatSpellMod * (1 + (GetModFromTalents(spell, Modify.SpellEffectiveness)/100)));
+                buffs.Add(a);
+            }
+            return;
+            //"Surrounds the caster with fel energy, increasing the amount of health generated through spells and effects by 20% and increasing spell damage by up to 100. &nbsp;Only one type of Armor spell can be active on the Warlock at any time. &nbsp;Lasts 30 min."
+        }
+        private int GetFelArmorSP(Spell spell)
+        {
+            string tooltip = spell.ToolTipText;
+            int startIndex = tooltip.IndexOf("spell damage by up to ") + "spell damage by up to ".Length;
+            int endIndex = tooltip.IndexOf(". &nbsp;Only");
+            string spStr = tooltip.Substring(startIndex, endIndex - startIndex);
+            return int.Parse(spStr);
+        }
+        public bool HaveManaForSpell(Spell spell)
+        {
+            return spell.Cost < Mana;
         }
         public void CastLifeTap(Spell lifetap, Report report = null)
         {
@@ -1042,10 +915,10 @@ namespace Simulation.Library
             if (shadowbolt.Name != "Shadow Bolt") return 0;
             double dmg;
             Random rnd = new();
-            double dmgModTalents = GetDamagePercentIncreaseFromTalents(shadowbolt);
-            double casttimeMod = GetCastTimeModFromTalents(shadowbolt);
+            double dmgModTalents = GetModFromTalents(shadowbolt, Modify.DamagePercent);
+            double casttimeMod = GetModFromTalents(shadowbolt, Modify.Casttime);
             shadowbolt.CastTime += casttimeMod;
-            var CritMod = GetCritModFromTalents(shadowbolt);
+            var CritMod = GetModFromTalents(shadowbolt, Modify.Critchance);
             bool isCrit = rnd.Next(100) <= SpellCrit + CritMod;
             lastSpelledCasted = shadowbolt;
             dmg = rnd.Next(GetShadowboltMinDmg(shadowbolt), GetShadowboltMaxDmg(shadowbolt));
@@ -1057,50 +930,14 @@ namespace Simulation.Library
             report.ReportDamage(dmg, lastSpelledCasted, dmg > 0, isCrit);
             return dmg;
         }
-
-        private double GetDamagePercentIncreaseFromTalents(Spell spell)
-        {
-            var spellEffects = GetAllEffectsBySpell(spell).ToList();
-            return spellEffects.Where(x => x.Modify == Modify.DamagePercent).Select(x => x.Value).Sum();
-        }
-
-        private double GetHitFromTalents(Spell spell)
-        {
-            var spellEffects = GetAllEffectsBySpell(spell).ToList();
-            return spellEffects.Where(x => x.Modify == Modify.Hitchance).Select(x => x.Value).Sum();
-        }
-
-        private double GetCastTimeModFromTalents(Spell spell)
-        {
-            var spellEffects = GetAllEffectsBySpell(spell).ToList();
-            return spellEffects.Where(x => x.Modify == Modify.Casttime).Select(x => x.Value).Sum();
-        }
-
-        private double GetCritModFromTalents(Spell spell)
-        {
-            var spellEffects = GetAllEffectsBySpell(spell).ToList();
-            return spellEffects.Where(x => x.Modify == Modify.Critchance).Select(x => x.Value).Sum();
-        }
-
-        private List<Effect> GetAllEffectsBySpell(Spell spell)
-        {
-            var talentsToModSpell = Talents.Where(x => x.Effects.Any(e => e.AffectedSpells.Any(y => y == spell.Name)));
-            var effectsToSpell = talentsToModSpell.Select(x => x.Effects.Select(y => y)).ToList();
-            List<Effect> effects = new();
-            effects.AddRange(effectsToSpell.SelectMany(list => list.Where(effect => effect.AffectedSpells.Any(x => x == spell.Name))));
-            return effects;
-        }
-
         private int GetShadowboltMinDmg(Spell shadowbolt)
         {
             return int.Parse(shadowbolt.ToolTipText.Split(' ')[8]);
         }
-
         private int GetShadowboltMaxDmg(Spell shadowbolt)
         {
             return int.Parse(shadowbolt.ToolTipText.Split(' ')[10]);
         }
-
         private double GetShadowboltSPMod(Spell shadowbolt)
         {
             int start = shadowbolt.Effects[0].IndexOf("SP mod");
@@ -1128,43 +965,5 @@ namespace Simulation.Library
             }
         }
         #endregion CastSpells
-
-        #region EquipGear
-        public void EquipHead(Equipment equipment) => head = equipment.InvSlot == "Head" ? equipment : head;
-        public void EquipNeck(Equipment equipment) => neck = equipment.InvSlot == "Neck" ? equipment : neck;
-        public void EquipShoulders(Equipment equipment) => shoulders = equipment.InvSlot == "Shoulder" ? equipment : shoulders;
-        public void EquipBack(Equipment equipment) => back = equipment.InvSlot == "Back" ? equipment : back;
-        public void EquipChest(Equipment equipment) => chest = equipment.InvSlot == "Chest" ? equipment : chest;
-        public void EquipWrist(Equipment equipment) => wrist = equipment.InvSlot == "Wrist" ? equipment : wrist;
-        public void EquipHands(Equipment equipment) => hands = equipment.InvSlot == "Hands" ? equipment : hands;
-        public void EquipWaist(Equipment equipment) => waist = equipment.InvSlot == "Waist" ? equipment : waist;
-        public void EquipLegs(Equipment equipment) => legs = equipment.InvSlot == "Legs" ? equipment : legs;
-        public void EquipFeet(Equipment equipment) => feet = equipment.InvSlot == "Feet" ? equipment : feet;
-        public void EquipRing1(Equipment equipment) => ring1 = equipment.InvSlot == "Finger" ? equipment : ring1;
-        public void EquipRing2(Equipment equipment) => ring2 = equipment.InvSlot == "Finger" ? equipment : ring2;
-        public void EquipTrinket1(Equipment equipment) => trinket1 = equipment.InvSlot == "Trinket" ? equipment : trinket1;
-        public void EquipTrinket2(Equipment equipment) => trinket2 = equipment.InvSlot == "Trinket" ? equipment : trinket2;
-        public void EquipMainhand(Equipment equipment)
-        {
-            if (equipment.InvSlot == "Main Hand")
-                mainhand = equipment.InvSlot == "Main Hand" ? equipment : mainhand;
-            else
-            {
-                EquipTwohander(equipment);
-            }
-        }
-        private void EquipTwohander(Equipment equipment)
-        {
-            mainhand = equipment.InvSlot == "Two-Hand" ? equipment : mainhand;
-            if (mainhand is not null && mainhand.InvSlot == "Two-Hand") offhand = null;
-        }
-        public void EquipOffhand(Equipment equipment)
-        {
-            if (mainhand is not null && mainhand.InvSlot == "Two-Hand") return;
-            offhand = equipment.InvSlot == "Held In Off-hand" ? equipment : offhand;
-        }
-        public void EquipRanged(Equipment equipment) => ranged = equipment.InvSlot == "Ranged" ? equipment : ranged;
-        #endregion EquipGear
-
     }
 }
