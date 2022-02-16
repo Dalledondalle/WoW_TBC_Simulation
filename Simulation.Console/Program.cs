@@ -12,11 +12,14 @@ namespace Simulation.Console
         static void Main(string[] args)
         {
             Warlock wl = new();
+            Dummy dummy = new();
             Wowhead wh = new();
+            Report report = new();
             wl.BaneRank = 5;
             var spell = wh.GetSpell(28189);
+            dummy.CastSpell(spell, wl, 12312, report);
             wl.DemonicAegisRank = 3;
-            wl.CastFelArmor(spell);
+
             //var spell = wh.GetSpell(686);
             //wl.CastShadowBolt(spell);
             System.Console.WriteLine(spell.Name);

@@ -8,6 +8,41 @@ namespace Simulation.Library
 {
     public class Warlock : PlayerClass
     {
+        #region SpellNames
+        private const string shadowBoltStr = "Shadow Bolt";
+        private const string immolateStr = "Immolate";
+        private const string soulFireStr = "Soul Fire";
+        private const string rainOfFireStr = "Rain of Fire";
+        private const string searingPainStr = "Searing Pain";
+        private const string hellFireStr = "Hellfire";
+        private const string shadowburnStr = "Shadowburn";
+        private const string fireboltStr = "Firebolt";
+        private const string lashOfPainStr = "Lash of Pain";
+        private const string incinerateStr = "Incinerate";
+        private const string conflagrateStr = "Conflagrate";
+        private const string shadowfuryStr = "Shadowfury";
+        private const string unstableAfflictionStr = "Unstable Affliction";
+        private const string corruptionStr = "Corruption";
+        private const string seedOfCorruption = "Seed of Corruption";
+        private const string lifeTapStr = "Life Tap";
+        private const string curseOfTheElementsStr = "Curse of the Elements";
+        private const string curseOfRecklessnessStr = "Curse of Recklessness";
+        private const string curseOfDoomStr = "Curse of Doom";
+        private const string amplifyCurseStr = "Amplify Curse";
+        private const string curseOfAgonyStr = "Curse of Agony";
+        private const string curseOfTongues = "Curse of Tongues";
+        private const string drainManaStr = "Drain Mana";
+        private const string drainSoulStr = "Drain Soul";
+        private const string howlOfTerrorStr = "Howl of Terror";
+        private const string fearStr = "Fear";
+        private const string deathCoilStr = "Death Coil";
+        private const string curseOfWeaknessStr = "Curse of Weakness";
+        private const string drainLifeStr = "Drain Life";
+        private const string fireShieldStr = "Fire Shield";
+        private const string bloodPactStr = "Blood Pact";
+        private const string soothingKissStr = "Soothing Kiss";
+        private const string lesserInvisibilityStr = "Lesser Invisibility";
+        #endregion SpellNames
         #region Talents
         #region DestructionTalents
         public int BaneRank
@@ -133,6 +168,17 @@ namespace Simulation.Library
                 }
             }
         }
+        public int ShadowfuryRank
+        {
+            set
+            {
+                RemoveTalent(shadowfuryStr);
+                if (value > 0)
+                {
+                    Talents.Add(shadowfury);
+                }
+            }
+        }
         public int ImprovedSearingPainRank
         {
             set
@@ -194,9 +240,11 @@ namespace Simulation.Library
             }
         }
 
-        private static string[] baneAffectedSpells1 = new[] { "Immolate", "Shadow Bolt" };
-        private static string[] baneAffectedSpells2 = new[] { "Soul Fire" };
-        private static string baneStr = "Bane";
+        private static string[] destructionSpells = new[] { immolateStr, shadowBoltStr, rainOfFireStr, hellFireStr, searingPainStr, soulFireStr, incinerateStr, shadowburnStr, conflagrateStr, shadowfuryStr };
+
+        private static string[] baneAffectedSpells1 = new[] { immolateStr, shadowBoltStr };
+        private static string[] baneAffectedSpells2 = new[] { soulFireStr };
+        private const string baneStr = "Bane";
         private Talent[] banes = new Talent[]
         {
             new(){ ID = "17788", Level = 1, Name = baneStr, Effects = new() { new(){ AffectedSpells = baneAffectedSpells1.ToList(), Modify = Modify.Casttime, Value = -100 }, new(){AffectedSpells = baneAffectedSpells2.ToList(), Modify = Modify.Casttime, Value = -400 } } },
@@ -206,8 +254,8 @@ namespace Simulation.Library
             new(){ ID = "17792", Level = 5, Name = baneStr, Effects = new() { new(){ AffectedSpells = baneAffectedSpells1.ToList(), Modify = Modify.Casttime, Value = -500 }, new(){AffectedSpells = baneAffectedSpells2.ToList(), Modify = Modify.Casttime, Value = -2000 } } }
         };
 
-        private static string[] cataclysmAffectedSpells = new[] { "Immolate", "Shadow Bolt", "Rain of Fire", "Searing Pain", "Soul Fire", "Hellfire" };
-        private static string cataclysmStr = "Cataclysm";
+        private static string[] cataclysmAffectedSpells => destructionSpells;
+        private const string cataclysmStr = "Cataclysm";
         private Talent[] cataclysms = new Talent[]
         {
             new(){ ID = "17778", Level = 1, Name = cataclysmStr, Effects = new() { new(){ AffectedSpells = cataclysmAffectedSpells.ToList() , Modify = Modify.ManaPercent, Value = -1 } } },
@@ -217,8 +265,8 @@ namespace Simulation.Library
             new(){ ID = "17782", Level = 5, Name = cataclysmStr, Effects = new() { new(){ AffectedSpells = cataclysmAffectedSpells.ToList() , Modify = Modify.ManaPercent, Value = -5 } } }
         };
 
-        private static string[] improvedShadowBoltAffectedSpells = new string[] { "Shadow Bolt" };
-        private static string improvedShadowBoltStr = "Improved Shadow Bolt";
+        private static string[] improvedShadowBoltAffectedSpells = new string[] { shadowBoltStr };
+        private const string improvedShadowBoltStr = "Improved Shadow Bolt";
         private Talent[] improvedShadowBolts = new Talent[]
         {
             new(){ ID = "17793", Level = 1, Name = improvedShadowBoltStr, Effects = new() { new(){ AffectedSpells = improvedShadowBoltAffectedSpells.ToList() , Modify = Modify.ManaPercent, Value = 4 } } },
@@ -228,24 +276,24 @@ namespace Simulation.Library
             new(){ ID = "17803", Level = 5, Name = improvedShadowBoltStr, Effects = new() { new(){ AffectedSpells = improvedShadowBoltAffectedSpells.ToList() , Modify = Modify.ManaPercent, Value = 20 } } },
         };
 
-        private static string[] improvedFireboltAffectSpells = new[] { "Firebolt" };
-        private static string improvedFireboltStr = "Improved Firebolt";
+        private static string[] improvedFireboltAffectSpells = new[] { fireboltStr };
+        private const string improvedFireboltStr = "Improved Firebolt";
         private Talent[] improvedFirebolts = new Talent[]
         {
             new(){ ID = "18126", Level = 1, Name = improvedFireboltStr, Effects = new() { new(){ AffectedSpells = improvedFireboltAffectSpells.ToList() , Modify = Modify.Casttime, Value = -250 } } },
             new(){ ID = "18127", Level = 2, Name = improvedFireboltStr, Effects = new() { new(){ AffectedSpells = improvedFireboltAffectSpells.ToList() , Modify = Modify.Casttime, Value = -500 } } }
         };
 
-        private static string[] improvedLashOfPainAffectedSpells = new[] { "Lash of Pain" };
-        private static string improvedLashOfPainStr = "Improved Lash of Pain";
+        private static string[] improvedLashOfPainAffectedSpells = new[] { lashOfPainStr };
+        private const string improvedLashOfPainStr = "Improved Lash of Pain";
         private Talent[] improvedLastOfPain= new Talent[]
         {
             new(){ ID = "18128", Level = 1, Name = improvedLashOfPainStr, Effects = new() { new(){ AffectedSpells = improvedLashOfPainAffectedSpells.ToList() , Modify = Modify.Cooldown, Value = -3000 } } },
             new(){ ID = "18129", Level = 2, Name = improvedLashOfPainStr, Effects = new() { new(){ AffectedSpells = improvedLashOfPainAffectedSpells.ToList() , Modify = Modify.Cooldown, Value = -6000 } } }
         };
 
-        private static string[] devastationAffectedSpells = new[] { "Immolate", "Shadow Bolt", "Searing Pain", "Soul Fire"};
-        private static string devastationStr = "Devastation";
+        private static string[] devastationAffectedSpells => destructionSpells;
+        private const string devastationStr = "Devastation";
         private Talent[] devasations = new Talent[]
         {
             new(){ ID = "18130", Level = 1, Name = devastationStr, Effects = new() { new(){ AffectedSpells = devastationAffectedSpells.ToList() , Modify = Modify.Critchance, Value = 1 } } },
@@ -255,12 +303,11 @@ namespace Simulation.Library
             new(){ ID = "18134", Level = 5, Name = devastationStr, Effects = new() { new(){ AffectedSpells = devastationAffectedSpells.ToList() , Modify = Modify.Critchance, Value = 5 } } }
         };
 
-        private static string[] shadowburnAffectedSpells = new[] { "Shadowburn" };
-        private static string shadowburnStr = "Shadowburn";
+        private static string[] shadowburnAffectedSpells = new[] { shadowburnStr };
         private Talent shadowburn = new() { ID = "17877", Level = 1, Name = shadowburnStr, Effects = new() { new() { AffectedSpells = shadowburnAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 17962 } } };
 
-        private static string[] improvedSearingPainAffectedSpells = new[] { "Searing Pain" };
-        private static string improvedSearingPainStr = "Improved Searing Pain";
+        private static string[] improvedSearingPainAffectedSpells = new[] { searingPainStr };
+        private const string improvedSearingPainStr = "Improved Searing Pain";
         private Talent[] improvedSearingPain = new Talent[]
         {
             new() { ID = "17927", Level = 1, Name = improvedSearingPainStr, Effects = new() { new() { AffectedSpells = improvedSearingPainAffectedSpells.ToList(), Modify = Modify.Critchance, Value = 4 } } },
@@ -268,8 +315,8 @@ namespace Simulation.Library
             new() { ID = "17930", Level = 3, Name = improvedSearingPainStr, Effects = new() { new() { AffectedSpells = improvedSearingPainAffectedSpells.ToList(), Modify = Modify.Critchance, Value = 10 } } }
         };
 
-        private static string[] improvedImmolateAffectedSpells = new[] { "Immolate" };
-        private static string improvedImmolateStr = "Improved Immolate";
+        private static string[] improvedImmolateAffectedSpells = new[] { immolateStr };
+        private const string improvedImmolateStr = "Improved Immolate";
         private Talent[] improvedImmolate = new Talent[]
         {
             new() { ID = "17815", Level = 1, Name = improvedImmolateStr, Effects = new() { new() { AffectedSpells = improvedImmolateAffectedSpells.ToList(), Modify = Modify.DamagePercent, Value = 5 } } },
@@ -279,13 +326,13 @@ namespace Simulation.Library
             new() { ID = "17836", Level = 5, Name = improvedImmolateStr, Effects = new() { new() { AffectedSpells = improvedImmolateAffectedSpells.ToList(), Modify = Modify.DamagePercent, Value = 25 } } }
         };
 
-        private static string[] ruinAffectedSpells = new[] { "Immolate", "Shadow Bolt", "Searing Pain", "Hellfire", "Soul Fire" };
-        private static string ruinStr = "Ruin";
+        private static string[] ruinAffectedSpells => destructionSpells;
+        private const string ruinStr = "Ruin";
         private Talent ruin = new() { ID = "17959", Level = 1, Name = ruinStr, Effects = new() { new() { AffectedSpells = ruinAffectedSpells.ToList(), Modify = Modify.CritDamagePercent, Value = 100 } } };
 
-        private static string[] emberstormAffectedSpells = new[] { "Immolate", "Hellfire", "Rain of Fire", "Incinerate", "Searing Pain" };
-        private static string[] emberstormCastAffectedSpells = new[] { "Incinerate" };
-        private static string emberstormStr = "Emberstorm";
+        private static string[] emberstormAffectedSpells = new[] { immolateStr, hellFireStr, rainOfFireStr, incinerateStr, searingPainStr };
+        private static string[] emberstormCastAffectedSpells = new[] { incinerateStr };
+        private const string emberstormStr = "Emberstorm";
         private Talent[] emberstorms = new Talent[]
         {
         new() { ID = "17954", Level = 1, Name = emberstormStr, Effects = new() { new() { AffectedSpells = emberstormAffectedSpells.ToList(), Modify = Modify.DamagePercent, Value = 2 }, new() { AffectedSpells = emberstormAffectedSpells.ToList(), Modify = Modify.PeriodicDamagePercent, Value = 2 }, new() { AffectedSpells = emberstormAffectedSpells.ToList(), Modify = Modify.CasttimePercent, Value = -2 } } },
@@ -295,12 +342,12 @@ namespace Simulation.Library
         new() { ID = "17958", Level = 5, Name = emberstormStr, Effects = new() { new() { AffectedSpells = emberstormAffectedSpells.ToList(), Modify = Modify.DamagePercent, Value = 10 }, new() { AffectedSpells = emberstormAffectedSpells.ToList(), Modify = Modify.PeriodicDamagePercent, Value = 10 }, new() { AffectedSpells = emberstormAffectedSpells.ToList(), Modify = Modify.CasttimePercent, Value = -10 } } },
         };
 
-        private static string[] conflagrateAffectedSpells = new[] { "Conflagrate" };
-        private static string conflagrateStr = "Conflagrate";
+        private static string[] conflagrateAffectedSpells = new[] { conflagrateStr };
         private Talent conflagrate = new() { ID = "17962", Level = 1, Name = conflagrateStr, Effects = new() { new() { AffectedSpells = conflagrateAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 17962 } } };
 
-        private static string[] shadowAndFlameAffectedSpells = new[] { "Incinerate", "Shadow Bolt" };
-        private static string shadowAndFlameStr = "Shadow and Flame";
+        private static string[] shadowAndFlameAffectedSpells = new[] { incinerateStr, shadowBoltStr };
+        private const string shadowAndFlameStr = "Shadow and Flame";
+
         private Talent[] shadowAndFlames = new Talent[]
         {
             new() { ID = "30288", Level = 1, Name = shadowAndFlameStr, Effects = new() { new() { AffectedSpells = shadowAndFlameAffectedSpells.ToList(), Modify = Modify.SpellPowerPercent, Value = 4 } } },
@@ -309,6 +356,9 @@ namespace Simulation.Library
             new() { ID = "30291", Level = 4, Name = shadowAndFlameStr, Effects = new() { new() { AffectedSpells = shadowAndFlameAffectedSpells.ToList(), Modify = Modify.SpellPowerPercent, Value = 16 } } },
             new() { ID = "30292", Level = 5, Name = shadowAndFlameStr, Effects = new() { new() { AffectedSpells = shadowAndFlameAffectedSpells.ToList(), Modify = Modify.SpellPowerPercent, Value = 20 } } }
         };
+
+        private static string[] shadowfuryAffectedSpells = new[] { shadowfuryStr };
+        private Talent shadowfury = new() { ID = "30283", Level = 1, Name = shadowfuryStr, Effects = new() { new() { AffectedSpells = shadowfuryAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 17962 } } };
         #endregion DestructionTalents
 
         #region AfflictionTalents
@@ -481,7 +531,9 @@ namespace Simulation.Library
             }
         }
 
-        private static string[] suppressionAffectedSpells = new[] { "Corruption", "Drain Life", "Curse of Weakness", "Curse of Tongues", "Fear", "Curse of Doom", "Curse of Agony", "Drain Soul", "Drain Mana", "Curse of Recklessness", "Curse of the Elements", "Howl of Terror", "Seed of Corruption", "Curse of Exhaustion", "Curse of Exhaustion", "Death Coil", "Shadow Embrace", "Unstable Affliction" };
+        private static string[] afflictionSpells = new[] { seedOfCorruption, curseOfTheElementsStr, curseOfRecklessnessStr, curseOfDoomStr, curseOfTongues, curseOfWeaknessStr, corruptionStr, drainLifeStr, curseOfAgonyStr, lifeTapStr, deathCoilStr, fearStr, howlOfTerrorStr, drainSoulStr, drainManaStr, amplifyCurseStr };
+
+        private static string[] suppressionAffectedSpells => afflictionSpells;
         private static string suppressionStr = "Suppression";
         private Talent[] suppressions = new Talent[]
         {
@@ -492,7 +544,7 @@ namespace Simulation.Library
             new(){ ID = "18178", Level = 5, Name = suppressionStr, Effects = new() { new(){ AffectedSpells = suppressionAffectedSpells.ToList() , Modify = Modify.Hitchance, Value = 10 } } }
         };
 
-        private static string[] improvedCorruptionAffectedSpells = new[] { "Corruption" };
+        private static string[] improvedCorruptionAffectedSpells = new[] { corruptionStr };
         private static string improvedCorruptionStr = "Improved Corruption";
         private Talent[] improvedCorruptions = new Talent[]
         {
@@ -503,7 +555,7 @@ namespace Simulation.Library
             new(){ ID = "17814", Level = 5, Name = improvedCorruptionStr, Effects = new() { new(){ AffectedSpells = improvedCorruptionAffectedSpells.ToList() , Modify = Modify.Casttime, Value = -2000 } } }
         };
 
-        private static string[] improvedLifeTapAffectedSpells = new[] { "Life Tap" };
+        private static string[] improvedLifeTapAffectedSpells = new[] { lifeTapStr };
         private static string improvedLifeTapStr = "Improved Life Tap";
         private Talent[] improvedLifeTaps = new Talent[]
         {
@@ -511,7 +563,7 @@ namespace Simulation.Library
             new(){ ID = "18183", Level = 2, Name = improvedLifeTapStr, Effects = new() { new(){ AffectedSpells = improvedLifeTapAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 20 } } }
         };
 
-        private static string[] soulSiphonAffectedSpells = new[] { "Drain Life" };
+        private static string[] soulSiphonAffectedSpells = new[] { drainLifeStr };
         private static string soulSiphonStr = "Soul Siphon";
         private Talent[] soulSiphons = new Talent[]
         {
@@ -519,7 +571,7 @@ namespace Simulation.Library
             new(){ ID = "18183", Level = 2, Name = soulSiphonStr, Effects = new() { new(){ AffectedSpells = soulSiphonAffectedSpells.ToList() , Modify = Modify.Unique, Value = 4 } } }
         };
 
-        private static string[] improvedCurseOfAgonyAffectedSpells = new[] { "Curse of Agony" };
+        private static string[] improvedCurseOfAgonyAffectedSpells = new[] { curseOfAgonyStr };
         private static string improvedCurseOfAgonyStr = "Improved Curse of Agony";
         private Talent[] improvedCurseOfAgonys = new Talent[]
         {
@@ -527,11 +579,10 @@ namespace Simulation.Library
             new(){ ID = "18829", Level = 2, Name = improvedCurseOfAgonyStr, Effects = new() { new(){ AffectedSpells = improvedCurseOfAgonyAffectedSpells.ToList() , Modify = Modify.PeriodicDamagePercent, Value = 10 } } }
         };
 
-        private static string[] amplifyCurseAffectedSpells = new[] { "Amplify Curse" };
-        private static string amplifyCurseStr = "Amplify Curse";
+        private static string[] amplifyCurseAffectedSpells = new[] { amplifyCurseStr };
         private Talent amplifyCurse = new() { ID = "18827", Level = 1, Name = amplifyCurseStr, Effects = new() { new() { AffectedSpells = amplifyCurseAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 18288 } } };
 
-        private static string[] nightfallAffectedSpells = new[] { "Drain Life", "Corruption" };
+        private static string[] nightfallAffectedSpells = new[] { drainLifeStr, corruptionStr };
         private static string nightfallStr = "Nightfall";
         private Talent[] nightfalls = new Talent[]
         {
@@ -539,7 +590,7 @@ namespace Simulation.Library
             new(){ ID = "18095", Level = 2, Name = nightfallStr, Effects = new() { new(){ AffectedSpells = nightfallAffectedSpells.ToList() , Modify = Modify.PeriodicProc, Value = 4 } } }
         };
 
-        private static string[] empoweredCorruptionSpells = new[] { "Corruption" };
+        private static string[] empoweredCorruptionSpells = new[] { corruptionStr };
         private static string empoweredCorruptionStr = "Empowered Corruption";
         private Talent[] empoweredCorruptions = new Talent[]
         {
@@ -552,8 +603,8 @@ namespace Simulation.Library
         private static string siphonLifeStr = "Siphon Life";
         private Talent siphonLife = new() { ID = "18827", Level = 1, Name = siphonLifeStr, Effects = new() { new() { AffectedSpells = siphonLifeAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 18265 } } };
 
-        private static string[] shadowMasteryAffectedSpellsDamage = new[] { "Seed of Corruption", "Unstable Affliction" };
-        private static string[] shadowMasteryAffectedSpellsPeriodic= new[] { "Seed of Corruption", "Unstable Affliction", "Corruption", "Drain Life", "Drain Soul", "Curse of Agony", "Siphon Life" };
+        private static string[] shadowMasteryAffectedSpellsDamage = new[] { seedOfCorruption, unstableAfflictionStr };
+        private static string[] shadowMasteryAffectedSpellsPeriodic= new[] { seedOfCorruption, unstableAfflictionStr, corruptionStr, drainLifeStr, drainSoulStr, curseOfAgonyStr, "Siphon Life", shadowBoltStr, shadowfuryStr, shadowburnStr };
         private static string shadowMasteryStr = "Shadow Mastery";
         private Talent[] shadowMasterys = new Talent[]
         {
@@ -564,7 +615,7 @@ namespace Simulation.Library
             new(){ ID = "18275", Level = 5, Name = shadowMasteryStr, Effects = new() { new(){ AffectedSpells = shadowMasteryAffectedSpellsPeriodic.ToList() , Modify = Modify.PeriodicDamagePercent, Value = 10 }, new(){ AffectedSpells = shadowMasteryAffectedSpellsDamage.ToList() , Modify = Modify.DamagePercent, Value = 10 } } }
         };
 
-        private static string[] contagionAffectedSpells = new[] { "Corruption", "Curse of Agony", "Seed of Corruption" };
+        private static string[] contagionAffectedSpells = new[] { corruptionStr, curseOfAgonyStr, seedOfCorruption };
         private static string contagionStr = "Contagion";
         private Talent[] contagions = new Talent[]
         {
@@ -575,8 +626,7 @@ namespace Simulation.Library
             new(){ ID = "30064", Level = 5, Name = contagionStr, Effects = new() { new(){ AffectedSpells = contagionAffectedSpells.ToList() , Modify = Modify.PeriodicDamagePercent, Value = 5 } } }
         };
 
-        private static string[] unstableAfflictionAffectedSpells = new[] { "Unstable Affliction" };
-        private static string unstableAfflictionStr = "Unstable Affliction";
+        private static string[] unstableAfflictionAffectedSpells = new[] { unstableAfflictionStr };
         private Talent unstableAffliction = new() { ID = "30108", Level = 1, Name = unstableAfflictionStr, Effects = new() { new() { AffectedSpells = unstableAfflictionAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 30108 } } };
         #endregion AfflictionTalents
 
@@ -750,7 +800,7 @@ namespace Simulation.Library
 
         private static string[] pets = new[] { "Felhunter", "Voidwalker", "Imp", "Succubus", "Incubus", "Felguard" };
 
-        private static string[] improvedImpAffectedSpells = new[] { "Fire Shield", "Firebolt", "Blood Pact" };
+        private static string[] improvedImpAffectedSpells = new[] { fireShieldStr, fireboltStr, bloodPactStr };
         private static string improvedImpStr = "Improved Imp";
         private Talent[] improvedImps = new Talent[]
         {
@@ -768,8 +818,8 @@ namespace Simulation.Library
             new(){ ID = "18744", Level = 3, Name = felIntellectStr, Effects = new() { new(){ AffectedSpells = felIntellectAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 15 }, new() { AffectedSpells = new(){ "Mana" }, Modify = Modify.MaxMana, Value = 3} } }
         };
 
-        private static string[] improvedSayaadAffectedSpellsEffectiveness = new[] { "Soothing Kiss", "Lash of Pain"};
-        private static string[] improvedSayaadAffectedSpellsBuffDuration= new[] { "Lesser Invisibility", "Seduction" };
+        private static string[] improvedSayaadAffectedSpellsEffectiveness = new[] { soothingKissStr, lashOfPainStr };
+        private static string[] improvedSayaadAffectedSpellsBuffDuration= new[] { lesserInvisibilityStr, "Seduction" };
         private static string improvedSayaadStr = "Improved Sayaad";
         private Talent[] improvedSayaads = new Talent[]
         {
@@ -851,7 +901,6 @@ namespace Simulation.Library
             new(){ ID = "30248", Level = 5, Name = demonicTacticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 5 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 5 } } }
         };
         #endregion DemonologyTalents
-
         #endregion Talents
 
         public Warlock()
@@ -889,7 +938,7 @@ namespace Simulation.Library
         public void CastLifeTap(Spell lifetap, Report report = null)
         {
             if (report is null) report = new();
-            if (lifetap.Name != "Life Tap") return;
+            if (lifetap.Name != lifeTapStr) return;
             int manaFromLT = ManaGainedFromLifetap(lifetap);
             int ManaGained = 0;
             lastSpelledCasted = lifetap;
@@ -912,7 +961,7 @@ namespace Simulation.Library
         public double CastShadowBolt(Spell shadowbolt, Report report = null)
         {
             if (report is null) report = new();
-            if (shadowbolt.Name != "Shadow Bolt") return 0;
+            if (shadowbolt.Name != shadowBoltStr) return 0;
             double dmg;
             Random rnd = new();
             double dmgModTalents = GetModFromTalents(shadowbolt, Modify.DamagePercent);
@@ -965,5 +1014,10 @@ namespace Simulation.Library
             }
         }
         #endregion CastSpells
+
+        public override void CastSpell(Spell spell, Unit target, double fightTick, Report report)
+        {
+            return;
+        }
     }
 }

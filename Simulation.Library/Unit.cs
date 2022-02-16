@@ -46,21 +46,21 @@ namespace Simulation.Library
         protected List<Aura> auras => Buffs.Concat(Debuffs).ToList();
         public List<Aura> Buffs => buffs.OrderBy(x => x.EndTimer).ToList();
         protected List<Aura> buffs = new();
-
         public List<Aura> Debuffs => debuffs;
         protected List<Aura> debuffs = new();
-        #endregion SpellsAndAuras
-
         public void AddAura(Aura Aura)
         {
             if (Aura is null) return;
             if (Aura.AuraType == AuraType.Buff) buffs.Add(Aura);
             if (Aura.AuraType == AuraType.Debuff) debuffs.Add(Aura);
         }
-        public void CheckBuffs(double timestamp)
+        #endregion SpellsAndAuras
+
+        public virtual void CastSpell(Spell spell, Unit target, double fightTick, Report report)
         {
-            buffs.RemoveAll(b => b.EndTimer < timestamp);
+            return;
         }
+
         #region AddStats
         public void AddMana(int mana)
         {

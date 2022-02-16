@@ -902,5 +902,54 @@ namespace TalentTests.Destruction
             Assert.Empty(wl.Talents);
         }
     }
+    public class ShadowfuryTests
+    {
+        private static string rank = "Rank";
+        private static string propertyName = "Shadowfury" + rank;
+        private static string talentName = "Shadowfury";
+        [Fact]
+        public void AddTests()
+        {
+            Warlock wl = new();
+            wl.GetType().GetProperty(propertyName).SetValue(wl, 1);
+
+            Assert.Single(wl.Talents);
+            Assert.Equal(1, wl.Talents.First().Level);
+            Assert.Equal(talentName, wl.Talents.First().Name);
+        }
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-20)]
+        public void NullTests(int rank)
+        {
+            Warlock wl = new();
+            wl.GetType().GetProperty(propertyName).SetValue(wl, rank);
+
+            Assert.Empty(wl.Talents);
+        }
+
+        [Theory]
+        [InlineData(999)]
+        [InlineData(6)]
+        public void AboveRank2Tests(int rank)
+        {
+            Warlock wl = new();
+            wl.GetType().GetProperty(propertyName).SetValue(wl, rank);
+
+            Assert.Single(wl.Talents);
+            Assert.Equal(1, wl.Talents.First().Level);
+            Assert.Equal(talentName, wl.Talents.First().Name);
+        }
+
+        [Fact]
+        public void RemoveTests()
+        {
+            Warlock wl = new();
+            wl.GetType().GetProperty(propertyName).SetValue(wl, 1);
+            wl.GetType().GetProperty(propertyName).SetValue(wl, 0);
+
+            Assert.Empty(wl.Talents);
+        }
+    }
     #endregion 1pointTalents
 }
