@@ -10,11 +10,72 @@ namespace Simulation.Library
 {
     public class Wowhead
     {
-        public Equipment GetItem(int id)
+        public static SocketBonus[] SocketBonuses = new SocketBonus[]
         {
+            new(){ID = "2889", Stat = BonusStat.spellpower, Amount = 5},
+            new(){ID = "2900", Stat = BonusStat.spellpower, Amount = 4},
+            new(){ID = "2974", Stat = BonusStat.spellpower, Amount = 3},     //7 Healing and SP
+            new(){ID = "2872", Stat = BonusStat.spellpower, Amount = 3},     //9 Healing and sp
+            new(){ID = "3153", Stat = BonusStat.spellpower, Amount = 2},
+            new(){ID = "3098", Stat = BonusStat.spellpower, Amount = 2},    //4 Healing and SP
+
+
+            new(){ID = "2880", Stat = BonusStat.spellcrit, Amount = 2},
+            new(){ID = "2875", Stat = BonusStat.spellcrit, Amount = 3},
+            new(){ID = "2951", Stat = BonusStat.spellcrit, Amount = 4},
+
+
+            new(){ID = "2909", Stat = BonusStat.spellhit, Amount = 2},
+            new(){ID = "3153", Stat = BonusStat.spellhit, Amount = 3},
+
+
+            new(){ID = "2881", Stat = BonusStat.MP5, Amount = 1},
+            new(){ID = "2865", Stat = BonusStat.MP5, Amount = 2},
+
+
+            new(){ID = "2863", Stat = BonusStat.intellect, Amount = 3},
+            new(){ID = "94", Stat = BonusStat.intellect, Amount = 4},
+        };
+        public Equipment GetEquipment(int id)
+        {
+            var equipment = GetEquipementFromFolder(id);
+            if (equipment is not null) return equipment;
             var json = XmlStringToJson($"https://tbc.wowhead.com/item={id}&xml");
-            Equipment equipment = JsonConvert.DeserializeObject<Equipment>(json);
+            equipment = JsonConvert.DeserializeObject<Equipment>(json);
+            equipment.ID = id.ToString();
+            SaveEquipmentToLocalFolder(equipment);
             return equipment;
+        }
+
+        public Gem GetGem(int id)
+        {
+            Gem gem = GetGemFromFolder(id);
+            if (gem is not null) return gem;
+            string color = string.Empty;
+            string output = string.Empty;
+            XmlTextReader reader = new XmlTextReader($"https://tbc.wowhead.com/item={id}&xml");
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    if (reader.Name == "subclass")
+                    {
+                        reader.Read();
+                        color = reader.Value.ToString();
+                    }
+
+                    if (reader.Name == "jsonEquip")
+                    {
+                        reader.Read();
+                        output = reader.Value.ToString();
+                    }
+                }
+            }
+            gem = JsonConvert.DeserializeObject<Gem>("{" + output + "}");
+            gem.Color = color.Replace(" Gems", "");
+            gem.ID = id;
+            SaveGemToLocalFolder(gem);
+            return gem;
         }
 
         public Spell GetSpell(int id)
@@ -63,15 +124,67 @@ namespace Simulation.Library
             fs.Close();
         }
 
+        private void SaveGemToLocalFolder(Gem gem)
+        {
+            string dir = Environment.CurrentDirectory + @"/Gems/";
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            string jsonString = JsonConvert.SerializeObject(gem);
+            var fs = new FileStream(dir + gem.ID.ToString(), FileMode.Append, FileAccess.Write);
+            var sw = new StreamWriter(fs);
+            sw.WriteLine(jsonString);
+            sw.Flush();
+            sw.Close();
+            fs.Close();
+        }
+
+        private void SaveEquipmentToLocalFolder(Equipment equipment)
+        {
+            string dir = Environment.CurrentDirectory + @"/Equipment/";
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            string jsonString = JsonConvert.SerializeObject(equipment);
+            var fs = new FileStream(dir + equipment.ID.ToString(), FileMode.Append, FileAccess.Write);
+            var sw = new StreamWriter(fs);
+            sw.WriteLine(jsonString);
+            sw.Flush();
+            sw.Close();
+            fs.Close();
+        }
+
         private Spell GetSpellFromFolder(int id)
         {
             string dir = Environment.CurrentDirectory + @"/Spells/";
             string jsonString = string.Empty;
-            if(File.Exists(dir + id.ToString()))
+            if (File.Exists(dir + id.ToString()))
                 jsonString = File.ReadAllText(dir + id.ToString());
 
-            if(!string.IsNullOrEmpty(jsonString))
+            if (!string.IsNullOrEmpty(jsonString))
                 return JsonConvert.DeserializeObject<Spell>(jsonString);
+            return null;
+        }
+
+        private Gem GetGemFromFolder(int id)
+        {
+            string dir = Environment.CurrentDirectory + @"/Gems/";
+            string jsonString = string.Empty;
+            if (File.Exists(dir + id.ToString()))
+                jsonString = File.ReadAllText(dir + id.ToString());
+
+            if (!string.IsNullOrEmpty(jsonString))
+                return JsonConvert.DeserializeObject<Gem>(jsonString);
+            return null;
+        }
+
+        private Equipment GetEquipementFromFolder(int id)
+        {
+            string dir = Environment.CurrentDirectory + @"/Equipment/";
+            string jsonString = string.Empty;
+            if (File.Exists(dir + id.ToString()))
+                jsonString = File.ReadAllText(dir + id.ToString());
+
+            if (!string.IsNullOrEmpty(jsonString))
+                return JsonConvert.DeserializeObject<Equipment>(jsonString);
             return null;
         }
 
@@ -89,11 +202,14 @@ namespace Simulation.Library
             SaveSpellToLocalFolder(spell);
             return spell;
         }
+
     }
 
 
     public class Equipment
     {
+        [JsonProperty("id")]
+        public string ID { get; set; }
         [JsonProperty("invSlot")]
         public string InvSlot { get; set; }
 
@@ -125,15 +241,36 @@ namespace Simulation.Library
         public int Slotbak { get; set; }
 
         [JsonProperty("socket1")]
-        public int Socket1 { get; set; }
+        public SocketColor Socket1 { get; set; }
 
         [JsonProperty("socket2")]
-        public int Socket2 { get; set; }
+        public SocketColor Socket2 { get; set; }
         [JsonProperty("socket3")]
-        public int Socket3 { get; set; }
+        public SocketColor Socket3 { get; set; }
+
+        [JsonIgnore]
+        public Gem Gem1 { get; private set; }
+        [JsonIgnore]
+        public Gem Gem2 { get; private set; }
+        [JsonIgnore]
+        public Gem Gem3 { get; private set; }
 
         [JsonProperty("socketbonus")]
-        public int SocketBonus { get; set; }
+        public string SocketBonus { get; set; }
+        [JsonIgnore]
+        public bool IsSocketBonusActive
+        {
+            get
+            {
+                if (Socket1 != SocketColor.Dummy && Socket1 != SocketColor.Meta)
+                    if (!DoesSocketMatchGem(Socket1, Gem1)) return false;
+                if (Socket2 != SocketColor.Dummy && Socket2 != SocketColor.Meta)
+                    if (!DoesSocketMatchGem(Socket2, Gem2)) return false;
+                if (Socket3 != SocketColor.Dummy && Socket3 != SocketColor.Meta)
+                    if (!DoesSocketMatchGem(Socket3, Gem3)) return false;
+                return true;
+            }
+        }
 
         [JsonProperty("splcritstrkrtng")]
         public int SpellCritRating { get; set; }
@@ -163,6 +300,64 @@ namespace Simulation.Library
 
         [JsonProperty("manargn")]
         public int ManaRegn { get; set; }
+
+        public void SocketGem(Gem gem, int gemslot)
+        {
+            switch (gemslot)
+            {
+                case 1:
+                    if(Socket1 != SocketColor.Dummy)
+                    {
+                        if(Socket1 != SocketColor.Meta && gem.Color != "Meta")
+                            Gem1 = gem;
+                        if (Socket1 == SocketColor.Meta && gem.Color == "Meta")
+                            Gem1 = gem;
+                    }
+                    break;
+                case 2:
+                    if (Socket2 != SocketColor.Dummy)
+                    {
+                        if (Socket2 != SocketColor.Meta && gem.Color != "Meta")
+                            Gem2 = gem;
+                        if (Socket2 == SocketColor.Meta && gem.Color == "Meta")
+                            Gem2 = gem;
+                    }
+                    break;
+                case 3:
+                    if (Socket3 != SocketColor.Dummy)
+                    {
+                        if (Socket3 != SocketColor.Meta && gem.Color != "Meta")
+                            Gem3 = gem;
+                        if (Socket3 == SocketColor.Meta && gem.Color == "Meta")
+                            Gem1 = gem;
+                    }
+                    break;
+            }
+        }
+
+        private bool DoesSocketMatchGem(SocketColor socket, Gem gem)
+        {
+            if (gem is null) return false;
+            string[] redGems = new[] { "Red", "Purple", "Orange" };
+            string[] YellowGems = new[] { "Yellow", "Orange", "Green" };
+            string[] BlueGems = new[] { "Blue", "Purple", "Green" };
+            if (socket != SocketColor.Dummy && socket != SocketColor.Meta)
+            {
+                if (socket == SocketColor.Red)
+                {
+                    if (!redGems.Contains(gem.Color)) return false;
+                }
+                if (socket == SocketColor.Yellow)
+                {
+                    if (!YellowGems.Contains(gem.Color)) return false;
+                }
+                if (socket == SocketColor.Blue)
+                {
+                    if (!BlueGems.Contains(gem.Color)) return false;
+                }
+            }
+            return true;
+        }
     }
 
     public class Spell
@@ -321,5 +516,83 @@ namespace Simulation.Library
     public enum AuraType
     {
         Buff, Debuff
+    }
+
+    public class SocketBonus
+    {
+        public string ID { get; set; }
+        public BonusStat Stat { get; set; }
+        public int Amount { get; set; }
+    }
+
+    public enum BonusStat
+    {
+        spellpower,
+        spellcrit,
+        spellhaste,
+        spellhit,
+        intellect,
+        MP5
+    }
+
+    public enum SocketColor
+    {
+        Dummy,
+        Meta,
+        Red,
+        Yellow,
+        Blue
+    }
+
+    public class Gem
+    {
+        [JsonProperty("id")]
+        public int ID { get; set; }
+        [JsonProperty("color")]
+        public string Color { get; set; }
+        [JsonProperty("sta")]
+        public int Stamina { get; set; }
+        [JsonProperty("int")]
+        public int Intellect { get; set; }
+        [JsonProperty("agi")]
+        public int Agility { get; set; }
+        [JsonProperty("str")]
+        public int Strength { get; set; }
+        [JsonProperty("spi")]
+        public int Spirit { get; set; }
+        [JsonProperty("manargn")]
+        public int MP5 { get; set; }
+        [JsonProperty("splpen")]
+        public int SpellPenetration { get; set; }
+        [JsonProperty("spldmg")]
+        public int SpellPower { get; set; }
+        [JsonProperty("splheal")]
+        public int HealingPower { get; set; }
+        [JsonProperty("mleatkpwr")]
+        public int MeleeAttackPower { get; set; }
+        [JsonProperty("rgdatkpwr")]
+        public int RangedAttackPower { get; set; }
+        [JsonProperty("dodgertng")]
+        public int DodgeRating { get; set; }
+        [JsonProperty("parryrtng")]
+        public int ParryRating { get; set; }
+        [JsonProperty("rgdhitrtng")]
+        public int RangedHitRating { get; set; }
+        [JsonProperty("mlehitrtng")]
+        public int MeleeHitRating { get; set; }
+        [JsonProperty("mlecritstrkrtng")]
+        public int MeleeCritRating { get; set; }
+        [JsonProperty("rgdcritstrkrtng")]
+        public int RangedCritRating { get; set; }
+        [JsonProperty("resirtng")]
+        public int ResilienceRating { get; set; }
+        [JsonProperty("splhitrtng")]
+        public int SpellHitRating { get; set; }
+        [JsonProperty("splhastertng")]
+        public int SpellHasteRating { get; set; }
+        [JsonProperty("splcritstrkrtng")]
+        public int SpellCritRating { get; set; }
+        [JsonProperty("defrtng")]
+        public int DefenseRating { get; set; }
     }
 }

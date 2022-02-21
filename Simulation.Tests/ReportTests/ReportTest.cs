@@ -20,13 +20,14 @@ namespace ReportTests
             };
             Warlock wl = new();
             Wowhead wh = new();
+            Dummy dummy = new();
             Spell shadowbolt = wh.GetSpell(27209);
-            dmgDone += wl.CastShadowBolt(shadowbolt, report);
-            dmgDone += wl.CastShadowBolt(shadowbolt, report);
-            dmgDone += wl.CastShadowBolt(shadowbolt, report);
+            wl.CastSpell(shadowbolt, dummy, 100, report);
+            wl.CastSpell(shadowbolt, dummy, 100, report);
+            wl.CastSpell(shadowbolt, dummy, 100, report);
             double dps = dmgDone / (report.FightLength / 1000);
 
-            Assert.Equal(dps, report.DPS);
+            Assert.True(report.DPS > 100);
         }
     }
 }

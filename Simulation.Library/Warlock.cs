@@ -355,7 +355,7 @@ namespace Simulation.Library
 
         private static string[] shadowAndFlameAffectedSpells = new[] { incinerateStr, shadowBoltStr };
         private const string shadowAndFlameStr = "Shadow and Flame";
-        
+
         private Talent[] shadowAndFlames = new Talent[]
         {
             new() { ID = "30288", Level = 1, Name = shadowAndFlameStr, Effects = new() { new() { AffectedSpells = shadowAndFlameAffectedSpells.ToList(), Modify = Modify.SpellPowerPercent, Value = 4 } } },
@@ -922,7 +922,7 @@ namespace Simulation.Library
             a.FlatSpellMod = GetFelArmorSP(spell);
             if(!buffs.Any(x => x.Name == spell.Name))
             {
-                a.FlatSpellMod = (int)(a.FlatSpellMod * (1 + (GetModFromTalents(spell, Modify.SpellEffectiveness)/100)));
+                a.FlatSpellMod = (int)(a.FlatSpellMod * (1 + (GetModAdditivesFromTalents(spell, Modify.SpellEffectiveness)/100)));
                 buffs.Add(a);
             }
             return;
@@ -963,16 +963,16 @@ namespace Simulation.Library
         {
             return int.Parse(lifetap.ToolTipText.Split(' ')[1]);
         }
-        public double CastShadowBolt(Spell shadowbolt, Report report = null)
+        protected double CastShadowBolt(Spell shadowbolt, Unit target, Report report = null)
         {
             if (report is null) report = new();
             if (shadowbolt.Name != shadowBoltStr) return 0;
             double dmg;
             Random rnd = new();
-            double dmgModTalents = GetModFromTalents(shadowbolt, Modify.DamagePercent);
-            double casttimeMod = GetModFromTalents(shadowbolt, Modify.Casttime);
+            double dmgModTalents = GetModMultiplicativeFromTalents(shadowbolt, Modify.DamagePercent);
+            double casttimeMod = GetModAdditivesFromTalents(shadowbolt, Modify.Casttime);
             shadowbolt.CastTime += casttimeMod;
-            var CritMod = GetModFromTalents(shadowbolt, Modify.Critchance);
+            var CritMod = GetModAdditivesFromTalents(shadowbolt, Modify.Critchance);
             bool isCrit = rnd.Next(100) <= SpellCrit + CritMod;
             lastSpelledCasted = shadowbolt;
             dmg = rnd.Next(GetShadowboltMinDmg(shadowbolt), GetShadowboltMaxDmg(shadowbolt));
@@ -1022,6 +1022,14 @@ namespace Simulation.Library
 
         public override void CastSpell(Spell spell, Unit target, double fightTick, Report report)
         {
+            switch (spell.Name)
+            {
+                case shadowBoltStr:
+                    CastShadowBolt(spell, target, report);
+                    break;
+                default:
+                    break;
+            }
             return;
         }
     }

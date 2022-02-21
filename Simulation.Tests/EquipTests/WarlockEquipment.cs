@@ -15,7 +15,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipHead(wh.GetItem(itemId));
+            wl.EquipHead(wh.GetEquipment(itemId));
 
             Assert.NotNull(wl.Head);
         }
@@ -27,7 +27,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipHead(wh.GetItem(itemId));
+            wl.EquipHead(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Head);
         }
@@ -39,7 +39,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipNeck(wh.GetItem(itemId));
+            wl.EquipNeck(wh.GetEquipment(itemId));
 
             Assert.NotNull(wl.Neck);
         }
@@ -51,7 +51,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipNeck(wh.GetItem(itemId));
+            wl.EquipNeck(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Neck);
         }
@@ -63,7 +63,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipShoulders(wh.GetItem(itemId));
+            wl.EquipShoulders(wh.GetEquipment(itemId));
 
             Assert.NotNull(wl.Shoulders);
         }
@@ -75,7 +75,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipShoulders(wh.GetItem(itemId));
+            wl.EquipShoulders(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Shoulders);
         }
@@ -87,7 +87,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipBack(wh.GetItem(itemId));
+            wl.EquipBack(wh.GetEquipment(itemId));
 
             Assert.NotNull(wl.Back);
         }
@@ -99,7 +99,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipBack(wh.GetItem(itemId));
+            wl.EquipBack(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Back);
         }
@@ -111,7 +111,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipChest(wh.GetItem(itemId));
+            wl.EquipChest(wh.GetEquipment(itemId));
 
             Assert.NotNull(wl.Chest);
         }
@@ -123,7 +123,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipBack(wh.GetItem(itemId));
+            wl.EquipBack(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Chest);
         }
@@ -135,7 +135,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipWrist(wh.GetItem(itemId));
+            wl.EquipWrist(wh.GetEquipment(itemId));
 
             Assert.NotNull(wl.Wrist);
         }
@@ -147,7 +147,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipWrist(wh.GetItem(itemId));
+            wl.EquipWrist(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Wrist);
         }
@@ -159,7 +159,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipHands(wh.GetItem(itemId));
+            wl.EquipHands(wh.GetEquipment(itemId));
 
             Assert.NotNull(wl.Hands);
         }
@@ -171,7 +171,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipHands(wh.GetItem(itemId));
+            wl.EquipHands(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Hands);
         }
@@ -183,7 +183,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipWaist(wh.GetItem(itemId));
+            wl.EquipWaist(wh.GetEquipment(itemId));
 
             Assert.NotNull(wl.Waist);
         }
@@ -195,7 +195,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipWaist(wh.GetItem(itemId));
+            wl.EquipWaist(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Waist);
         }
@@ -207,7 +207,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipLegs(wh.GetItem(itemId));
+            wl.EquipLegs(wh.GetEquipment(itemId));
 
             Assert.NotNull(wl.Legs);
         }
@@ -219,7 +219,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipLegs(wh.GetItem(itemId));
+            wl.EquipLegs(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Legs);
         }
@@ -231,7 +231,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipFeet(wh.GetItem(itemId));
+            wl.EquipFeet(wh.GetEquipment(itemId));
 
             Assert.NotNull(wl.Feet);
         }
@@ -243,7 +243,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipFeet(wh.GetItem(itemId));
+            wl.EquipFeet(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Feet);
         }
@@ -255,8 +255,8 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipRing1(wh.GetItem(itemId));
-            wl.EquipRing2(wh.GetItem(itemId));
+            wl.EquipRing1(wh.GetEquipment(itemId));
+            wl.EquipRing2(wh.GetEquipment(itemId));
 
             Assert.NotNull(wl.Ring1);
             Assert.NotNull(wl.Ring2);
@@ -269,8 +269,8 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipRing1(wh.GetItem(itemId));
-            wl.EquipRing2(wh.GetItem(itemId));
+            wl.EquipRing1(wh.GetEquipment(itemId));
+            wl.EquipRing2(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Ring1);
             Assert.Null(wl.Ring2);
@@ -283,8 +283,8 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipTrinket1(wh.GetItem(itemId));
-            wl.EquipTrinket2(wh.GetItem(itemId));
+            wl.EquipTrinket1(wh.GetEquipment(itemId));
+            wl.EquipTrinket2(wh.GetEquipment(itemId));
 
             Assert.NotNull(wl.Trinket1);
             Assert.NotNull(wl.Trinket2);
@@ -297,8 +297,8 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipTrinket1(wh.GetItem(itemId));
-            wl.EquipTrinket2(wh.GetItem(itemId));
+            wl.EquipTrinket1(wh.GetEquipment(itemId));
+            wl.EquipTrinket2(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Trinket1);
             Assert.Null(wl.Trinket2);
@@ -311,7 +311,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipMainhand(wh.GetItem(itemId));
+            wl.EquipMainhand(wh.GetEquipment(itemId));
 
             Assert.NotNull(wl.Mainhand);
         }
@@ -323,7 +323,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipFeet(wh.GetItem(itemId));
+            wl.EquipFeet(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Mainhand);
         }
@@ -335,8 +335,8 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipOffhand(wh.GetItem(34206));
-            wl.EquipMainhand(wh.GetItem(itemId));
+            wl.EquipOffhand(wh.GetEquipment(34206));
+            wl.EquipMainhand(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Offhand);
             Assert.NotNull(wl.Mainhand);
@@ -349,7 +349,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipMainhand(wh.GetItem(itemId));
+            wl.EquipMainhand(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Mainhand);
         }
@@ -361,7 +361,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipOffhand(wh.GetItem(itemId));
+            wl.EquipOffhand(wh.GetEquipment(itemId));
 
             Assert.NotNull(wl.Offhand);
         }
@@ -373,7 +373,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipOffhand(wh.GetItem(itemId));
+            wl.EquipOffhand(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Offhand);
         }
@@ -385,7 +385,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipRanged(wh.GetItem(itemId));
+            wl.EquipRanged(wh.GetEquipment(itemId));
 
             Assert.NotNull(wl.Ranged);
         }
@@ -397,7 +397,7 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipRanged(wh.GetItem(itemId));
+            wl.EquipRanged(wh.GetEquipment(itemId));
 
             Assert.Null(wl.Ranged);
         }
@@ -409,8 +409,8 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipMainhand(wh.GetItem(itemId));
-            wl.EquipOffhand(wh.GetItem(34206));
+            wl.EquipMainhand(wh.GetEquipment(itemId));
+            wl.EquipOffhand(wh.GetEquipment(34206));
 
             Assert.Null(wl.Offhand);
             Assert.NotNull(wl.Mainhand);
@@ -421,24 +421,24 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipHead(wh.GetItem(31051));
-            wl.EquipNeck(wh.GetItem(34204));
-            wl.EquipShoulders(wh.GetItem(31054));
-            wl.EquipBack(wh.GetItem(32331));
-            wl.EquipChest(wh.GetItem(31052));
-            wl.EquipWrist(wh.GetItem(32586));
-            wl.EquipHands(wh.GetItem(31050));
-            wl.EquipWaist(wh.GetItem(34541));
-            wl.EquipLegs(wh.GetItem(31053));
-            wl.EquipFeet(wh.GetItem(34564));
-            wl.EquipRing1(wh.GetItem(34362));
-            wl.EquipRing2(wh.GetItem(29305));
-            wl.EquipTrinket1(wh.GetItem(34429));
-            wl.EquipTrinket2(wh.GetItem(35326));
-            wl.EquipMainhand(wh.GetItem(34337));
-            wl.EquipOffhand(wh.GetItem(34206));
-            wl.EquipRanged(wh.GetItem(34347));
-            wl.EquipOffhand(wh.GetItem(34206));
+            wl.EquipHead(wh.GetEquipment(31051));
+            wl.EquipNeck(wh.GetEquipment(34204));
+            wl.EquipShoulders(wh.GetEquipment(31054));
+            wl.EquipBack(wh.GetEquipment(32331));
+            wl.EquipChest(wh.GetEquipment(31052));
+            wl.EquipWrist(wh.GetEquipment(32586));
+            wl.EquipHands(wh.GetEquipment(31050));
+            wl.EquipWaist(wh.GetEquipment(34541));
+            wl.EquipLegs(wh.GetEquipment(31053));
+            wl.EquipFeet(wh.GetEquipment(34564));
+            wl.EquipRing1(wh.GetEquipment(34362));
+            wl.EquipRing2(wh.GetEquipment(29305));
+            wl.EquipTrinket1(wh.GetEquipment(34429));
+            wl.EquipTrinket2(wh.GetEquipment(35326));
+            wl.EquipMainhand(wh.GetEquipment(34337));
+            wl.EquipOffhand(wh.GetEquipment(34206));
+            wl.EquipRanged(wh.GetEquipment(34347));
+            wl.EquipOffhand(wh.GetEquipment(34206));
 
             Assert.NotNull(wl.Head);
             Assert.NotNull(wl.Neck);
@@ -464,23 +464,23 @@ namespace EquipTests
         {
             Warlock wl = new();
             Wowhead wh = new();
-            wl.EquipHead(wh.GetItem(31051));
-            wl.EquipNeck(wh.GetItem(34204));
-            wl.EquipShoulders(wh.GetItem(31054));
-            wl.EquipBack(wh.GetItem(32331));
-            wl.EquipChest(wh.GetItem(31052));
-            wl.EquipWrist(wh.GetItem(32586));
-            wl.EquipHands(wh.GetItem(31050));
-            wl.EquipWaist(wh.GetItem(34541));
-            wl.EquipLegs(wh.GetItem(31053));
-            wl.EquipFeet(wh.GetItem(34564));
-            wl.EquipRing1(wh.GetItem(34362));
-            wl.EquipRing2(wh.GetItem(29305));
-            wl.EquipTrinket1(wh.GetItem(34429));
-            wl.EquipTrinket2(wh.GetItem(35326));
-            wl.EquipMainhand(wh.GetItem(34336));
-            wl.EquipRanged(wh.GetItem(34347));
-            wl.EquipOffhand(wh.GetItem(34206));
+            wl.EquipHead(wh.GetEquipment(31051));
+            wl.EquipNeck(wh.GetEquipment(34204));
+            wl.EquipShoulders(wh.GetEquipment(31054));
+            wl.EquipBack(wh.GetEquipment(32331));
+            wl.EquipChest(wh.GetEquipment(31052));
+            wl.EquipWrist(wh.GetEquipment(32586));
+            wl.EquipHands(wh.GetEquipment(31050));
+            wl.EquipWaist(wh.GetEquipment(34541));
+            wl.EquipLegs(wh.GetEquipment(31053));
+            wl.EquipFeet(wh.GetEquipment(34564));
+            wl.EquipRing1(wh.GetEquipment(34362));
+            wl.EquipRing2(wh.GetEquipment(29305));
+            wl.EquipTrinket1(wh.GetEquipment(34429));
+            wl.EquipTrinket2(wh.GetEquipment(35326));
+            wl.EquipMainhand(wh.GetEquipment(34336));
+            wl.EquipRanged(wh.GetEquipment(34347));
+            wl.EquipOffhand(wh.GetEquipment(34206));
 
             Assert.NotNull(wl.Head);
             Assert.NotNull(wl.Neck);

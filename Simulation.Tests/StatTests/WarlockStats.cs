@@ -48,7 +48,7 @@ namespace StatTests
             Wowhead wh = new();
             var shadowbolt = wh.GetSpell(27209);
             wl.AddHasteRating(hasteRating);
-            wl.CastShadowBolt(shadowbolt);
+            wl.CastSpell(shadowbolt, new Dummy(), 100, new Report());
 
             Assert.Equal(expectedWait, Math.Round(wl.WaitForNextCast()));
         }
@@ -110,7 +110,7 @@ namespace StatTests
             Wowhead wh = new();
             var shadowbolt = wh.GetSpell(27209);
             wl.AddHaste(haste);
-            wl.CastShadowBolt(shadowbolt);
+            wl.CastSpell(shadowbolt, new Dummy(), 100, new Report());
 
             Assert.Equal(expectedWait, Math.Round(wl.WaitForNextCast()));
         }
@@ -154,7 +154,7 @@ namespace StatTests
             var shadowbolt = wh.GetSpell(27209);
             wl.AddHaste(haste);
             wl.AddHasteRating(hasteRating);
-            wl.CastShadowBolt(shadowbolt);
+            wl.CastSpell(shadowbolt, new Dummy(), 100, new Report());
 
             Assert.Equal(expectedWait, Math.Round(wl.WaitForNextCast()));
         }

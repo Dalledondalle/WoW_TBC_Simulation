@@ -44,7 +44,7 @@ namespace CastTests
             Warlock wl = new();
             Wowhead wh = new();
             var shadowbolt = wh.GetSpell(27209);
-            wl.CastShadowBolt(shadowbolt);
+            wl.CastSpell(shadowbolt, new Dummy(), 100, new Report());
 
             Assert.Equal(shadowbolt.Name, wl.lastSpelledCasted.Name);
         }

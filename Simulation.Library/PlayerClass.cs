@@ -9,17 +9,19 @@ namespace Simulation.Library
     public abstract class PlayerClass : Unit
     {
         #region Stats
-        public new int MP5 => GetAllGear().Where(e => e is not null).Select(e => e.ManaRegn).Sum() + mp5 + auras.Select(e => e.FlatManaRegenMod).Sum();
-        public new int SpellHitRating => GetAllGear().Where(e => e is not null).Select(e => e.SpellHitRating).Sum() + spellHitRating + auras.Select(e => e.SpellHitRatingMod).Sum();
+        public new int MP5 => GetAllGear().Where(e => e is not null).Select(e => e.ManaRegn).Sum() + mp5 + auras.Select(e => e.FlatManaRegenMod).Sum() + GetSumOfSocketBonuses(BonusStat.MP5);
+        public new int SpellHitRating => GetAllGear().Where(e => e is not null).Select(e => e.SpellHitRating).Sum() + spellHitRating + auras.Select(e => e.SpellHitRatingMod).Sum() + GetSumOfSocketBonuses(BonusStat.spellhit);
         public new double SpellHit => (SpellHitRating / 12.6) + spellHit + auras.Select(e => e.SpellHitModifer).Sum();
-        public new int SpellCritRating => GetAllGear().Where(e => e is not null).Select(e => e.SpellCritRating).Sum() + spellCritRating + auras.Select(e => e.SpellCritRatingMod).Sum();
+        public new int SpellCritRating => GetAllGear().Where(e => e is not null).Select(e => e.SpellCritRating).Sum() + spellCritRating + auras.Select(e => e.SpellCritRatingMod).Sum() + GetSumOfSocketBonuses(BonusStat.spellcrit);
         public new int Intellect => (int)((intellect +
+                                GetSumOfSocketBonuses(BonusStat.intellect) +
                                 GetAllGear().Where(e => e is not null).Select(e => e.Intellect).Sum() +
                                 auras.Select(e => e.FlatIntMod).Sum()) *
                                 (1 + (auras.Select(e => e.IntModifer).Sum() / 100)));
-        public new double SpellCrit => spellCrit + (Intellect / 81.9) + (SpellCritRating / 22.1) + auras.Select(e => e.SpellCritModifer).Sum();
+        public new double SpellCrit => spellCrit + (Intellect / 81.9) + (SpellCritRating / 22.1) + auras.Select(e => e.SpellCritModifer).Sum() + GetSumOfSocketBonuses(BonusStat.spellcrit);
         public new int SpellPower => (int)((GetAllGear().Where(e => e is not null).Select(e => e.SpellPower).Sum() +
                                     spellPower +
+                                    GetSumOfSocketBonuses(BonusStat.spellpower) +
                                     auras.Select(e => e.FlatSpellMod).Sum()) *
                                     (1 + (auras.Select(e => e.SpellModifer).Sum() / 100)));
         public new int ShadowPower => (int)((GetAllGear().Where(e => e is not null).Select(e => e.ShadowSpellPower).Sum() +
@@ -38,7 +40,7 @@ namespace Simulation.Library
                                     frostPower +
                                     auras.Select(e => e.FlatFrostMod).Sum()) *
                                     (1 + (auras.Select(e => e.FrostModifer).Sum() / 100)));
-        public new int SpellHasteRating => GetAllGear().Where(e => e is not null).Select(e => e.SpellHasteRating).Sum() + spellHasteRating + auras.Select(e => e.SpellHasteRatingMod).Sum();
+        public new int SpellHasteRating => GetAllGear().Where(e => e is not null).Select(e => e.SpellHasteRating).Sum() + spellHasteRating + auras.Select(e => e.SpellHasteRatingMod).Sum() + GetSumOfSocketBonuses(BonusStat.spellhaste);
         //Hasted Cast Time = Base Cast Time / (1 + ( Spell Haste Rating / 1577 ) )
         public new double SpellHaste => (SpellHasteRating / 15.77) + spellHaste + auras.Select(e => e.SpellHasteModifer).Sum();
         public new int Mana => mana;
@@ -94,12 +96,32 @@ namespace Simulation.Library
         {
             return new Equipment[] { head, neck, shoulders, back, chest, wrist, hands, waist, legs, feet, ring1, ring2, trinket1, trinket2, mainhand, offhand, ranged };
         }
+        protected int GetSumOfSocketBonuses(BonusStat stat)
+        {
+            return GetAllGear()
+                    .Where(e => e is not null && e.IsSocketBonusActive)
+                    .Select(b => Wowhead.SocketBonuses
+                                    .FirstOrDefault(x => x.ID == b.SocketBonus) is not null
+                                    && Wowhead.SocketBonuses.FirstOrDefault(x => x.ID == b.SocketBonus).Stat == stat
+                                    ? Wowhead.SocketBonuses.FirstOrDefault(x => x.ID == b.SocketBonus).Amount : 0).Sum();
+        }
 
         #region ModsFromTalents
-        protected double GetModFromTalents(Spell spell, Modify mod)
+        protected double GetModAdditivesFromTalents(Spell spell, Modify mod)
         {
             var spellEffects = GetAllEffectsBySpell(spell).ToList();
             return spellEffects.Where(x => x.Modify == mod).Select(x => x.Value).Sum();
+        }
+        protected double GetModMultiplicativeFromTalents(Spell spell, Modify mod)
+        {
+            double modifier = 1.0;
+            var spellEffects = GetAllEffectsBySpell(spell).ToList();
+            var mods = spellEffects.Where(x => x.Modify == mod).Select(x => x.Value);
+            foreach (var item in mods)
+            {
+                modifier *= 1 + (item / 100);
+            }
+            return modifier;
         }
         protected List<Effect> GetAllEffectsBySpell(Spell spell)
         {

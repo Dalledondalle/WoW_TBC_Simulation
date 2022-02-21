@@ -94,7 +94,7 @@ namespace TalentTests.Destruction
             wl.BaneRank = rank;
             var shadowbolt = wh.GetSpell(27209);
 
-            wl.CastShadowBolt(shadowbolt);
+            wl.CastSpell(shadowbolt, new Dummy(), 100, new Report());
 
             Assert.Equal(expectedCasttime, wl.lastSpelledCasted.CastTime);
         }
