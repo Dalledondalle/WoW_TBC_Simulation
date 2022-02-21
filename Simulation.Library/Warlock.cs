@@ -42,6 +42,14 @@ namespace Simulation.Library
         private const string bloodPactStr = "Blood Pact";
         private const string soothingKissStr = "Soothing Kiss";
         private const string lesserInvisibilityStr = "Lesser Invisibility";
+        private const string seductionStr = "Seduction";
+        private const string demonArmorStr = "Demon Armor";
+        private const string felArmorStr = "Fel Armor";
+        private const string demonicSacrificeStr = "Demonic Sacrifice";
+        private const string soulLinkStr = "Soul Link";
+        private const string felguardStr = "Felguard";
+        private const string spellstoneStr = "Spellstone";
+        private const string firestoneStr = "Firestone";
         #endregion SpellNames
         #region Talents
         #region DestructionTalents
@@ -347,7 +355,7 @@ namespace Simulation.Library
 
         private static string[] shadowAndFlameAffectedSpells = new[] { incinerateStr, shadowBoltStr };
         private const string shadowAndFlameStr = "Shadow and Flame";
-
+        
         private Talent[] shadowAndFlames = new Talent[]
         {
             new() { ID = "30288", Level = 1, Name = shadowAndFlameStr, Effects = new() { new() { AffectedSpells = shadowAndFlameAffectedSpells.ToList(), Modify = Modify.SpellPowerPercent, Value = 4 } } },
@@ -798,7 +806,7 @@ namespace Simulation.Library
             }
         }
 
-        private static string[] pets = new[] { "Felhunter", "Voidwalker", "Imp", "Succubus", "Incubus", "Felguard" };
+        private static string[] pets = new[] { "Felhunter", "Voidwalker", "Imp", "Succubus", "Incubus", felguardStr };
 
         private static string[] improvedImpAffectedSpells = new[] { fireShieldStr, fireboltStr, bloodPactStr };
         private static string improvedImpStr = "Improved Imp";
@@ -819,7 +827,7 @@ namespace Simulation.Library
         };
 
         private static string[] improvedSayaadAffectedSpellsEffectiveness = new[] { soothingKissStr, lashOfPainStr };
-        private static string[] improvedSayaadAffectedSpellsBuffDuration= new[] { lesserInvisibilityStr, "Seduction" };
+        private static string[] improvedSayaadAffectedSpellsBuffDuration= new[] { lesserInvisibilityStr, seductionStr };
         private static string improvedSayaadStr = "Improved Sayaad";
         private Talent[] improvedSayaads = new Talent[]
         {
@@ -828,7 +836,7 @@ namespace Simulation.Library
             new(){ ID = "18756", Level = 3, Name = improvedSayaadStr, Effects = new() { new(){ AffectedSpells = improvedSayaadAffectedSpellsEffectiveness.ToList() , Modify = Modify.SpellEffectiveness, Value = 30 }, new() { AffectedSpells = improvedSayaadAffectedSpellsBuffDuration.ToList(), Modify = Modify.AuraDuration, Value = 30} } }
         };
 
-        private static string[] demonicAegisAffectedSpells = new[] { "Demon Armor", "Fel Armor"};
+        private static string[] demonicAegisAffectedSpells = new[] { demonArmorStr, felArmorStr };
         private static string demonicAegisStr = "Demonic Aegis";
         private Talent[] demonicAegiss = new Talent[]
         {
@@ -848,19 +856,16 @@ namespace Simulation.Library
             new(){ ID = "18773", Level = 5, Name = unholyPowerStr, Effects = new() { new(){ AffectedSpells = unholyPowerAffectedSpells.ToList() , Modify = Modify.SpellEffectiveness, Value = 20 } } }
         };
 
-        private static string[] demonicSacrificeAffectedSpells = new[] { "Demonic Sacrifice" };
-        private static string demonicSacrificeStr = "Demonic Sacrifice";
+        private static string[] demonicSacrificeAffectedSpells = new[] { demonicSacrificeStr };
         private Talent demonicSacrifice = new() { ID = "18788", Level = 1, Name = demonicSacrificeStr, Effects = new() { new() { AffectedSpells = demonicSacrificeAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 18788 } } };
 
-        private static string[] soulLinkAffectedSpells = new[] { "Soul Link" };
-        private static string soulLinkStr = "Soul Link";
+        private static string[] soulLinkAffectedSpells = new[] { soulLinkStr };
         private Talent soulLink = new() { ID = "19028", Level = 1, Name = soulLinkStr, Effects = new() { new() { AffectedSpells = soulLinkAffectedSpells.ToList(), Modify = Modify.LearnSpell, Value = 19028 } } };
 
-        private static string[] felguardSpells = new[] { "Felguard" };
-        private static string felguardStr = "Felguard";
+        private static string[] felguardSpells = new[] { felguardStr };
         private Talent felguard = new() { ID = "30146", Level = 1, Name = felguardStr, Effects = new() { new() { AffectedSpells = felguardSpells.ToList(), Modify = Modify.LearnSpell, Value = 30146 } } };
 
-        private static string[] masterConjurorAffectedSpells = new[] { "Spellstone", "Firestone" };
+        private static string[] masterConjurorAffectedSpells = new[] { spellstoneStr, firestoneStr };
         private static string masterConjurorStr = "Master Conjuror";
         private Talent[] masterConjurors = new Talent[]
         {
