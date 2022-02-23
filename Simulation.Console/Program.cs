@@ -4,24 +4,92 @@ using System.Linq;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Simulation.Console
 {
     class Program
     {
+        static List<Report> reports = new();
+        static Dictionary<int, TimeSpan> sims = new();
         static void Main(string[] args)
         {
-            Run();
+            for (int i = 1; i < 10001; i++)
+            {
+                System.Console.WriteLine($"Running {i} tasks now");
+                Run(i);
+                System.Console.Clear();
+                TimeSpan time = sims.Min(x => x.Value);
+                int threadCount = sims.First(x => x.Value == time).Key;
+                System.Console.WriteLine($"Fast setup currently is {threadCount} threads which took {time}");
+            }
+
+            TimeSpan bestTime = sims.Min(x => x.Value);
+            int bestThread = sims.First(x => x.Value == bestTime).Key;
+            System.Console.WriteLine($"Fast setup was is {bestThread} threads which took {bestTime}");
+            //Simulate(new Warlock(), 300, 150000);
+            //PrintAReport(reports.First());
         }
 
-        private static void Run()
+        private static void Run(int threads)
         {
-            var wl = CreateWarlock();
+            Stopwatch sw = new();
+            reports.Clear();
+            //var wl = CreateWarlock();
             //PrintWarlock(wl);
-            Simulate(wl, 1000, 150000);
-            System.Console.WriteLine("-----------------------");
+            //Simulate(wl, 10000, 150000);
+            //System.Console.WriteLine("-----------------------");
             //PrintWarlock(wl);
-            Simulate(new Warlock(), 1000, 150000);
+            sw.Start();
+            //Parallel.For(0, 100, i =>
+            //{
+
+            var tasks = MakeTasks(threads).ToList();
+            while (tasks.Any(t => !t.IsCompleted))
+            {
+                //System.Console.Write($"\r{reports.Count}");
+            }
+            System.Console.WriteLine();
+            //});
+            sw.Stop();
+            //double worstFight = reports.Min(r => r.DPS);
+            //double bestFight = reports.Max(r => r.DPS);
+            //double avg = reports.Average(r => r.DPS);
+            //System.Console.WriteLine($"Worst fight: {worstFight.ToString("0.###")}\nBest fight: {bestFight.ToString("0.###")}\nOn average: {avg.ToString("0.###")}\nTime elapsed: {sw.Elapsed}");
+            //Random rnd = new();
+            //Report reportToAnalyze = reports[rnd.Next(reports.Count)];
+
+            //PrintAReport(reportToAnalyze);
+
+            sims.Add(threads, sw.Elapsed);
+
+        }
+
+        static void PrintAReport(Report reportToAnalyze)
+        {
+            Wowhead wh = new();
+            foreach (var item in reportToAnalyze.AllSpellsCasted.OrderBy(x => x.FightTick))
+            {
+                if (item.GetType() == typeof(DamageSpellReport))
+                {
+                    DamageSpellReport sp = item as DamageSpellReport;
+                    System.Console.WriteLine($"{wh.GetSpell(int.Parse(sp.SpellId)).Name} did {sp.Damage} at {sp.FightTick}. Crit: {sp.Crit}");
+                }
+                if (item.GetType() == typeof(RessourceRegenratedReport))
+                {
+                    RessourceRegenratedReport rp = item as RessourceRegenratedReport;
+                    System.Console.WriteLine($"{wh.GetSpell(int.Parse(rp.SpellId)).Name} restored {rp.Amount} Mana at  {rp.FightTick}");
+                }
+            }
+        }
+
+        static IEnumerable<Task> MakeTasks(int amount)
+        {
+            Warlock wl = CreateWarlock();
+            for (int i = 0; i < amount; i++)
+            {
+                yield return Task.Run(() => { Simulate(wl, 100000 / amount, 150000); });
+            }
         }
 
         private static void PrintWarlock(Warlock wl)
@@ -54,7 +122,7 @@ namespace Simulation.Console
 
             wl.EquipShoulders(wh.GetEquipment(31054));
             wl.Shoulders.SocketGem(blueGem, 1);
-            wl.Shoulders.SocketGem(yellowGem,2 );
+            wl.Shoulders.SocketGem(yellowGem, 2);
 
             wl.EquipBack(wh.GetEquipment(32331));
 
@@ -111,36 +179,36 @@ namespace Simulation.Console
             //Pre fight setup
             wl.CastSpell(felarmor, target, 0, new Report());
 
-            var clone = (Warlock)wl.Clone();
 
             for (int i = 0; i < itterations; i++)
             {
+                var clone = (Warlock)wl.Clone();
                 Report report = new Report()
                 {
                     FightLength = fightLength,
                     FightNo = i,
                 };
                 double currentFight = 0;
-                while (fightLength > currentFight)
+                while (fightLength >= currentFight)
                 {
-                    if (clone.HaveManaForSpell(shadowbolt))
+                    if (!clone.HaveManaForSpell(shadowbolt))
                     {
-                        clone.CastSpell(shadowbolt, target, currentFight, report);
+                        clone.CastLifeTap(lifetap, report, currentFight);
                     }
                     else
                     {
-                        clone.CastLifeTap(lifetap, report);
+                        clone.CastSpell(shadowbolt, target, currentFight, report);
                     }
                     currentFight += clone.WaitForNextCast();
                 }
-                array[i] = report;
+                reports.Add(report);
             }
 
-            double worstFight = array.Min(r => r.DPS);
-            double bestFight = array.Max(r => r.DPS);
-            double avg = array.Average(r => r.DPS);
-            sw.Stop();
-            System.Console.WriteLine($"Worst fight: {worstFight.ToString("0.###")}\nBest fight: {bestFight.ToString("0.###")}\nOn average: {avg.ToString("0.###")}\nTime elapsed: {sw.Elapsed}\nCrit %: {wl.SpellCrit.ToString("0.##")}%");
+            //double worstFight = array.Min(r => r.DPS);
+            //double bestFight = array.Max(r => r.DPS);
+            //double avg = array.Average(r => r.DPS);
+            //sw.Stop();
+            //System.Console.WriteLine($"Worst fight: {worstFight.ToString("0.###")}\nBest fight: {bestFight.ToString("0.###")}\nOn average: {avg.ToString("0.###")}\nTime elapsed: {sw.Elapsed}\nCrit %: {wl.SpellCrit.ToString("0.##")}%");
         }
     }
 }
