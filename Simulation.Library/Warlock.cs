@@ -1046,5 +1046,22 @@ namespace Simulation.Library
             }
             return;
         }
+
+        protected override void UpdateSetBonusEffects()
+        {
+            var gear = GetAllGear().ToList();
+            SetBonusEffects.Clear();
+            //Malefic 4set
+            if (gear.Count(x => x.Itemset == 670) >= 4) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 670).FourSet);
+            //Corruptor
+            if (gear.Count(x => x.Itemset == 646) >= 4) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 646).FourSet);
+            //VoidHeart
+            if (gear.Count(x => x.Itemset == 645) >= 2) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 645).TwoSet);
+            if (gear.Count(x => x.Itemset == 645) >= 4) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 645).FourSet);
+            //Spellstrike
+            if (gear.Count(x => x.Itemset == 559) >= 2) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 559).TwoSet);
+            //Spellfire
+            if (gear.Count(x => x.Itemset == 552) >= 3) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 552).ThreeSet);
+        }
     }
 }

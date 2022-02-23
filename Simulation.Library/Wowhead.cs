@@ -40,6 +40,14 @@ namespace Simulation.Library
         {
             new Aura("32837", "Spell Focus Trigger", AuraType.Buff) {Effects = new(){ new(){ AuraID = "32837", InternalCD = 35000, Modify = Modify.SpellHasteRating, Value = 320, ProcChance = 15 } }, Duration = 6000}
         };
+        public static SetBonus[] SetBonus = new SetBonus[]
+        {
+            new SetBonus(){ID = 670, TwoSet = new(){AffectedSpells = new(){ "Corruption", "Immolate"}, AuraID = "38394", ProcChance = 100, Value = 70, Modify = Modify.HealFlatOnPeriodicDamage }, FourSet = new(){AffectedSpells = new(){ "Shadow Bolt", "Incinerate"}, AuraID = "38393", Value = 6, Modify = Modify.DamagePercent}},//Tier 6
+            new SetBonus(){ID = 646, TwoSet = new(){AffectedSpells = new(){ "Any"}, AuraID = "38394", ProcChance = 100, Value = 15, Modify = Modify.HealPercentOffDamageOnDamage }, FourSet = new(){AffectedSpells = new(){ "Corruption", "Immolate"}, AuraID = "38393", Value = 10, Modify = Modify.Unique}},//Tier 5
+            new SetBonus(){ID = 645, TwoSet = new(){AffectedSpells = new(){ "Any"}, AuraID = "37377", ProcChance = 5, Value = 135, Modify = Modify.Unique }, FourSet = new(){AffectedSpells = new(){ "Corruption", "Immolate"}, AuraID = "37380", Value = 3000, Modify = Modify.AuraDuration}},//Tier 4
+            new SetBonus(){ID = 559, TwoSet = new(){AffectedSpells = new(){ "Any"}, AuraID = "37377", ProcChance = 5, Value = 92, Modify = Modify.ProcOnHit }},//Spellstrike
+            new SetBonus(){ID = 552, TwoSet = new(){AffectedSpells = new(){ "Any"}, AuraID = "32196", Value = 7, Modify = Modify.Unique }},//Spellfire
+        };
         public Equipment GetEquipment(int id)
         {
             var equipment = GetEquipementFromFolder(id);
@@ -542,6 +550,12 @@ namespace Simulation.Library
         MP5Percent,
         SpiritFlat,
         SpirtPercent,
+        HealFlatOnDirectDamage,
+        HealFlatOnPeriodicDamage,
+        HealFlatOnDamage,
+        HealPercentOffDamageOnDirectDamage,
+        HealPercentOffDamageOnPeriodicDamage,
+        HealPercentOffDamageOnDamage
     }
     public enum AuraType
     {
@@ -615,5 +629,13 @@ namespace Simulation.Library
         public int SpellCritRating { get; set; }
         [JsonProperty("defrtng")]
         public int DefenseRating { get; set; }
+    }
+
+    public class SetBonus
+    {
+        public int ID { get; set; }
+        public Effect TwoSet { get; set; }
+        public Effect ThreeSet { get; set; }
+        public Effect FourSet { get; set; }
     }
 }

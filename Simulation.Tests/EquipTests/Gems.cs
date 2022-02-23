@@ -152,5 +152,43 @@ namespace EquipTests
 
             Assert.Equal(10, wl.MP5);
         }
+
+        [Fact]
+        public void TwoSpellPowerSocketBonusTest()
+        {
+            Warlock wl = new();
+            Wowhead wh = new();
+
+            var gem = wh.GetGem(32206); // Yellow
+            var equipment = wh.GetEquipment(34347);
+
+            wl.EquipRanged(equipment);
+
+            Assert.Equal(22, wl.SpellPower);
+
+            wl.SocketItem(wl.Ranged, gem, 1);
+
+            Assert.Equal(24, wl.SpellPower);
+        }
+
+        [Fact]
+        public void SpellCritGemTest()
+        {
+            Warlock wl = new();
+            Wowhead wh = new();
+
+            var gem = wh.GetGem(32207); // Yellow
+            var equipment = wh.GetEquipment(34347);
+
+            wl.EquipRanged(equipment);
+
+            Assert.Equal(0, wl.SpellCritRating);
+            Assert.Equal(3.42, Math.Round(wl.SpellCrit,2));
+
+            wl.SocketItem(wl.Ranged, gem, 1);
+
+            Assert.Equal(10, wl.SpellCritRating);
+            Assert.Equal(3.87, Math.Round(wl.SpellCrit, 2));
+        }
     }
 }

@@ -106,6 +106,7 @@ namespace Simulation.Library
         public Equipment Ranged => ranged;
         public Equipment[] Equipment => GetAllGear();
         #endregion Equipment
+        protected List<Effect> SetBonusEffects = new();
 
         public List<Talent> Talents { get; set; } = new();
         protected void RemoveTalent(string talentName)
@@ -114,7 +115,25 @@ namespace Simulation.Library
         }
         protected Equipment[] GetAllGear()
         {
-            return new Equipment[] { head, neck, shoulders, back, chest, wrist, hands, waist, legs, feet, ring1, ring2, trinket1, trinket2, mainhand, offhand, ranged };
+            List<Equipment> list = new();
+            if (head is not null) list.Add(head);
+            if (neck is not null) list.Add(neck);
+            if (shoulders is not null) list.Add(shoulders);
+            if (back is not null) list.Add(back);
+            if (chest is not null) list.Add(chest);
+            if (wrist is not null) list.Add(wrist);
+            if (hands is not null) list.Add(hands);
+            if (waist is not null) list.Add(waist);
+            if (legs is not null) list.Add(legs);
+            if (feet is not null) list.Add(feet);
+            if (ring1 is not null) list.Add(ring1);
+            if (ring2 is not null) list.Add(ring2);
+            if (trinket1 is not null) list.Add(trinket1);
+            if (trinket2 is not null) list.Add(trinket2);
+            if (mainhand is not null) list.Add(mainhand);
+            if (offhand is not null) list.Add(offhand);
+            if (ranged is not null) list.Add(ranged);
+            return list.ToArray();
         }
         protected int GetSumOfSocketsSpellPower()
         {
@@ -163,6 +182,10 @@ namespace Simulation.Library
                                     .FirstOrDefault(x => x.ID == b.SocketBonus) is not null
                                     && Wowhead.SocketBonuses.FirstOrDefault(x => x.ID == b.SocketBonus).Stat == stat
                                     ? Wowhead.SocketBonuses.FirstOrDefault(x => x.ID == b.SocketBonus).Amount : 0).Sum();
+        }
+        protected virtual void UpdateSetBonusEffects()
+        {
+            throw new NotImplementedException();
         }
 
         #region ModsFromTalents
@@ -345,70 +368,85 @@ namespace Simulation.Library
         public void EquipHead(Equipment equipment)
         {
             head = equipment.InvSlot == "Head" ? equipment : head;
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipNeck(Equipment equipment)
         {
             neck = equipment.InvSlot == "Neck" ? equipment : neck;
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipShoulders(Equipment equipment)
         {
             shoulders = equipment.InvSlot == "Shoulder" ? equipment : shoulders;
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipBack(Equipment equipment)
         {
             back = equipment.InvSlot == "Back" ? equipment : back;
+            UpdateSetBonusEffects();
             UpdateStats();
-        }        public void EquipChest(Equipment equipment)
+        }
+        public void EquipChest(Equipment equipment)
         {
             chest = equipment.InvSlot == "Chest" ? equipment : chest;
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipWrist(Equipment equipment)
         {
             wrist = equipment.InvSlot == "Wrist" ? equipment : wrist;
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipHands(Equipment equipment)
         {
             hands = equipment.InvSlot == "Hands" ? equipment : hands;
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipWaist(Equipment equipment)
         {
             waist = equipment.InvSlot == "Waist" ? equipment : waist;
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipLegs(Equipment equipment)
         {
             legs = equipment.InvSlot == "Legs" ? equipment : legs;
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipFeet(Equipment equipment)
         {
             feet = equipment.InvSlot == "Feet" ? equipment : feet;
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipRing1(Equipment equipment)
         {
             ring1 = equipment.InvSlot == "Finger" ? equipment : ring1;
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipRing2(Equipment equipment)
         {
             ring2 = equipment.InvSlot == "Finger" ? equipment : ring2;
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipTrinket1(Equipment equipment)
         {
             trinket1 = equipment.InvSlot == "Trinket" ? equipment : trinket1;
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipTrinket2(Equipment equipment)
         {
             trinket2 = equipment.InvSlot == "Trinket" ? equipment : trinket2;
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipMainhand(Equipment equipment)
@@ -419,23 +457,27 @@ namespace Simulation.Library
             {
                 EquipTwohander(equipment);
             }
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         private void EquipTwohander(Equipment equipment)
         {
             mainhand = equipment.InvSlot == "Two-Hand" ? equipment : mainhand;
             if (mainhand is not null && mainhand.InvSlot == "Two-Hand") offhand = null;
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipOffhand(Equipment equipment)
         {
             if (mainhand is not null && mainhand.InvSlot == "Two-Hand") return;
             offhand = equipment.InvSlot == "Held In Off-hand" ? equipment : offhand;
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipRanged(Equipment equipment)
         {
             ranged = equipment.InvSlot == "Ranged" ? equipment : ranged;
+            UpdateSetBonusEffects();
             UpdateStats();
         }
         #endregion EquipGear
