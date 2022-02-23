@@ -11,10 +11,7 @@ namespace Simulation.Console
     {
         static void Main(string[] args)
         {
-            Wowhead wh = new();
-            //wh.GetItem(31051);
-            var chest = wh.GetEquipment(30152);
-            System.Console.WriteLine(chest);
+            Run();
         }
 
         private static void Run()
@@ -44,22 +41,53 @@ namespace Simulation.Console
         {
             Warlock wl = new();
             Wowhead wh = new();
+            var metaGem = wh.GetGem(34220);
+            var redGem = wh.GetGem(32196);
+            var blueGem = wh.GetGem(32215);
+            var yellowGem = wh.GetGem(35761);
+
             wl.EquipHead(wh.GetEquipment(31051));
+            wl.Head.SocketGem(metaGem, 1);
+            wl.Head.SocketGem(yellowGem, 2);
+
             wl.EquipNeck(wh.GetEquipment(34204));
+
             wl.EquipShoulders(wh.GetEquipment(31054));
+            wl.Shoulders.SocketGem(blueGem, 1);
+            wl.Shoulders.SocketGem(yellowGem,2 );
+
             wl.EquipBack(wh.GetEquipment(32331));
+
             wl.EquipChest(wh.GetEquipment(31052));
+            wl.Chest.SocketGem(yellowGem, 1);
+            wl.Chest.SocketGem(yellowGem, 2);
+            wl.Chest.SocketGem(blueGem, 3);
+
             wl.EquipWrist(wh.GetEquipment(32586));
+
             wl.EquipHands(wh.GetEquipment(31050));
+            wl.Hands.SocketGem(yellowGem, 1);
+
             wl.EquipWaist(wh.GetEquipment(34541));
+            wl.Waist.SocketGem(yellowGem, 1);
+
             wl.EquipLegs(wh.GetEquipment(31053));
+            wl.Legs.SocketGem(yellowGem, 1);
+
             wl.EquipFeet(wh.GetEquipment(34564));
+            wl.Feet.SocketGem(yellowGem, 1);
+
             wl.EquipRing1(wh.GetEquipment(34362));
             wl.EquipRing2(wh.GetEquipment(29305));
             wl.EquipTrinket1(wh.GetEquipment(34429));
             wl.EquipTrinket2(wh.GetEquipment(35326));
             wl.EquipMainhand(wh.GetEquipment(34337));
+            wl.Mainhand.SocketGem(redGem, 1);
+            wl.Mainhand.SocketGem(blueGem, 2);
+            wl.Mainhand.SocketGem(blueGem, 3);
+
             wl.EquipRanged(wh.GetEquipment(34347));
+            wl.Ranged.SocketGem(yellowGem, 1);
             return wl;
         }
 
@@ -79,6 +107,12 @@ namespace Simulation.Console
             Wowhead wh = new();
             var shadowbolt = wh.GetSpell(27209);
             var lifetap = wh.GetSpell(27222);
+            var felarmor = wh.GetSpell(28189);
+            //Pre fight setup
+            wl.CastSpell(felarmor, target, 0, new Report());
+
+            var clone = (Warlock)wl.Clone();
+
             for (int i = 0; i < itterations; i++)
             {
                 Report report = new Report()
@@ -89,15 +123,15 @@ namespace Simulation.Console
                 double currentFight = 0;
                 while (fightLength > currentFight)
                 {
-                    if (wl.HaveManaForSpell(shadowbolt))
+                    if (clone.HaveManaForSpell(shadowbolt))
                     {
-                        wl.CastSpell(shadowbolt, target, currentFight, report);
+                        clone.CastSpell(shadowbolt, target, currentFight, report);
                     }
                     else
                     {
-                        wl.CastLifeTap(lifetap, report);
+                        clone.CastLifeTap(lifetap, report);
                     }
-                    currentFight += wl.WaitForNextCast();
+                    currentFight += clone.WaitForNextCast();
                 }
                 array[i] = report;
             }

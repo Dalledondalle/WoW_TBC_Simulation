@@ -147,8 +147,8 @@ namespace EquipTests
 
             Assert.Equal(8, wl.MP5);
 
-            wl.Head.SocketGem(metaGem, 1);
-            wl.Head.SocketGem(gem, 2);
+            wl.SocketItem(wl.Head, metaGem, 1);
+            wl.SocketItem(wl.Head, gem, 2);
 
             Assert.Equal(10, wl.MP5);
         }

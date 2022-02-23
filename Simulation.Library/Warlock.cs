@@ -304,11 +304,11 @@ namespace Simulation.Library
         private const string devastationStr = "Devastation";
         private Talent[] devasations = new Talent[]
         {
-            new(){ ID = "18130", Level = 1, Name = devastationStr, Effects = new() { new(){ AffectedSpells = devastationAffectedSpells.ToList() , Modify = Modify.Critchance, Value = 1 } } },
-            new(){ ID = "18131", Level = 2, Name = devastationStr, Effects = new() { new(){ AffectedSpells = devastationAffectedSpells.ToList() , Modify = Modify.Critchance, Value = 2 } } },
-            new(){ ID = "18132", Level = 3, Name = devastationStr, Effects = new() { new(){ AffectedSpells = devastationAffectedSpells.ToList() , Modify = Modify.Critchance, Value = 3 } } },
-            new(){ ID = "18133", Level = 4, Name = devastationStr, Effects = new() { new(){ AffectedSpells = devastationAffectedSpells.ToList() , Modify = Modify.Critchance, Value = 4 } } },
-            new(){ ID = "18134", Level = 5, Name = devastationStr, Effects = new() { new(){ AffectedSpells = devastationAffectedSpells.ToList() , Modify = Modify.Critchance, Value = 5 } } }
+            new(){ ID = "18130", Level = 1, Name = devastationStr, Effects = new() { new(){ AffectedSpells = devastationAffectedSpells.ToList() , Modify = Modify.SpellCritChance, Value = 1 } } },
+            new(){ ID = "18131", Level = 2, Name = devastationStr, Effects = new() { new(){ AffectedSpells = devastationAffectedSpells.ToList() , Modify = Modify.SpellCritChance, Value = 2 } } },
+            new(){ ID = "18132", Level = 3, Name = devastationStr, Effects = new() { new(){ AffectedSpells = devastationAffectedSpells.ToList() , Modify = Modify.SpellCritChance, Value = 3 } } },
+            new(){ ID = "18133", Level = 4, Name = devastationStr, Effects = new() { new(){ AffectedSpells = devastationAffectedSpells.ToList() , Modify = Modify.SpellCritChance, Value = 4 } } },
+            new(){ ID = "18134", Level = 5, Name = devastationStr, Effects = new() { new(){ AffectedSpells = devastationAffectedSpells.ToList() , Modify = Modify.SpellCritChance, Value = 5 } } }
         };
 
         private static string[] shadowburnAffectedSpells = new[] { shadowburnStr };
@@ -318,9 +318,9 @@ namespace Simulation.Library
         private const string improvedSearingPainStr = "Improved Searing Pain";
         private Talent[] improvedSearingPain = new Talent[]
         {
-            new() { ID = "17927", Level = 1, Name = improvedSearingPainStr, Effects = new() { new() { AffectedSpells = improvedSearingPainAffectedSpells.ToList(), Modify = Modify.Critchance, Value = 4 } } },
-            new() { ID = "17929", Level = 2, Name = improvedSearingPainStr, Effects = new() { new() { AffectedSpells = improvedSearingPainAffectedSpells.ToList(), Modify = Modify.Critchance, Value = 7 } } },
-            new() { ID = "17930", Level = 3, Name = improvedSearingPainStr, Effects = new() { new() { AffectedSpells = improvedSearingPainAffectedSpells.ToList(), Modify = Modify.Critchance, Value = 10 } } }
+            new() { ID = "17927", Level = 1, Name = improvedSearingPainStr, Effects = new() { new() { AffectedSpells = improvedSearingPainAffectedSpells.ToList(), Modify = Modify.SpellCritChance, Value = 4 } } },
+            new() { ID = "17929", Level = 2, Name = improvedSearingPainStr, Effects = new() { new() { AffectedSpells = improvedSearingPainAffectedSpells.ToList(), Modify = Modify.SpellCritChance, Value = 7 } } },
+            new() { ID = "17930", Level = 3, Name = improvedSearingPainStr, Effects = new() { new() { AffectedSpells = improvedSearingPainAffectedSpells.ToList(), Modify = Modify.SpellCritChance, Value = 10 } } }
         };
 
         private static string[] improvedImmolateAffectedSpells = new[] { immolateStr };
@@ -545,11 +545,11 @@ namespace Simulation.Library
         private static string suppressionStr = "Suppression";
         private Talent[] suppressions = new Talent[]
         {
-            new(){ ID = "18174", Level = 1, Name = suppressionStr, Effects = new() { new(){ AffectedSpells = suppressionAffectedSpells.ToList() , Modify = Modify.Hitchance, Value = 2 } } },
-            new(){ ID = "18175", Level = 2, Name = suppressionStr, Effects = new() { new(){ AffectedSpells = suppressionAffectedSpells.ToList() , Modify = Modify.Hitchance, Value = 4 } } },
-            new(){ ID = "18176", Level = 3, Name = suppressionStr, Effects = new() { new(){ AffectedSpells = suppressionAffectedSpells.ToList() , Modify = Modify.Hitchance, Value = 6 } } },
-            new(){ ID = "18177", Level = 4, Name = suppressionStr, Effects = new() { new(){ AffectedSpells = suppressionAffectedSpells.ToList() , Modify = Modify.Hitchance, Value = 8 } } },
-            new(){ ID = "18178", Level = 5, Name = suppressionStr, Effects = new() { new(){ AffectedSpells = suppressionAffectedSpells.ToList() , Modify = Modify.Hitchance, Value = 10 } } }
+            new(){ ID = "18174", Level = 1, Name = suppressionStr, Effects = new() { new(){ AffectedSpells = suppressionAffectedSpells.ToList() , Modify = Modify.SpellHitChance, Value = 2 } } },
+            new(){ ID = "18175", Level = 2, Name = suppressionStr, Effects = new() { new(){ AffectedSpells = suppressionAffectedSpells.ToList() , Modify = Modify.SpellHitChance, Value = 4 } } },
+            new(){ ID = "18176", Level = 3, Name = suppressionStr, Effects = new() { new(){ AffectedSpells = suppressionAffectedSpells.ToList() , Modify = Modify.SpellHitChance, Value = 6 } } },
+            new(){ ID = "18177", Level = 4, Name = suppressionStr, Effects = new() { new(){ AffectedSpells = suppressionAffectedSpells.ToList() , Modify = Modify.SpellHitChance, Value = 8 } } },
+            new(){ ID = "18178", Level = 5, Name = suppressionStr, Effects = new() { new(){ AffectedSpells = suppressionAffectedSpells.ToList() , Modify = Modify.SpellHitChance, Value = 10 } } }
         };
 
         private static string[] improvedCorruptionAffectedSpells = new[] { corruptionStr };
@@ -899,33 +899,38 @@ namespace Simulation.Library
         private static string demonicTacticsStr = "Demonic Tactics";
         private Talent[] demonicTacticss = new Talent[]
         {
-            new(){ ID = "30242", Level = 1, Name = demonicTacticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 1 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 1 } } },
-            new(){ ID = "30245", Level = 2, Name = demonicTacticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 2 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 2 } } },
-            new(){ ID = "30246", Level = 3, Name = demonicTacticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 3 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 3 } } },
-            new(){ ID = "30247", Level = 4, Name = demonicTacticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 4 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 4 } } },
-            new(){ ID = "30248", Level = 5, Name = demonicTacticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 5 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.Critchance, Value = 5 } } }
+            new(){ ID = "30242", Level = 1, Name = demonicTacticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 1 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.SpellCritChance, Value = 1 } } },
+            new(){ ID = "30245", Level = 2, Name = demonicTacticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 2 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.SpellCritChance, Value = 2 } } },
+            new(){ ID = "30246", Level = 3, Name = demonicTacticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 3 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.SpellCritChance, Value = 3 } } },
+            new(){ ID = "30247", Level = 4, Name = demonicTacticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 4 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.SpellCritChance, Value = 4 } } },
+            new(){ ID = "30248", Level = 5, Name = demonicTacticsStr, Effects = new() { new(){ AffectedSpells = demonicTaticsAffectedSpellsPets.ToList() , Modify = Modify.SpellEffectiveness, Value = 5 }, new(){ AffectedSpells = demonicTaticsAffectedSpellsPlayer.ToList() , Modify = Modify.SpellCritChance, Value = 5 } } }
         };
         #endregion DemonologyTalents
         #endregion Talents
 
         public Warlock()
         {
-            spellCrit = 1.7;
-            intellect = 131;
+            baseSpellCrit = 1.7;
+            baseIntellect = 131;
+            UpdateStats();
             baseMana = 2615;
             mana = MaxMana;
+            UpdateStats();
         }
         #region CastSpells
-        public void CastFelArmor(Spell spell)
+        public void CastFelArmor(Spell spell, double fightTick)
         {
             Aura a = new(spell.ID, spell.Name, AuraType.Buff);
-            a.FlatSpellMod = GetFelArmorSP(spell);
-            if(!buffs.Any(x => x.Name == spell.Name))
+            if(!buffs.Any(x => x.Value.Name == spell.Name))
             {
-                a.FlatSpellMod = (int)(a.FlatSpellMod * (1 + (GetModAdditivesFromTalents(spell, Modify.SpellEffectiveness)/100)));
-                buffs.Add(a);
+                int sp = GetFelArmorSP(spell);
+                double modifier = GetModMultiplicativeFromTalents(spell, Modify.SpellEffectiveness);
+                sp = (int)(sp * modifier);
+                var effect = new Effect() { Value = sp, AuraID = spell.ID, Modify = Modify.SpellPower };
+                a.Effects.Add(effect);
+                buffs.Add(fightTick, a);
             }
-            return;
+            UpdateStats();
             //"Surrounds the caster with fel energy, increasing the amount of health generated through spells and effects by 20% and increasing spell damage by up to 100. &nbsp;Only one type of Armor spell can be active on the Warlock at any time. &nbsp;Lasts 30 min."
         }
         private int GetFelArmorSP(Spell spell)
@@ -972,18 +977,22 @@ namespace Simulation.Library
             double dmgModTalents = GetModMultiplicativeFromTalents(shadowbolt, Modify.DamagePercent);
             double casttimeMod = GetModAdditivesFromTalents(shadowbolt, Modify.Casttime);
             shadowbolt.CastTime += casttimeMod;
-            var CritMod = GetModAdditivesFromTalents(shadowbolt, Modify.Critchance);
+            var CritMod = GetModAdditivesFromTalents(shadowbolt, Modify.SpellCritChance);
             bool isCrit = rnd.Next(100) <= SpellCrit + CritMod;
             lastSpelledCasted = shadowbolt;
             dmg = rnd.Next(GetShadowboltMinDmg(shadowbolt), GetShadowboltMaxDmg(shadowbolt));
             dmg = dmg + ((SpellPower + ShadowPower) * GetShadowboltSPMod(shadowbolt));
             mana -= shadowbolt.Cost;
             if (!DidHit(lastSpelledCasted)) dmg = 0;
-            dmg = dmg * (1 + (dmgModTalents / 100));
-            dmg = isCrit ? dmg * 1.5 : dmg;
+            dmg = dmg * dmgModTalents;
+            if(Talents.Any(x => x.Name == baneStr))
+                dmg = isCrit ? (dmg * 2) * GetModMultiplicativeFromAuras(Modify.SpellCritChance, shadowbolt) : dmg;
+            else
+                dmg = isCrit ? dmg * 1.5 : dmg;
             report.ReportDamage(dmg, lastSpelledCasted, dmg > 0, isCrit);
             return dmg;
         }
+
         private int GetShadowboltMinDmg(Spell shadowbolt)
         {
             return int.Parse(shadowbolt.ToolTipText.Split(' ')[8]);
@@ -1000,7 +1009,12 @@ namespace Simulation.Library
             string str = shadowbolt.Effects[0];
             string sub = str.Substring(start, lenght);
             sub = sub.Split(' ')[2];
-            return double.Parse(sub);
+            int decimalSeprator = 0;
+            if (sub.Contains(',')) decimalSeprator = sub.Substring(sub.IndexOf(',')).Length;
+            if (sub.Contains('.')) decimalSeprator = sub.Substring(sub.IndexOf('.')).Length;
+            double divider = Math.Pow(10, decimalSeprator-1);
+            double spMod = double.Parse(sub) / divider;
+            return spMod;
         }
         private bool DidHit(Spell spell, double hitmodifier = 0)
         {

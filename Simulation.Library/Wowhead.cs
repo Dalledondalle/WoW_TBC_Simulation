@@ -12,29 +12,33 @@ namespace Simulation.Library
     {
         public static SocketBonus[] SocketBonuses = new SocketBonus[]
         {
-            new(){ID = "2889", Stat = BonusStat.spellpower, Amount = 5},
-            new(){ID = "2900", Stat = BonusStat.spellpower, Amount = 4},
-            new(){ID = "2974", Stat = BonusStat.spellpower, Amount = 3},     //7 Healing and SP
-            new(){ID = "2872", Stat = BonusStat.spellpower, Amount = 3},     //9 Healing and sp
-            new(){ID = "3153", Stat = BonusStat.spellpower, Amount = 2},
-            new(){ID = "3098", Stat = BonusStat.spellpower, Amount = 2},    //4 Healing and SP
+            new(){ID = "2889", Stat = Modify.SpellPower, Amount = 5},
+            new(){ID = "2900", Stat = Modify.SpellPower, Amount = 4},
+            new(){ID = "2974", Stat = Modify.SpellPower, Amount = 3},     //7 Healing and SP
+            new(){ID = "2872", Stat = Modify.SpellPower, Amount = 3},     //9 Healing and sp
+            new(){ID = "3153", Stat = Modify.SpellPower, Amount = 2},
+            new(){ID = "3098", Stat = Modify.SpellPower, Amount = 2},    //4 Healing and SP
 
 
-            new(){ID = "2880", Stat = BonusStat.spellcrit, Amount = 2},
-            new(){ID = "2875", Stat = BonusStat.spellcrit, Amount = 3},
-            new(){ID = "2951", Stat = BonusStat.spellcrit, Amount = 4},
+            new(){ID = "2880", Stat = Modify.SpellCritRating, Amount = 2},
+            new(){ID = "2875", Stat = Modify.SpellCritRating, Amount = 3},
+            new(){ID = "2951", Stat = Modify.SpellCritRating, Amount = 4},
 
 
-            new(){ID = "2909", Stat = BonusStat.spellhit, Amount = 2},
-            new(){ID = "3153", Stat = BonusStat.spellhit, Amount = 3},
+            new(){ID = "2909", Stat = Modify.SpellHitRating, Amount = 2},
+            new(){ID = "3153", Stat = Modify.SpellHitRating, Amount = 3},
 
 
-            new(){ID = "2881", Stat = BonusStat.MP5, Amount = 1},
-            new(){ID = "2865", Stat = BonusStat.MP5, Amount = 2},
+            new(){ID = "2881", Stat = Modify.MP5Flat, Amount = 1},
+            new(){ID = "2865", Stat = Modify.MP5Flat, Amount = 2},
 
 
-            new(){ID = "2863", Stat = BonusStat.intellect, Amount = 3},
-            new(){ID = "94", Stat = BonusStat.intellect, Amount = 4},
+            new(){ID = "2863", Stat = Modify.IntellectFlat, Amount = 3},
+            new(){ID = "94", Stat = Modify.IntellectFlat, Amount = 4},
+        };
+        public static Aura[] Auras = new Aura[]
+        {
+            new Aura("32837", "Spell Focus Trigger", AuraType.Buff) {Effects = new(){ new(){ AuraID = "32837", InternalCD = 35000, Modify = Modify.SpellHasteRating, Value = 320, ProcChance = 15 } }, Duration = 6000}
         };
         public Equipment GetEquipment(int id)
         {
@@ -271,6 +275,18 @@ namespace Simulation.Library
                 return true;
             }
         }
+        [JsonIgnore]
+        public List<Gem> Gems
+        {
+            get
+            {
+                List<Gem> g = new();
+                if (Gem1 is not null) g.Add(Gem1);
+                if (Gem3 is not null) g.Add(Gem2);
+                if (Gem3 is not null) g.Add(Gem3);
+                return g;
+            }
+        }
 
         [JsonProperty("splcritstrkrtng")]
         public int SpellCritRating { get; set; }
@@ -306,9 +322,9 @@ namespace Simulation.Library
             switch (gemslot)
             {
                 case 1:
-                    if(Socket1 != SocketColor.Dummy)
+                    if (Socket1 != SocketColor.Dummy)
                     {
-                        if(Socket1 != SocketColor.Meta && gem.Color != "Meta")
+                        if (Socket1 != SocketColor.Meta && gem.Color != "Meta")
                             Gem1 = gem;
                         if (Socket1 == SocketColor.Meta && gem.Color == "Meta")
                             Gem1 = gem;
@@ -442,29 +458,7 @@ namespace Simulation.Library
         public string SpellID { get; set; }
         public string Name { get; set; }
         public AuraType AuraType { get; set; }
-        public int FlatSpellMod { get; set; }
-        public int FlatShadowMod { get; set; }
-        public int FlatArcaneMod { get; set; }
-        public int FlatFireMod { get; set; }
-        public int FlatFrostMod { get; set; }
-        public int FlatNatureMod { get; set; }
-        public int FlatHolyMod { get; set; }
-        public int SpellHasteRatingMod { get; set; }
-        public int SpellCritRatingMod { get; set; }
-        public int SpellHitRatingMod { get; set; }
-        public int FlatManaRegenMod { get; set; }
-        public int FlatIntMod { get; set; }
-        public double IntModifer { get; set; }
-        public double SpellModifer { get; set; }
-        public double ShadowModifer { get; set; }
-        public double FrostModifer { get; internal set; }
-        public double ArcaneModifer { get; set; }
-        public double FireModifer { get; set; }
-        public double NatureModifer { get; set; }
-        public double HolyModifer { get; set; }
-        public double SpellHasteModifer { get; set; }
-        public double SpellCritModifer { get; set; }
-        public double SpellHitModifer { get; set; }
+        public List<Effect> Effects { get; set; }
         public double Duration { get; set; }
         public double EndTimer { get; set; }
         public double NextTick { get; set; }
@@ -474,6 +468,7 @@ namespace Simulation.Library
             SpellID = spellID;
             Name = name;
             AuraType = auraType;
+            Effects = new();
         }
     }
 
@@ -489,7 +484,11 @@ namespace Simulation.Library
     {
         public Modify Modify { get; set; }
         public int Value { get; set; }
-        public List<string> AffectedSpells { get; set; }
+        public List<string> AffectedSpells { get; set; } = new() { "All" };
+        public double InternalCD { get; set; }
+        public double ProcChance { get; set; }
+        public double LastProcTimeStamp { get; set; }
+        public string AuraID { get; set; }
     }
 
     public enum Modify
@@ -500,8 +499,13 @@ namespace Simulation.Library
         DamageFlat,
         SpellPowerPercent,
         PeriodicDamagePercent,
-        Hitchance,
-        Critchance,
+        SpellHitChance,
+        SpellHitRating,
+        SpellCritRating,
+        CritRating,
+        SpellCritChance,
+        CritChance,
+        HitChance,
         CritDamagePercent,
         ManaPercent,
         ProcOnHit,
@@ -511,7 +515,33 @@ namespace Simulation.Library
         Unique,
         SpellEffectiveness,
         MaxMana,
-        AuraDuration
+        AuraDuration,
+        SpellHasteRating,
+        SpellHastePercent,
+        HolyPower,
+        HolyPercent,
+        ShadowPower,
+        ShadowPercent,
+        ArcanePower,
+        ArcanePercent,
+        FirePower,
+        FirePercent,
+        NaturePower,
+        NaturePercent,
+        FrostPower,
+        FrostPercent,
+        HealingPower,
+        SpellPower,
+        ManaReturnFlat,
+        ManaReturnPercentOfDamage,
+        ManaReturnPercenttOfMaxMana,
+        ManaReturnPercentOfBaseMana,
+        IntellectPercent,
+        IntellectFlat,
+        MP5Flat,
+        MP5Percent,
+        SpiritFlat,
+        SpirtPercent,
     }
     public enum AuraType
     {
@@ -521,19 +551,10 @@ namespace Simulation.Library
     public class SocketBonus
     {
         public string ID { get; set; }
-        public BonusStat Stat { get; set; }
+        public Modify Stat { get; set; }
         public int Amount { get; set; }
     }
 
-    public enum BonusStat
-    {
-        spellpower,
-        spellcrit,
-        spellhaste,
-        spellhit,
-        intellect,
-        MP5
-    }
 
     public enum SocketColor
     {

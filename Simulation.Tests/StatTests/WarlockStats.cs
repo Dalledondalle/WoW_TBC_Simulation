@@ -22,6 +22,7 @@ namespace StatTests
         {
             Warlock wl = new();
             wl.AddHasteRating(hasteRating);
+            wl.UpdateStats();
 
             Assert.Equal(expectedHasteRating, wl.SpellHasteRating);
             Assert.Equal(expectedHaste, Math.Round(wl.SpellHaste, 2));
@@ -161,7 +162,7 @@ namespace StatTests
 
         [Theory]
         [InlineData(0, 0, 0, 3.3)]
-        [InlineData(32, 36, 32, 5.19)]
+        [InlineData(26, 40, 26, 4.96)]
         [InlineData(45, 58, 45, 6.04)]
         [InlineData(85, 58, 85, 7.85)]
         public void AddCritRatingTests(int critRating, int intellect, int expectedCritRating, double expectedCritChance)
@@ -208,8 +209,10 @@ namespace StatTests
             wl.AddHasteRating(150);
 
             Aura DrumsOfBattle = new("35476", "Drums Of Battle", AuraType.Buff);
-            DrumsOfBattle.SpellHasteRatingMod = 80;
-            wl.AddAura(DrumsOfBattle);
+            Effect effect = new() { AuraID = "35476", Modify = Modify.SpellHasteRating, Value = 80 };
+            DrumsOfBattle.Duration = 30000;
+            DrumsOfBattle.Effects.Add(effect);
+            wl.AddAura(DrumsOfBattle,0);
 
             Assert.Equal(230, wl.SpellHasteRating);
         }
@@ -221,8 +224,10 @@ namespace StatTests
             wl.AddHasteRating(158);
 
             Aura Bloodlust = new("2825", "Bloodlust", AuraType.Buff);
-            Bloodlust.SpellHasteModifer = 30;
-            wl.AddAura(Bloodlust);
+            Effect effect = new() { AuraID = "35476", Modify = Modify.SpellHastePercent, Value = 30 };
+            Bloodlust.Duration = 40000;
+            Bloodlust.Effects.Add(effect);
+            wl.AddAura(Bloodlust, 0);
 
             Assert.Equal(40.02, Math.Round(wl.SpellHaste, 2));
         }
@@ -234,8 +239,10 @@ namespace StatTests
             wl.AddIntellect(123); //254 since warlock starts with 131 int base
 
             Aura BlessingOfKings = new("25898", "Greater Blessing of Kings", AuraType.Buff);
-            BlessingOfKings.IntModifer = 10;
-            wl.AddAura(BlessingOfKings);
+            Effect effect = new() { AuraID = "35476", Modify = Modify.IntellectPercent, Value = 10 };
+            BlessingOfKings.Duration = 360000/2;
+            BlessingOfKings.Effects.Add(effect);
+            wl.AddAura(BlessingOfKings,0);
 
             Assert.Equal(279, wl.Intellect);
         }
@@ -247,8 +254,10 @@ namespace StatTests
             wl.AddSpellPower(123);
 
             Aura FelArmor = new("28189", "Fel Armor", AuraType.Buff);
-            FelArmor.FlatSpellMod = 100;
-            wl.AddAura(FelArmor);
+            Effect effect = new() { AuraID = "35476", Modify = Modify.SpellPower, Value = 100 };
+            FelArmor.Duration = 3600000/2;
+            FelArmor.Effects.Add(effect);
+            wl.AddAura(FelArmor,0);
 
             Assert.Equal(223, wl.SpellPower);
         }
@@ -260,8 +269,10 @@ namespace StatTests
             wl.AddIntellect(123); //254 since warlock starts with 131 int base
 
             Aura BlessingOfWisdom = new("27143", "Greater Blessing of Wisdom", AuraType.Buff);
-            BlessingOfWisdom.FlatManaRegenMod = 41;
-            wl.AddAura(BlessingOfWisdom);
+            Effect effect = new() { AuraID = "35476", Modify = Modify.MP5Flat, Value = 41 };
+            BlessingOfWisdom.Duration = 3600000 / 2;
+            BlessingOfWisdom.Effects.Add(effect);
+            wl.AddAura(BlessingOfWisdom,0);
 
             Assert.Equal(41, wl.MP5);
         }
@@ -273,8 +284,10 @@ namespace StatTests
             wl.AddIntellect(123); //254 since warlock starts with 131 int base
 
             Aura ArcaneIntellect = new("3738", "Arcane Brilliance", AuraType.Buff);
-            ArcaneIntellect.FlatIntMod = 40;
-            wl.AddAura(ArcaneIntellect);
+            Effect effect = new() { AuraID = "35476", Modify = Modify.IntellectFlat, Value = 40 };
+            ArcaneIntellect.Duration = 3600000 / 2;
+            ArcaneIntellect.Effects.Add(effect);
+            wl.AddAura(ArcaneIntellect,0);
 
             Assert.Equal(294, wl.Intellect);
         }
@@ -286,9 +299,11 @@ namespace StatTests
             wl.AddIntellect(123); //254 since warlock starts with 131 int base
 
             Aura TotemOfWrath = new("30706", "Totem Of Wrath", AuraType.Buff);
-            TotemOfWrath.SpellHitModifer = 3;
-            TotemOfWrath.SpellCritModifer = 3;
-            wl.AddAura(TotemOfWrath);
+            Effect effect1 = new() { AuraID = "35476", Modify = Modify.SpellHitChance, Value = 3 };
+            Effect effect2 = new() { AuraID = "35476", Modify = Modify.SpellCritChance, Value = 3 };
+            TotemOfWrath.Effects.Add(effect1);
+            TotemOfWrath.Effects.Add(effect2);
+            wl.AddAura(TotemOfWrath,0);
 
             Assert.Equal(3, wl.SpellHit);
             Assert.Equal(7.80, Math.Round(wl.SpellCrit,2));

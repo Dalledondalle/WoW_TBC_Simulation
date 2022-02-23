@@ -457,7 +457,7 @@ namespace TalentTests.Demonology
             Warlock wl = new();
             var spell = wh.GetSpell(28189);
             wl.GetType().GetProperty(propertyName).SetValue(wl, rank);
-            wl.CastFelArmor(spell);
+            wl.CastFelArmor(spell,0);
 
             Assert.Equal(expectedSP, wl.SpellPower);
         }
@@ -473,7 +473,7 @@ namespace TalentTests.Demonology
             Warlock wl = new();
             var spell = wh.GetSpell(28176);
             wl.GetType().GetProperty(propertyName).SetValue(wl, rank);
-            wl.CastFelArmor(spell);
+            wl.CastFelArmor(spell,0);
 
             Assert.Equal(expectedSP, wl.SpellPower);
         }
