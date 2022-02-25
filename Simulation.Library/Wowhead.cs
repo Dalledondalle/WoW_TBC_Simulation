@@ -170,7 +170,14 @@ namespace Simulation.Library
             string jsonString = string.Empty;
             if (File.Exists(dir + id.ToString()))
                 jsonString = File.ReadAllText(dir + id.ToString());
-
+            while (jsonString.Contains('\n'))
+            {
+                jsonString = jsonString.Remove(jsonString.IndexOf('\n'));
+            }
+            while (jsonString.Contains('\r'))
+            {
+                jsonString = jsonString.Remove(jsonString.IndexOf('\r'));
+            }
             if (!string.IsNullOrEmpty(jsonString))
                 return JsonConvert.DeserializeObject<Spell>(jsonString);
             return null;
@@ -447,17 +454,65 @@ namespace Simulation.Library
 
         private double ParseFromSecondsToMiliSecDouble(string str)
         {
-            return double.Parse(str.Replace(",", "").Replace(".", "")) * 1000;
+            var decimals = string.Empty;
+            var integers = string.Empty;
+            if (str.Contains(','))
+                integers = str.Substring(0, str.IndexOf(','));
+            if (str.Contains('.'))
+                integers = str.Substring(0, str.IndexOf('.'));
+
+            if (str.Contains(','))
+                decimals = str.Substring(str.IndexOf(',')+1);
+            if (str.Contains('.'))
+                decimals = str.Substring(str.IndexOf('.')+1);
+
+            while (decimals.Length < 3) decimals = decimals + '0';
+            while (decimals.Length > 3) decimals = decimals.Remove(decimals.Length - 1);
+
+
+            return double.Parse(integers + decimals);
         }
 
         private double ParseFromMinutesToMiliSecDouble(string str)
         {
-            return double.Parse(str.Replace(",", "").Replace(".", "")) * 60 * 1000;
+            var decimals = string.Empty;
+            var integers = string.Empty;
+            if (str.Contains(','))
+                integers = str.Substring(0, str.IndexOf(','));
+            if (str.Contains('.'))
+                integers = str.Substring(0, str.IndexOf('.'));
+
+            if (str.Contains(','))
+                decimals = str.Substring(str.IndexOf(',') + 1);
+            if (str.Contains('.'))
+                decimals = str.Substring(str.IndexOf('.') + 1);
+
+            while (decimals.Length < 3) decimals = decimals + '0';
+            while (decimals.Length > 3) decimals = decimals.Remove(decimals.Length - 1);
+
+
+            return double.Parse(integers + decimals) * 60;
         }
 
         private double ParseFromHoursToMiliSecDouble(string str)
         {
-            return double.Parse(str.Replace(",", "").Replace(".", "")) * 60 * 60 * 1000;
+            var decimals = string.Empty;
+            var integers = string.Empty;
+            if (str.Contains(','))
+                integers = str.Substring(0, str.IndexOf(','));
+            if (str.Contains('.'))
+                integers = str.Substring(0, str.IndexOf('.'));
+
+            if (str.Contains(','))
+                decimals = str.Substring(str.IndexOf(',') + 1);
+            if (str.Contains('.'))
+                decimals = str.Substring(str.IndexOf('.') + 1);
+
+            while (decimals.Length < 3) decimals = decimals + '0';
+            while (decimals.Length > 3) decimals = decimals.Remove(decimals.Length - 1);
+
+
+            return double.Parse(integers + decimals) * 60 *60;
         }
     }
 

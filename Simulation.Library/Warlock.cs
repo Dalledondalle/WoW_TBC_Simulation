@@ -945,7 +945,7 @@ namespace Simulation.Library
         {
             return spell.Cost < Mana;
         }
-        public void CastLifeTap(Spell lifetap, Report report = null)
+        public void CastLifeTap(Spell lifetap, Report report = null, double fightTick = 0)
         {
             if (report is null) report = new();
             if (lifetap.Name != lifeTapStr) return;
@@ -960,7 +960,7 @@ namespace Simulation.Library
             {
                 ManaGained = manaFromLT;
             }
-            report.ReportManaGained(ManaGained, $"Life Tap");
+            report.ReportManaGained(ManaGained, lifetap, fightTick + WaitForNextCast());
             this.mana += ManaGained;
             if (this.mana > MaxMana) this.mana = MaxMana;
         }
@@ -968,7 +968,7 @@ namespace Simulation.Library
         {
             return int.Parse(lifetap.ToolTipText.Split(' ')[1]);
         }
-        protected double CastShadowBolt(Spell shadowbolt, Unit target, Report report = null)
+        protected double CastShadowBolt(Spell shadowbolt, Unit target, Report report = null, double fightTick = 0)
         {
             if (report is null) report = new();
             if (shadowbolt.Name != shadowBoltStr) return 0;
@@ -989,7 +989,7 @@ namespace Simulation.Library
                 dmg = isCrit ? (dmg * 2) * GetModMultiplicativeFromAuras(Modify.SpellCritChance, shadowbolt) : dmg;
             else
                 dmg = isCrit ? dmg * 1.5 : dmg;
-            report.ReportDamage(dmg, lastSpelledCasted, dmg > 0, isCrit);
+            report.ReportDamage(dmg, lastSpelledCasted, fightTick + WaitForNextCast(), dmg > 0, isCrit);
             return dmg;
         }
 
@@ -1039,7 +1039,7 @@ namespace Simulation.Library
             switch (spell.Name)
             {
                 case shadowBoltStr:
-                    CastShadowBolt(spell, target, report);
+                    CastShadowBolt(spell, target, report, fightTick);
                     break;
                 default:
                     break;

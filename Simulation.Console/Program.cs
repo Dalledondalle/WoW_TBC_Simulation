@@ -11,100 +11,85 @@ namespace Simulation.Console
     class Program
     {
         static List<Report> reports = new();
-        static Dictionary<int, TimeSpan> tests = new();
-        static Thread[] threads = new Thread[100];
+        static Dictionary<int, TimeSpan> sims = new();
         static void Main(string[] args)
         {
-            SetupThreads();
-            System.Console.Read();
-            System.Console.Clear();
-            Run(10000, 50);
-            //for (int i = 0; i < 100; i += 5)
-            //{
-            //    Run(10000, i);
-            //}
-            //System.Console.Clear();
-            //tests = tests.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            //foreach (var item in tests)
-            //{
-            //    System.Console.WriteLine($"Threads: {item.Key} -> Time: {item.Value}");
-            //}
-        }
-
-        private static void SetupThreads()
-        {
-            for (int i = 0; i < threads.Length; i++)
+            for (int i = 1; i < 10001; i++)
             {
-                threads[i] = new Thread(SimulateWithThread);
+                System.Console.WriteLine($"Running {i} tasks now");
+                Run(i);
+                System.Console.Clear();
+                TimeSpan time = sims.Min(x => x.Value);
+                int threadCount = sims.First(x => x.Value == time).Key;
+                System.Console.WriteLine($"Fast setup currently is {threadCount} threads which took {time}");
             }
-            System.Console.WriteLine("Threads sat up");
+
+            TimeSpan bestTime = sims.Min(x => x.Value);
+            int bestThread = sims.First(x => x.Value == bestTime).Key;
+            System.Console.WriteLine($"Fast setup was is {bestThread} threads which took {bestTime}");
+            //Simulate(new Warlock(), 300, 150000);
+            //PrintAReport(reports.First());
         }
 
-        private static void Run(int itterations, int threadCount)
+        private static void Run(int threads)
         {
+            Stopwatch sw = new();
             reports.Clear();
             //var wl = CreateWarlock();
             //PrintWarlock(wl);
-            //Simulate(wl, 30000, 150000);
+            //Simulate(wl, 10000, 150000);
             //System.Console.WriteLine("-----------------------");
             //PrintWarlock(wl);
-            //Simulate(new Warlock(), 30000, 150000);
-            //Thread thread = new Thread(SimulateWithThread);
-            //thread.Start(new ThreadPass{ Character = new Warlock(), FightLength = 150000, Itterations = 3000 });
-            Stopwatch sw = new();
             sw.Start();
+            //Parallel.For(0, 100, i =>
+            //{
 
-            Parallel.ForEach(threads, new ParallelOptions { MaxDegreeOfParallelism = -1 }, t =>
+            var tasks = MakeTasks(threads).ToList();
+            while (tasks.Any(t => !t.IsCompleted))
             {
-                t.Start(new ThreadPass { Character = new Warlock(), FightLength = 150000, Itterations = itterations / threads.Length, ID = threads.ToList().IndexOf(t) });
-            });
-
-            //for (int i = 0; i < threadCount; i++)
-            //{
-            //    threads.Add(new Thread(SimulateWithThread));
-            //}
-
-            //foreach (var item in threads)
-            //{
-            //    item.Start(new ThreadPass { Character = new Warlock(), FightLength = 150000, Itterations = itterations / threadCount });
-            //}
-            //System.Console.WriteLine($"Threads {threadCount}");
-            //while (reports.Count < itterations)
-            //{
-            //    if (reports.Count % 20 == 0)
-            //    {
-            //        double progress = (double)reports.Count / (double)itterations * 100;
-            //        System.Console.Write($"\r{Math.Round(progress, 2)}%");
-            //    }
-            //}
-
-            //while(threads.Any(x => x.IsAlive))
-            //{
-            //    if (reports.Count % 20 == 0)
-            //    {
-            //        double worstFight = reports.Min(r => r.DPS);
-            //        double bestFight = reports.Max(r => r.DPS);
-            //        double avg = reports.Average(r => r.DPS);
-            //        System.Console.Write($"\rWorst fight: {worstFight.ToString("0.###")}\nBest fight: {bestFight.ToString("0.###")}\nOn average: {avg.ToString("0.###")}\n");
-            //    }
-            //}
+                //System.Console.Write($"\r{reports.Count}");
+            }
+            System.Console.WriteLine();
+            //});
             sw.Stop();
-            System.Console.WriteLine($"Time elapsed: {sw.Elapsed}");
-            tests.Add(threadCount, sw.Elapsed);
+            //double worstFight = reports.Min(r => r.DPS);
+            //double bestFight = reports.Max(r => r.DPS);
+            //double avg = reports.Average(r => r.DPS);
+            //System.Console.WriteLine($"Worst fight: {worstFight.ToString("0.###")}\nBest fight: {bestFight.ToString("0.###")}\nOn average: {avg.ToString("0.###")}\nTime elapsed: {sw.Elapsed}");
+            //Random rnd = new();
+            //Report reportToAnalyze = reports[rnd.Next(reports.Count)];
+
+            //PrintAReport(reportToAnalyze);
+
+            sims.Add(threads, sw.Elapsed);
+
         }
 
-        private class ThreadPass
+        static void PrintAReport(Report reportToAnalyze)
         {
-            public Unit Character { get; set; }
-            public double FightLength { get; set; }
-            public int Itterations { get; set; }
-            public int ID { get; set; }
+            Wowhead wh = new();
+            foreach (var item in reportToAnalyze.AllSpellsCasted.OrderBy(x => x.FightTick))
+            {
+                if (item.GetType() == typeof(DamageSpellReport))
+                {
+                    DamageSpellReport sp = item as DamageSpellReport;
+                    System.Console.WriteLine($"{wh.GetSpell(int.Parse(sp.SpellId)).Name} did {sp.Damage} at {sp.FightTick}. Crit: {sp.Crit}");
+                }
+                if (item.GetType() == typeof(RessourceRegenratedReport))
+                {
+                    RessourceRegenratedReport rp = item as RessourceRegenratedReport;
+                    System.Console.WriteLine($"{wh.GetSpell(int.Parse(rp.SpellId)).Name} restored {rp.Amount} Mana at  {rp.FightTick}");
+                }
+            }
         }
 
-        private static void SimulateWithThread(object obj)
+        static IEnumerable<Task> MakeTasks(int amount)
         {
-            ThreadPass tp = obj as ThreadPass;
-            Simulate((Warlock)tp.Character, tp.Itterations, tp.FightLength, tp.ID);
+            Warlock wl = CreateWarlock();
+            for (int i = 0; i < amount; i++)
+            {
+                yield return Task.Run(() => { Simulate(wl, 100000 / amount, 150000); });
+            }
         }
 
         private static void PrintWarlock(Warlock wl)
@@ -194,38 +179,37 @@ namespace Simulation.Console
             var felarmor = wh.GetSpell(28189);
             //Pre fight setup
             wl.CastSpell(felarmor, target, 0, new Report());
-            var clone = (Warlock)wl.Clone();
+
 
             for (int i = 0; i < itterations+1; i++)
             {
+                var clone = (Warlock)wl.Clone();
                 Report report = new Report()
                 {
                     FightLength = fightLength,
                     FightNo = i,
                 };
                 double currentFight = 0;
-                while (fightLength > currentFight)
+                while (fightLength >= currentFight)
                 {
-                    if (clone.HaveManaForSpell(shadowbolt))
+                    if (!clone.HaveManaForSpell(shadowbolt))
                     {
-                        clone.CastSpell(shadowbolt, target, currentFight, report);
+                        clone.CastLifeTap(lifetap, report, currentFight);
                     }
                     else
                     {
-                        clone.CastLifeTap(lifetap, report);
+                        clone.CastSpell(shadowbolt, target, currentFight, report);
                     }
                     currentFight += clone.WaitForNextCast();
                 }
-                //array[i] = report;
                 reports.Add(report);
             }
-            System.Console.WriteLine($"Stop id: {id}");
+
             //double worstFight = array.Min(r => r.DPS);
             //double bestFight = array.Max(r => r.DPS);
             //double avg = array.Average(r => r.DPS);
             //sw.Stop();
             //System.Console.WriteLine($"Worst fight: {worstFight.ToString("0.###")}\nBest fight: {bestFight.ToString("0.###")}\nOn average: {avg.ToString("0.###")}\nTime elapsed: {sw.Elapsed}\nCrit %: {wl.SpellCrit.ToString("0.##")}%");
-            //System.Console.WriteLine($"Done {reports.Count}");
         }
     }
 }

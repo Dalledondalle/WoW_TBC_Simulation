@@ -8,54 +8,79 @@ namespace Simulation.Library
 {
     public class Report
     {
-        public double TotalDamageDone => Spells.Select(sr => sr.Damage).Sum();
+        public double TotalDamageDone => Spells.Select(sr => sr.Damage).ToList().Sum();
+        public List<SpellReport> AllSpellsCasted 
+        {
+            get
+            {
+                List<SpellReport> allSpellsCasted = new();
+                foreach (var item in Spells)
+                {
+                    allSpellsCasted.Add(item);
+                }
+                foreach (var item in RessourcesRegenerated)
+                {
+                    allSpellsCasted.Add(item);
+                }
+                return allSpellsCasted;
+            }
+        }
         public double DPS => TotalDamageDone / (FightLength / 1000);
-        public List<SpellReport> Spells { get; set; }
+        public List<DamageSpellReport> Spells { get; set; }
         public int FightNo { get; set; }
         public double FightLength { get; set; }
-        public List<RessourceRegenrated> RessourcesRegenerated { get; set; }
+        public List<RessourceRegenratedReport> RessourcesRegenerated { get; set; }
         public Report()
         {
             Spells = new();
             RessourcesRegenerated = new();
         }
 
-        public void ReportDamage(double dmg, Spell spell, bool hit, bool isCrit = false, bool tick = false)
+        public void ReportDamage(double dmg, Spell spell, double figthTick, bool hit, bool isCrit = false, bool tick = false)
         {
-            SpellReport spellReport = new()
+            DamageSpellReport spellReport = new()
             {
                 SpellId = spell.ID,
                 Damage = dmg,
                 Hit = hit,
                 Crit = isCrit,
-                Tick = tick
+                Tick = tick,
+                FightTick = figthTick
             };
             Spells.Add(spellReport);
         }
 
-        public void ReportManaGained(int amount, string source)
+        public void ReportManaGained(int amount, Spell spell, double fightTick)
         {
-            RessourceRegenrated regenrated = new()
+            RessourceRegenratedReport regenrated = new()
             {
+                SpellId = spell.ID,
                 Amount = amount,
-                Source = source
+                Source = spell.Name,
+                FightTick = fightTick
             };
             RessourcesRegenerated.Add(regenrated);
         }
     }
 
-    public class RessourceRegenrated
+    public class SpellReport
+    {
+        public string SpellId { get; set; }
+        public double FightTick { get; set; }
+    }
+
+    public class RessourceRegenratedReport : SpellReport
     {
         public string Source { get; set; }
         public int Amount { get; set; }
     }
 
-    public class SpellReport
-    {
-        public string SpellId { get; set; }
+    public class DamageSpellReport : SpellReport
+    {        
         public bool Hit { get; set; }
         public bool Crit { get; set; }
         public bool Tick { get; set; }
         public double Damage { get; set; }
+        
     }
 }
