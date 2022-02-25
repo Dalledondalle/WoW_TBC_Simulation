@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
 
 namespace Simulation.Library
@@ -918,19 +919,24 @@ namespace Simulation.Library
             UpdateStats();
         }
         #region CastSpells
-        public void CastFelArmor(Spell spell, double fightTick)
+        private double CastFelArmor(Spell spell, double fightTick)
         {
+            if(spell is null)
+            {
+                throw new NullReferenceException("Felarmor was null");
+            }
             Aura a = new(spell.ID, spell.Name, AuraType.Buff);
-            if(!buffs.Any(x => x.Value.Name == spell.Name))
+            if(!buffs.Any(x => x.Name == spell.Name))
             {
                 int sp = GetFelArmorSP(spell);
                 double modifier = GetModMultiplicativeFromTalents(spell, Modify.SpellEffectiveness);
                 sp = (int)(sp * modifier);
                 var effect = new Effect() { Value = sp, AuraID = spell.ID, Modify = Modify.SpellPower };
                 a.Effects.Add(effect);
-                buffs.Add(fightTick, a);
+                AddAura(a, fightTick);
             }
             UpdateStats();
+            return Math.Max(spell.GCD, 1000);
             //"Surrounds the caster with fel energy, increasing the amount of health generated through spells and effects by 20% and increasing spell damage by up to 100. &nbsp;Only one type of Armor spell can be active on the Warlock at any time. &nbsp;Lasts 30 min."
         }
         private int GetFelArmorSP(Spell spell)
@@ -945,10 +951,10 @@ namespace Simulation.Library
         {
             return spell.Cost < Mana;
         }
-        public void CastLifeTap(Spell lifetap, Report report = null, double fightTick = 0)
+        private double CastLifeTap(Spell lifetap, Report report = null, double fightTick = 0)
         {
             if (report is null) report = new();
-            if (lifetap.Name != lifeTapStr) return;
+            if (lifetap.Name != lifeTapStr) return 0;
             int manaFromLT = ManaGainedFromLifetap(lifetap);
             int ManaGained = 0;
             lastSpelledCasted = lifetap;
@@ -963,34 +969,44 @@ namespace Simulation.Library
             report.ReportManaGained(ManaGained, lifetap, fightTick + WaitForNextCast());
             this.mana += ManaGained;
             if (this.mana > MaxMana) this.mana = MaxMana;
+            return lifetap.GCD;
         }
         private int ManaGainedFromLifetap(Spell lifetap)
         {
             return int.Parse(lifetap.ToolTipText.Split(' ')[1]);
         }
-        protected double CastShadowBolt(Spell shadowbolt, Unit target, Report report = null, double fightTick = 0)
+        private double CastShadowBolt(Spell shadowbolt, Unit target, Report report = null, double fightTick = 0)
         {
             if (report is null) report = new();
             if (shadowbolt.Name != shadowBoltStr) return 0;
             double dmg;
             Random rnd = new();
-            double dmgModTalents = GetModMultiplicativeFromTalents(shadowbolt, Modify.DamagePercent);
-            double casttimeMod = GetModAdditivesFromTalents(shadowbolt, Modify.Casttime);
+            //Task<double> dmgModTalentsTask = Task.Run(() => ));
+            //Task<double> casttimeModTask = Task.Run(() => );
+            //Task<double> critModTask = Task.Run(() => );
+
+            var dmgModTalents = GetModMultiplicativeFromTalents(shadowbolt, Modify.DamagePercent);
+            var casttimeMod = GetModAdditivesFromTalents(shadowbolt, Modify.Casttime);
+            var critMod = GetModAdditivesFromTalents(shadowbolt, Modify.SpellCritChance);
+
             shadowbolt.CastTime += casttimeMod;
-            var CritMod = GetModAdditivesFromTalents(shadowbolt, Modify.SpellCritChance);
-            bool isCrit = rnd.Next(100) <= SpellCrit + CritMod;
+
+            shadowbolt.CastTime *= 1 + (SpellHaste / 100);
+
+            bool isCrit = rnd.Next(100) <= SpellCrit + critMod;
             lastSpelledCasted = shadowbolt;
             dmg = rnd.Next(GetShadowboltMinDmg(shadowbolt), GetShadowboltMaxDmg(shadowbolt));
             dmg = dmg + ((SpellPower + ShadowPower) * GetShadowboltSPMod(shadowbolt));
             mana -= shadowbolt.Cost;
-            if (!DidHit(lastSpelledCasted)) dmg = 0;
+            if (!DidHit(shadowbolt)) dmg = 0;
             dmg = dmg * dmgModTalents;
             if(Talents.Any(x => x.Name == baneStr))
                 dmg = isCrit ? (dmg * 2) * GetModMultiplicativeFromAuras(Modify.SpellCritChance, shadowbolt) : dmg;
             else
                 dmg = isCrit ? dmg * 1.5 : dmg;
+            if (SetBonusEffects.Any(x => x.AuraID == "38393")) dmg *= 1 + (SetBonusEffects.First(x => x.AuraID == "38393").Value / 100);
             report.ReportDamage(dmg, lastSpelledCasted, fightTick + WaitForNextCast(), dmg > 0, isCrit);
-            return dmg;
+            return Math.Max(shadowbolt.CastTime, shadowbolt.GCD);
         }
 
         private int GetShadowboltMinDmg(Spell shadowbolt)
@@ -1019,7 +1035,7 @@ namespace Simulation.Library
         private bool DidHit(Spell spell, double hitmodifier = 0)
         {
             Random rnd = new();
-            return rnd.Next(0) < 83 + SpellHit + hitmodifier;
+            return rnd.Next(101) < 83 + SpellHit + hitmodifier;
         }
         public double WaitForNextCast()
         {
@@ -1034,34 +1050,40 @@ namespace Simulation.Library
         }
         #endregion CastSpells
 
-        public override void CastSpell(Spell spell, Unit target, double fightTick, Report report)
+        public override double CastSpell(Spell spell, Unit target, double fightTick, Report report)
         {
+            double timeForward = 0;
             switch (spell.Name)
             {
                 case shadowBoltStr:
-                    CastShadowBolt(spell, target, report, fightTick);
+                    timeForward = CastShadowBolt(spell, target, report, fightTick);
+                    break;
+                case lifeTapStr:
+                    timeForward = CastLifeTap(spell, report, fightTick);
+                    break;
+                case felArmorStr:
+                    timeForward = CastFelArmor(spell, fightTick);
                     break;
                 default:
                     break;
             }
-            return;
+            return timeForward;
         }
 
         protected override void UpdateSetBonusEffects()
         {
-            var gear = GetAllGear().ToList();
             SetBonusEffects.Clear();
             //Malefic 4set
-            if (gear.Count(x => x.Itemset == 670) >= 4) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 670).FourSet);
+            if (AllGear.Count(x => x.Itemset == 670) >= 4) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 670).FourSet);
             //Corruptor
-            if (gear.Count(x => x.Itemset == 646) >= 4) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 646).FourSet);
+            if (AllGear.Count(x => x.Itemset == 646) >= 4) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 646).FourSet);
             //VoidHeart
-            if (gear.Count(x => x.Itemset == 645) >= 2) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 645).TwoSet);
-            if (gear.Count(x => x.Itemset == 645) >= 4) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 645).FourSet);
+            if (AllGear.Count(x => x.Itemset == 645) >= 2) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 645).TwoSet);
+            if (AllGear.Count(x => x.Itemset == 645) >= 4) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 645).FourSet);
             //Spellstrike
-            if (gear.Count(x => x.Itemset == 559) >= 2) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 559).TwoSet);
+            if (AllGear.Count(x => x.Itemset == 559) >= 2) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 559).TwoSet);
             //Spellfire
-            if (gear.Count(x => x.Itemset == 552) >= 3) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 552).ThreeSet);
+            if (AllGear.Count(x => x.Itemset == 552) >= 3) SetBonusEffects.Add(Wowhead.SetBonus.First(x => x.ID == 552).ThreeSet);
         }
     }
 }

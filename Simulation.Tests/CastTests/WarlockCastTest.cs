@@ -22,7 +22,7 @@ namespace CastTests
             wl.AddMana(-10000);
             wl.AddMana(1000);
 
-            wl.CastLifeTap(lifetap);
+            wl.CastSpell(lifetap, new Dummy(), 0, new Report());
 
             Assert.Equal(expectedMana, wl.Mana);
         }
@@ -33,7 +33,7 @@ namespace CastTests
             Warlock wl = new();
             Wowhead wh = new();
             var lifetap = wh.GetSpell(1456);
-            wl.CastLifeTap(lifetap);
+            wl.CastSpell(lifetap, new Dummy(), 0, new Report());
 
             Assert.Equal(lifetap.Name, wl.lastSpelledCasted.Name);
         }

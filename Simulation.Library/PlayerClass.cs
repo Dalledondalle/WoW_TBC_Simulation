@@ -11,45 +11,45 @@ namespace Simulation.Library
         #region Stats
         public override void UpdateStats()
         {
-            MP5 = GetAllGear().Where(e => e is not null).Select(e => e.ManaRegn).Sum() + basemp5 + (int)GetModAdditivesFromAuras(Modify.MP5Flat) + GetSumOfSocketBonuses(Modify.MP5Flat) + GetSumOfSocketsMP5();
-            SpellHitRating = GetAllGear().Where(e => e is not null).Select(e => e.SpellHitRating).Sum() + baseSpellHitRating + (int)GetModAdditivesFromAuras(Modify.SpellHitRating) + GetSumOfSocketBonuses(Modify.SpellHitRating) + GetSumOfSocketsSpellHit();
+            MP5 = AllGear.Where(e => e is not null).Select(e => e.ManaRegn).Sum() + basemp5 + (int)GetModAdditivesFromAuras(Modify.MP5Flat) + GetSumOfSocketBonuses(Modify.MP5Flat) + GetSumOfSocketsMP5();
+            SpellHitRating = AllGear.Where(e => e is not null).Select(e => e.SpellHitRating).Sum() + baseSpellHitRating + (int)GetModAdditivesFromAuras(Modify.SpellHitRating) + GetSumOfSocketBonuses(Modify.SpellHitRating) + GetSumOfSocketsSpellHit();
             SpellHit = (SpellHitRating / 12.6) + baseSpellHit + (int)GetModAdditivesFromAuras(Modify.SpellHitChance);
-            SpellCritRating = GetAllGear().Where(e => e is not null).Select(e => e.SpellCritRating).Sum() + baseSpellCritRating + (int)GetModAdditivesFromAuras(Modify.SpellCritRating) + GetSumOfSocketBonuses(Modify.SpellCritRating) + GetSumOfSocketsSpellCritRating();
+            SpellCritRating = AllGear.Where(e => e is not null).Select(e => e.SpellCritRating).Sum() + baseSpellCritRating + (int)GetModAdditivesFromAuras(Modify.SpellCritRating) + GetSumOfSocketBonuses(Modify.SpellCritRating) + GetSumOfSocketsSpellCritRating();
             Intellect = (int)((baseIntellect +
                                             GetSumOfSocketBonuses(Modify.IntellectFlat) +
                                             GetSumOfSocketsIntellect() +
-                                            GetAllGear().Where(e => e is not null).Select(e => e.Intellect).Sum() +
+                                            AllGear.Where(e => e is not null).Select(e => e.Intellect).Sum() +
                                             (int)GetModAdditivesFromAuras(Modify.IntellectFlat)) *
                                             GetModMultiplicativeFromAuras(Modify.IntellectPercent));
             SpellCrit = (Intellect / 81.9) + (SpellCritRating / 22.1) + baseSpellCrit + (int)GetModAdditivesFromAuras(Modify.SpellCritChance) + GetSumOfSocketBonuses(Modify.SpellCritRating);
-            SpellPower = (int)((GetAllGear().Where(e => e is not null).Select(e => e.SpellPower).Sum() +
+            SpellPower = (int)((AllGear.Where(e => e is not null).Select(e => e.SpellPower).Sum() +
                                             baseSpellPower +
                                             GetSumOfSocketBonuses(Modify.SpellPower) +
                                             GetSumOfSocketsSpellPower() +
                                             (int)GetModAdditivesFromAuras(Modify.SpellPower)) *
                                             GetModMultiplicativeFromAuras(Modify.SpellPowerPercent));
 
-            ShadowPower = (int)((GetAllGear().Where(e => e is not null).Select(e => e.ShadowSpellPower).Sum() +
+            ShadowPower = (int)((AllGear.Where(e => e is not null).Select(e => e.ShadowSpellPower).Sum() +
                                             baseShadowPower +
                                             (int)GetModAdditivesFromAuras(Modify.ShadowPower)) *
                                             GetModMultiplicativeFromAuras(Modify.ShadowPercent));
 
-            FirePower = (int)((GetAllGear().Where(e => e is not null).Select(e => e.FireSpellPower).Sum() +
+            FirePower = (int)((AllGear.Where(e => e is not null).Select(e => e.FireSpellPower).Sum() +
                                             baseFirePower +
                                             (int)GetModAdditivesFromAuras(Modify.FirePower)) *
                                             GetModMultiplicativeFromAuras(Modify.FirePercent));
 
-            ArcanePower = (int)((GetAllGear().Where(e => e is not null).Select(e => e.ArcaneSpellPower).Sum() +
+            ArcanePower = (int)((AllGear.Where(e => e is not null).Select(e => e.ArcaneSpellPower).Sum() +
                                             baseArcanePower +
                                             (int)GetModAdditivesFromAuras(Modify.ArcanePower)) *
                                             GetModMultiplicativeFromAuras(Modify.ArcanePercent));
 
-            FrostPower = (int)((GetAllGear().Where(e => e is not null).Select(e => e.FrostSpellPower).Sum() +
+            FrostPower = (int)((AllGear.Where(e => e is not null).Select(e => e.FrostSpellPower).Sum() +
                                             baseFrostPower +
                                             (int)GetModAdditivesFromAuras(Modify.FrostPower)) *
                                             GetModMultiplicativeFromAuras(Modify.FrostPercent));
 
-            SpellHasteRating = GetAllGear().Where(e => e is not null).Select(e => e.SpellHasteRating).Sum() + baseSpellHasteRating + (int)GetModAdditivesFromAuras(Modify.SpellHasteRating) + GetSumOfSocketBonuses(Modify.SpellHasteRating) + GetSumOfSocketsSpellHasteRating();
+            SpellHasteRating = AllGear.Where(e => e is not null).Select(e => e.SpellHasteRating).Sum() + baseSpellHasteRating + (int)GetModAdditivesFromAuras(Modify.SpellHasteRating) + GetSumOfSocketBonuses(Modify.SpellHasteRating) + GetSumOfSocketsSpellHasteRating();
             //Hasted Cast Time = Base Cast Time / (1 + ( Spell Haste Rating / 1577 ) )
             SpellHaste = (SpellHasteRating / 15.77) + baseSpellHaste + (int)GetModAdditivesFromAuras(Modify.SpellHastePercent);
         }
@@ -104,16 +104,16 @@ namespace Simulation.Library
         public Equipment Mainhand => mainhand;
         public Equipment Offhand => offhand;
         public Equipment Ranged => ranged;
-        public Equipment[] Equipment => GetAllGear();
         #endregion Equipment
         protected List<Effect> SetBonusEffects = new();
+        public Equipment[] AllGear { get; protected set; } = new Equipment[0];
 
         public List<Talent> Talents { get; set; } = new();
         protected void RemoveTalent(string talentName)
         {
             Talents.RemoveAll(x => x.Name == talentName);
         }
-        protected Equipment[] GetAllGear()
+        protected void UpdateGear()
         {
             List<Equipment> list = new();
             if (head is not null) list.Add(head);
@@ -133,7 +133,7 @@ namespace Simulation.Library
             if (mainhand is not null) list.Add(mainhand);
             if (offhand is not null) list.Add(offhand);
             if (ranged is not null) list.Add(ranged);
-            return list.ToArray();
+            AllGear = list.ToArray();
         }
         protected int GetSumOfSocketsSpellPower()
         {
@@ -162,7 +162,7 @@ namespace Simulation.Library
         protected List<Gem> GetAllGems()
         {
             List<Gem> Gems = new();
-            foreach (var item in GetAllGear())
+            foreach (var item in AllGear)
             {
                 if (item is not null)
                     Gems = Gems.Concat(item.Gems).ToList();
@@ -176,7 +176,7 @@ namespace Simulation.Library
         }
         protected int GetSumOfSocketBonuses(Modify stat)
         {
-            return GetAllGear()
+            return  AllGear
                     .Where(e => e is not null && e.IsSocketBonusActive)
                     .Select(b => Wowhead.SocketBonuses
                                     .FirstOrDefault(x => x.ID == b.SocketBonus) is not null
@@ -206,22 +206,18 @@ namespace Simulation.Library
             }
             return modifier;
         }
-        protected List<Effect> GetAllEffectsBySpell(Spell spell)
+        protected IEnumerable<Effect> GetAllEffectsBySpell(Spell spell)
         {
             var talentsToModSpell = Talents.Where(x => x.Effects.Any(e => e.AffectedSpells.Any(y => y == spell.Name || y == "All")));
-            var effectsToSpell = talentsToModSpell.Select(x => x.Effects.Select(y => y)).ToList();
-            List<Effect> effects = new();
-            effects.AddRange(effectsToSpell.SelectMany(list => list.Where(effect => effect.AffectedSpells.Any(x => x == spell.Name || x == "All"))));
-            return effects;
+            var effectsToSpell = talentsToModSpell.Select(x => x.Effects.Select(y => y));
+            return effectsToSpell.SelectMany(list => list.Where(effect => effect.AffectedSpells.Any(x => x == spell.Name || x == "All")));
         }
-        protected List<Effect> GetAllEffectsFromAuraBySpell(Spell spell = null)
+        protected IEnumerable<Effect> GetAllEffectsFromAuraBySpell(Spell spell = null)
         {
             string spellName = spell is null ? "All" : spell.Name;
-            var talentsToModSpell = auras.Where(x => x.Value.Effects.Any(e => e.AffectedSpells.Any(y => y == spellName || y == "All")));
-            var effectsToSpell = talentsToModSpell.Select(x => x.Value.Effects.Select(y => y)).ToList();
-            List<Effect> effects = new();
-            effects.AddRange(effectsToSpell.SelectMany(list => list.Where(effect => effect.AffectedSpells.Any(x => x == spellName || x == "All"))));
-            return effects;
+            var talentsToModSpell = auras.Where(x => x.Effects.Any(e => e.AffectedSpells.Any(y => y == spellName || y == "All")));
+            var effectsToSpell = talentsToModSpell.Select(x => x.Effects.Select(y => y));
+            return effectsToSpell.SelectMany(list => list.Where(effect => effect.AffectedSpells.Any(x => x == spellName || x == "All")));
         }
         protected double GetModMultiplicativeFromAuras(Modify mod, Spell spell = null)
         {
@@ -254,7 +250,8 @@ namespace Simulation.Library
                         {
                             case Modify.SpellHasteRating:
                                 var aura = Wowhead.Auras.FirstOrDefault(x => x.SpellID == metaGemEffect.AuraID);
-                                if (aura is not null) buffs.Add(fightTick, aura);
+                                aura.EndTimer = aura.Duration + fightTick;
+                                if (aura is not null) buffs.Add(aura);
                                 break;
                             case Modify.ManaReturnFlat:
                                 AddMana(metaGemEffect.Value);
@@ -368,84 +365,98 @@ namespace Simulation.Library
         public void EquipHead(Equipment equipment)
         {
             head = equipment.InvSlot == "Head" ? equipment : head;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipNeck(Equipment equipment)
         {
             neck = equipment.InvSlot == "Neck" ? equipment : neck;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipShoulders(Equipment equipment)
         {
             shoulders = equipment.InvSlot == "Shoulder" ? equipment : shoulders;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipBack(Equipment equipment)
         {
             back = equipment.InvSlot == "Back" ? equipment : back;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipChest(Equipment equipment)
         {
             chest = equipment.InvSlot == "Chest" ? equipment : chest;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipWrist(Equipment equipment)
         {
             wrist = equipment.InvSlot == "Wrist" ? equipment : wrist;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipHands(Equipment equipment)
         {
             hands = equipment.InvSlot == "Hands" ? equipment : hands;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipWaist(Equipment equipment)
         {
             waist = equipment.InvSlot == "Waist" ? equipment : waist;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipLegs(Equipment equipment)
         {
             legs = equipment.InvSlot == "Legs" ? equipment : legs;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipFeet(Equipment equipment)
         {
             feet = equipment.InvSlot == "Feet" ? equipment : feet;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipRing1(Equipment equipment)
         {
             ring1 = equipment.InvSlot == "Finger" ? equipment : ring1;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipRing2(Equipment equipment)
         {
             ring2 = equipment.InvSlot == "Finger" ? equipment : ring2;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipTrinket1(Equipment equipment)
         {
             trinket1 = equipment.InvSlot == "Trinket" ? equipment : trinket1;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipTrinket2(Equipment equipment)
         {
             trinket2 = equipment.InvSlot == "Trinket" ? equipment : trinket2;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
@@ -457,6 +468,7 @@ namespace Simulation.Library
             {
                 EquipTwohander(equipment);
             }
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
@@ -464,6 +476,7 @@ namespace Simulation.Library
         {
             mainhand = equipment.InvSlot == "Two-Hand" ? equipment : mainhand;
             if (mainhand is not null && mainhand.InvSlot == "Two-Hand") offhand = null;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
@@ -471,12 +484,14 @@ namespace Simulation.Library
         {
             if (mainhand is not null && mainhand.InvSlot == "Two-Hand") return;
             offhand = equipment.InvSlot == "Held In Off-hand" ? equipment : offhand;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }
         public void EquipRanged(Equipment equipment)
         {
             ranged = equipment.InvSlot == "Ranged" ? equipment : ranged;
+            UpdateGear();
             UpdateSetBonusEffects();
             UpdateStats();
         }

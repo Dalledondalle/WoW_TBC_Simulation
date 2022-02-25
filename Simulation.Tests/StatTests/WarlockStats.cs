@@ -75,7 +75,7 @@ namespace StatTests
             Wowhead wh = new();
             var lifetap = wh.GetSpell(27222);
             wl.AddHasteRating(hasteRating);
-            wl.CastLifeTap(lifetap);
+            wl.CastSpell(lifetap, new Dummy(), 0, new Report());
 
             Assert.Equal(expectedWait, Math.Round(wl.WaitForNextCast()));
         }
@@ -133,7 +133,7 @@ namespace StatTests
             Wowhead wh = new();
             var lifetap = wh.GetSpell(27222);
             wl.AddHaste(haste);
-            wl.CastLifeTap(lifetap);
+            wl.CastSpell(lifetap, new Dummy(), 0, new Report());
 
             Assert.Equal(expectedWait, Math.Round(wl.WaitForNextCast()));
         }

@@ -86,23 +86,24 @@ namespace Simulation.Library
         #endregion Stats
         #region SpellsAndAuras
         public Spell lastSpelledCasted { get; protected set; }
-        protected Dictionary<double, Aura> auras => Buffs.Concat(Debuffs).ToDictionary(x => x.Key, x => x.Value);
-        public Dictionary<double, Aura> Buffs => buffs.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
-        protected Dictionary<double, Aura> buffs = new();
-        public Dictionary<double, Aura> Debuffs => debuffs;
-        protected Dictionary<double, Aura> debuffs = new();
+        protected IEnumerable<Aura> auras => Buffs.Concat(Debuffs);
+        public IEnumerable<Aura> Buffs => buffs.OrderBy(x => x.EndTimer);
+        protected List<Aura> buffs = new();
+        public List<Aura> Debuffs => debuffs;
+        protected List<Aura> debuffs = new();
         public void AddAura(Aura Aura, double fightTick)
         {
             if (Aura is null) return;
-            if (Aura.AuraType == AuraType.Buff) buffs.Add(fightTick, Aura);
-            if (Aura.AuraType == AuraType.Debuff) debuffs.Add(fightTick, Aura);
+            Aura.EndTimer = Aura.Duration + fightTick;
+            if (Aura.AuraType == AuraType.Buff) buffs.Add(Aura);
+            if (Aura.AuraType == AuraType.Debuff) debuffs.Add(Aura);
             UpdateStats();
         }
         #endregion SpellsAndAuras
 
-        public virtual void CastSpell(Spell spell, Unit target, double fightTick, Report report)
+        public virtual double CastSpell(Spell spell, Unit target, double fightTick, Report report)
         {
-            return;
+            throw new NotImplementedException();
         }
 
         public virtual void UpdateStats()
