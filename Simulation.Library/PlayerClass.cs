@@ -11,12 +11,13 @@ namespace Simulation.Library
         #region Stats
         public override void UpdateStats()
         {
-            MP5 = AllGear.Where(e => e is not null).Select(e => e.ManaRegn).Sum() + basemp5 + (int)GetModAdditivesFromAuras(Modify.MP5Flat) + GetSumOfSocketBonuses(Modify.MP5Flat) + GetSumOfSocketsMP5();
-            SpellHitRating = AllGear.Where(e => e is not null).Select(e => e.SpellHitRating).Sum() + baseSpellHitRating + (int)GetModAdditivesFromAuras(Modify.SpellHitRating) + GetSumOfSocketBonuses(Modify.SpellHitRating) + GetSumOfSocketsSpellHit();
+            MP5 = AllGear.Where(e => e is not null).Select(e => e.ManaRegn).Sum() + basemp5 + (int)GetModAdditivesFromAuras(Modify.MP5Flat) + GetSumOfSocketBonuses(Modify.MP5Flat) + GetSumOfSocketsMP5() + GetModFromEnchants(Modify.MP5Flat);
+            SpellHitRating = AllGear.Where(e => e is not null).Select(e => e.SpellHitRating).Sum() + baseSpellHitRating + (int)GetModAdditivesFromAuras(Modify.SpellHitRating) + GetSumOfSocketBonuses(Modify.SpellHitRating) + GetSumOfSocketsSpellHit() + GetModFromEnchants(Modify.SpellHitRating);
             SpellHit = (SpellHitRating / 12.6) + baseSpellHit + (int)GetModAdditivesFromAuras(Modify.SpellHitChance);
-            SpellCritRating = AllGear.Where(e => e is not null).Select(e => e.SpellCritRating).Sum() + baseSpellCritRating + (int)GetModAdditivesFromAuras(Modify.SpellCritRating) + GetSumOfSocketBonuses(Modify.SpellCritRating) + GetSumOfSocketsSpellCritRating();
+            SpellCritRating = AllGear.Where(e => e is not null).Select(e => e.SpellCritRating).Sum() + baseSpellCritRating + (int)GetModAdditivesFromAuras(Modify.SpellCritRating) + GetSumOfSocketBonuses(Modify.SpellCritRating) + GetSumOfSocketsSpellCritRating() + GetModFromEnchants(Modify.SpellCritRating);
             Intellect = (int)((baseIntellect +
                                             GetSumOfSocketBonuses(Modify.IntellectFlat) +
+                                            GetModFromEnchants(Modify.IntellectFlat) +
                                             GetSumOfSocketsIntellect() +
                                             AllGear.Where(e => e is not null).Select(e => e.Intellect).Sum() +
                                             (int)GetModAdditivesFromAuras(Modify.IntellectFlat)) *
@@ -24,6 +25,7 @@ namespace Simulation.Library
             SpellCrit = (Intellect / 81.9) + (SpellCritRating / 22.1) + baseSpellCrit + (int)GetModAdditivesFromAuras(Modify.SpellCritChance) + GetSumOfSocketBonuses(Modify.SpellCritRating);
             SpellPower = (int)((AllGear.Where(e => e is not null).Select(e => e.SpellPower).Sum() +
                                             baseSpellPower +
+                                            GetModFromEnchants(Modify.SpellPower) +
                                             GetSumOfSocketBonuses(Modify.SpellPower) +
                                             GetSumOfSocketsSpellPower() +
                                             (int)GetModAdditivesFromAuras(Modify.SpellPower)) *
@@ -31,28 +33,38 @@ namespace Simulation.Library
 
             ShadowPower = (int)((AllGear.Where(e => e is not null).Select(e => e.ShadowSpellPower).Sum() +
                                             baseShadowPower +
+                                            SpellPower +
+                                            GetModFromEnchants(Modify.ShadowPower) +
                                             (int)GetModAdditivesFromAuras(Modify.ShadowPower)) *
                                             GetModMultiplicativeFromAuras(Modify.ShadowPercent));
 
             FirePower = (int)((AllGear.Where(e => e is not null).Select(e => e.FireSpellPower).Sum() +
                                             baseFirePower +
+                                            SpellPower +
+                                            GetModFromEnchants(Modify.FirePower) +
                                             (int)GetModAdditivesFromAuras(Modify.FirePower)) *
                                             GetModMultiplicativeFromAuras(Modify.FirePercent));
 
             ArcanePower = (int)((AllGear.Where(e => e is not null).Select(e => e.ArcaneSpellPower).Sum() +
                                             baseArcanePower +
+                                            SpellPower +
+                                            GetModFromEnchants(Modify.ArcanePower) +
                                             (int)GetModAdditivesFromAuras(Modify.ArcanePower)) *
                                             GetModMultiplicativeFromAuras(Modify.ArcanePercent));
 
             FrostPower = (int)((AllGear.Where(e => e is not null).Select(e => e.FrostSpellPower).Sum() +
                                             baseFrostPower +
+                                            SpellPower +
+                                            GetModFromEnchants(Modify.FrostPower) +
                                             (int)GetModAdditivesFromAuras(Modify.FrostPower)) *
                                             GetModMultiplicativeFromAuras(Modify.FrostPercent));
 
-            SpellHasteRating = AllGear.Where(e => e is not null).Select(e => e.SpellHasteRating).Sum() + baseSpellHasteRating + (int)GetModAdditivesFromAuras(Modify.SpellHasteRating) + GetSumOfSocketBonuses(Modify.SpellHasteRating) + GetSumOfSocketsSpellHasteRating();
+            SpellHasteRating = AllGear.Where(e => e is not null).Select(e => e.SpellHasteRating).Sum() + baseSpellHasteRating + (int)GetModAdditivesFromAuras(Modify.SpellHasteRating) + GetSumOfSocketBonuses(Modify.SpellHasteRating) + GetSumOfSocketsSpellHasteRating() + GetModFromEnchants(Modify.SpellHasteRating);
             //Hasted Cast Time = Base Cast Time / (1 + ( Spell Haste Rating / 1577 ) )
             SpellHaste = (SpellHasteRating / 15.77) + baseSpellHaste + (int)GetModAdditivesFromAuras(Modify.SpellHastePercent);
         }
+
+        public void RefillMana() => mana = MaxMana;
         #endregion Stats
 
         #region Equipment
@@ -159,15 +171,16 @@ namespace Simulation.Library
         {
             return GetAllGems().Sum(x => x.MP5);
         }
-        protected List<Gem> GetAllGems()
+        protected IEnumerable<Gem> GetAllGems()
         {
-            List<Gem> Gems = new();
-            foreach (var item in AllGear)
+            foreach (var gear in AllGear)
             {
-                if (item is not null)
-                    Gems = Gems.Concat(item.Gems).ToList();
+                if (gear is not null)
+                    foreach (var gem in gear.Gems)
+                    {
+                        yield return gem;
+                    }
             }
-            return Gems;
         }
         public void SocketItem(Equipment equipment, Gem gem, int gemSlot)
         {
@@ -176,7 +189,7 @@ namespace Simulation.Library
         }
         protected int GetSumOfSocketBonuses(Modify stat)
         {
-            return  AllGear
+            return AllGear
                     .Where(e => e is not null && e.IsSocketBonusActive)
                     .Select(b => Wowhead.SocketBonuses
                                     .FirstOrDefault(x => x.ID == b.SocketBonus) is not null
@@ -186,6 +199,15 @@ namespace Simulation.Library
         protected virtual void UpdateSetBonusEffects()
         {
             throw new NotImplementedException();
+        }
+        protected virtual int GetModFromEnchants(Modify mod)
+        {
+            return GetAllEffectsFromEnchants().Where(x => x.Modify == mod).Sum(x => x.Value);
+        }
+
+        protected IEnumerable<Effect> GetAllEffectsFromEnchants()
+        {
+            return AllGear.Where(x => x.Enchant is not null).SelectMany(x => x.Enchant.Effects);
         }
 
         #region ModsFromTalents
@@ -232,9 +254,15 @@ namespace Simulation.Library
         }
         protected double GetModAdditivesFromAuras(Modify mod, Spell spell = null)
         {
-            var spellEffects = GetAllEffectsFromAuraBySpell(spell).ToList();
-            var modValue = spellEffects.Where(x => x.Modify == mod).Select(x => x.Value).Sum();
-            return modValue;
+            try
+            {
+                var mods = GetAllEffectsFromAuraBySpell(spell).Where(x => x.Modify == mod);
+                return mods.Select(x => x.Value).Sum();
+            }
+            catch
+            {
+                return GetModAdditivesFromAuras(mod, spell);
+            }
         }
         protected void ProcOnCast(Spell spell, double fightTick)
         {

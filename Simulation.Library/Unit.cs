@@ -86,10 +86,10 @@ namespace Simulation.Library
         #endregion Stats
         #region SpellsAndAuras
         public Spell lastSpelledCasted { get; protected set; }
-        protected IEnumerable<Aura> auras => Buffs.Concat(Debuffs);
+        protected IEnumerable<Aura> auras => Buffs.Concat(Debuffs).OrderBy(x => x.EndTimer);
         public IEnumerable<Aura> Buffs => buffs.OrderBy(x => x.EndTimer);
         protected List<Aura> buffs = new();
-        public List<Aura> Debuffs => debuffs;
+        public IEnumerable<Aura> Debuffs => debuffs.OrderBy(x => x.EndTimer);
         protected List<Aura> debuffs = new();
         public void AddAura(Aura Aura, double fightTick)
         {

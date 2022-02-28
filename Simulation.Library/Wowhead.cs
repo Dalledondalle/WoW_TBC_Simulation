@@ -38,15 +38,77 @@ namespace Simulation.Library
         };
         public static Aura[] Auras = new Aura[]
         {
-            new Aura("32837", "Spell Focus Trigger", AuraType.Buff) {Effects = new(){ new(){ AuraID = "32837", InternalCD = 35000, Modify = Modify.SpellHasteRating, Value = 320, ProcChance = 15 } }, Duration = 6000}
+            new Aura("32837", "Spell Focus Trigger", AuraType.Buff) {Effects = new Effect[]{ new(){ AuraID = "32837", InternalCD = 35000, Modify = Modify.SpellHasteRating, Value = 320, ProcChance = 15 } }, Duration = 6000}
         };
         public static SetBonus[] SetBonus = new SetBonus[]
         {
-            new SetBonus(){ID = 670, TwoSet = new(){AffectedSpells = new(){ "Corruption", "Immolate"}, AuraID = "38394", ProcChance = 100, Value = 70, Modify = Modify.HealFlatOnPeriodicDamage }, FourSet = new(){AffectedSpells = new(){ "Shadow Bolt", "Incinerate"}, AuraID = "38393", Value = 6, Modify = Modify.DamagePercent}},//Tier 6
-            new SetBonus(){ID = 646, TwoSet = new(){AffectedSpells = new(){ "Any"}, AuraID = "38394", ProcChance = 100, Value = 15, Modify = Modify.HealPercentOffDamageOnDamage }, FourSet = new(){AffectedSpells = new(){ "Corruption", "Immolate"}, AuraID = "38393", Value = 10, Modify = Modify.Unique}},//Tier 5
-            new SetBonus(){ID = 645, TwoSet = new(){AffectedSpells = new(){ "Any"}, AuraID = "37377", ProcChance = 5, Value = 135, Modify = Modify.Unique }, FourSet = new(){AffectedSpells = new(){ "Corruption", "Immolate"}, AuraID = "37380", Value = 3000, Modify = Modify.AuraDuration}},//Tier 4
-            new SetBonus(){ID = 559, TwoSet = new(){AffectedSpells = new(){ "Any"}, AuraID = "37377", ProcChance = 5, Value = 92, Modify = Modify.ProcOnHit }},//Spellstrike
-            new SetBonus(){ID = 552, TwoSet = new(){AffectedSpells = new(){ "Any"}, AuraID = "32196", Value = 7, Modify = Modify.Unique }},//Spellfire
+            new SetBonus(){ID = 670, TwoSet = new(){AffectedSpells = new[]{ "Corruption", "Immolate"}, AuraID = "38394", ProcChance = 100, Value = 70, Modify = Modify.HealFlatOnPeriodicDamage }, FourSet = new(){AffectedSpells = new[]{ "Shadow Bolt", "Incinerate"}, AuraID = "38393", Value = 6, Modify = Modify.DamagePercent}},//Tier 6
+            new SetBonus(){ID = 646, TwoSet = new(){AffectedSpells = new[]{ "Any"}, AuraID = "38394", ProcChance = 100, Value = 15, Modify = Modify.HealPercentOffDamageOnDamage }, FourSet = new(){AffectedSpells = new[]{ "Corruption", "Immolate"}, AuraID = "38393", Value = 10, Modify = Modify.Unique}},//Tier 5
+            new SetBonus(){ID = 645, TwoSet = new(){AffectedSpells = new[]{ "Any"}, AuraID = "37377", ProcChance = 5, Value = 135, Modify = Modify.Unique }, FourSet = new(){AffectedSpells = new[]{ "Corruption", "Immolate"}, AuraID = "37380", Value = 3000, Modify = Modify.AuraDuration}},//Tier 4
+            new SetBonus(){ID = 559, TwoSet = new(){AffectedSpells = new[]{ "Any"}, AuraID = "37377", ProcChance = 5, Value = 92, Modify = Modify.ProcOnHit }},//Spellstrike
+            new SetBonus(){ID = 552, TwoSet = new(){AffectedSpells = new[]{ "Any"}, AuraID = "32196", Value = 7, Modify = Modify.Unique }},//Spellfire
+        };
+        public static Enchant[] WeaponEnchants = new Enchant[]
+        {
+            new(){ID = "35460", Name = "Soulfrost", EquipmentSlot = EquipmentSlot.Mainhand, Effects = new Effect[]{ new() { Modify = Modify.ShadowPower, Value = 54}, new() { Modify = Modify.FrostPower, Value = 54 } } },
+            new(){ID = "35462", Name = "Sunfire", EquipmentSlot = EquipmentSlot.Mainhand, Effects = new Effect[]{ new() { Modify = Modify.FirePower, Value = 50}, new() { Modify = Modify.ArcanePower, Value = 50 } } },
+            new(){ID = "35456", Name = "Major Spellpower", EquipmentSlot = EquipmentSlot.Mainhand, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 40} } },
+            new(){ID = "35455", Name = "Major Intellect", EquipmentSlot = EquipmentSlot.Mainhand, Effects = new Effect[]{ new() { Modify = Modify.IntellectFlat, Value = 30} } },
+            new(){ID = "22749", Name = "Spell Power", EquipmentSlot = EquipmentSlot.Mainhand, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 30} } }//Wrong ID
+        };
+        public static Enchant[] HeadEnchants = new Enchant[]
+        {
+            new(){ID = "35447", Name = "Glyph Of Power", EquipmentSlot = EquipmentSlot.Head, Effects = new Effect[]{ new() { Modify = Modify.ShadowPower, Value = 22}, new() { Modify = Modify.SpellHitRating, Value = 14 } } },
+            new(){ID = "35445", Name = "Glyph Of Renewal", EquipmentSlot = EquipmentSlot.Head, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 12}, new() { Modify = Modify.MP5Flat, Value = 7 }, new() { Modify = Modify.HealingPower, Value = 35 } } },
+            new(){ID = "24165", Name = "Hoodoo Hex", EquipmentSlot = EquipmentSlot.Head, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 18} } },
+        };
+        public static Enchant[] ShoulderEnchants = new Enchant[]
+        {
+            new(){ID = "35406", Name = "Greater Inscription of Discipline", EquipmentSlot = EquipmentSlot.Shoulders, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 18}, new() { Modify = Modify.SpellCritRating, Value = 10 } } },
+            new(){ID = "35437", Name = "Greater Inscription of the Orb", EquipmentSlot = EquipmentSlot.Shoulders, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 12}, new() { Modify = Modify.SpellCritRating, Value = 15 } } },
+            new(){ID = "35405", Name = "Inscription of Discipline", EquipmentSlot = EquipmentSlot.Shoulders, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 15} } },
+            new(){ID = "35436", Name = "Inscription of the Orb", EquipmentSlot = EquipmentSlot.Shoulders, Effects = new Effect[]{ new() { Modify = Modify.SpellCritRating, Value = 13} } },
+            new(){ID = "29467", Name = "Power of the Scourge", EquipmentSlot = EquipmentSlot.Shoulders, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 15 }, new() { Modify = Modify.SpellCritRating, Value = 14} } },
+            new(){ID = "24421", Name = "Zandalar Signet of Mojo", EquipmentSlot = EquipmentSlot.Shoulders, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 18} } }
+        };
+        public static Enchant[] ChestEnchants = new Enchant[]
+        {
+            new(){ID = "46502", Name = "Exceptional Stats", EquipmentSlot = EquipmentSlot.Chest, Effects = new Effect[]{ new() { Modify = Modify.IntellectFlat, Value = 6} } },
+            new(){ID = "46497", Name = "Restore Mana Prime", EquipmentSlot = EquipmentSlot.Chest, Effects = new Effect[]{ new() { Modify = Modify.MP5Flat, Value = 6} } },
+            new(){ID = "32399", Name = "Magister's Armor Kit", EquipmentSlot = EquipmentSlot.Chest, Effects = new Effect[]{ new() { Modify = Modify.MP5Flat, Value = 3} } },
+            new(){ID = "19988", Name = "Greater Stats", EquipmentSlot = EquipmentSlot.Chest, Effects = new Effect[]{ new() { Modify = Modify.IntellectFlat, Value = 4} } },//Might be wrong ID
+        };
+        public static Enchant[] WristEnchants = new Enchant[]
+        {
+            new(){ID = "46498", Name = "Spellpower", EquipmentSlot = EquipmentSlot.Wrist, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 15} } },
+            new(){ID = "46500", Name = "Superior Healing", EquipmentSlot = EquipmentSlot.Wrist, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 10 }, new() { Modify = Modify.HealingPower, Value = 30 } } },
+            new(){ID = "46496", Name = "Major Intellect", EquipmentSlot = EquipmentSlot.Wrist, Effects = new Effect[]{ new() { Modify = Modify.IntellectFlat, Value = 12} } },
+            new(){ID = "46499", Name = "Stats", EquipmentSlot = EquipmentSlot.Wrist, Effects = new Effect[]{ new() { Modify = Modify.IntellectFlat, Value = 4} } },
+            new(){ID = "23802", Name = "Healing Power", EquipmentSlot = EquipmentSlot.Wrist, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 8 }, new() { Modify = Modify.HealingPower, Value = 24 } } },//Wrong ID
+        };
+        public static Enchant[] HandEnchants = new Enchant[]
+        {
+            new(){ID = "46514", Name = "Major Spellpower", EquipmentSlot = EquipmentSlot.Hands, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 20} } },
+            new(){ID = "46516", Name = "Spell Strike" , EquipmentSlot = EquipmentSlot.Hands, Effects = new Effect[]{ new() { Modify = Modify.SpellHitRating, Value = 15} } },
+            new(){ID = "46512", Name = "Blasting", EquipmentSlot = EquipmentSlot.Hands, Effects = new Effect[]{ new() { Modify = Modify.SpellCritRating, Value = 10} } },
+            new(){ID = "32399", Name = "Magister's Armor Kit", EquipmentSlot = EquipmentSlot.Hands, Effects = new Effect[]{ new() { Modify = Modify.MP5Flat, Value = 3} } },
+        };
+        public static Enchant[] LegEnchants = new Enchant[]
+        {
+            new(){ID = "31372", Name = "Runic Spellthread", EquipmentSlot = EquipmentSlot.Legs, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 35} } },
+            new(){ID = "31371", Name = "Mystic Spellthread", EquipmentSlot = EquipmentSlot.Legs, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 25} } },
+            new(){ID = "32399", Name = "Magister's Armor Kit", EquipmentSlot = EquipmentSlot.Legs, Effects = new Effect[]{ new() { Modify = Modify.MP5Flat, Value = 3} } },
+            new(){ID = "24165", Name = "Hoodoo Hex", EquipmentSlot = EquipmentSlot.Legs, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 18} } },
+        };
+        public static Enchant[] FeetEnchants = new Enchant[]
+        {
+            new(){ID = "32399", Name = "Boar's Speed", EquipmentSlot = EquipmentSlot.Feet, Effects = new Effect[]{ new() { Modify = Modify.Unique, Value = 8} } },
+            new(){ID = "32399", Name = "Magister's Armor Kit", EquipmentSlot = EquipmentSlot.Feet, Effects = new Effect[]{ new() { Modify = Modify.MP5Flat, Value = 3} } },
+        };
+        public static Enchant[] RingEnchants = new Enchant[]
+        {
+            new(){ID = "46518", Name = "Spellpower", EquipmentSlot = EquipmentSlot.Feet, Effects = new Effect[]{ new() { Modify = Modify.SpellPower, Value = 12} } },
+            new(){ID = "46519", Name = "Stats", EquipmentSlot = EquipmentSlot.Feet, Effects = new Effect[]{ new() { Modify = Modify.IntellectFlat, Value = 4} } },
         };
         public Equipment GetEquipment(int id)
         {
@@ -291,15 +353,13 @@ namespace Simulation.Library
             }
         }
         [JsonIgnore]
-        public List<Gem> Gems
+        public IEnumerable<Gem> Gems
         {
             get
             {
-                List<Gem> g = new();
-                if (Gem1 is not null) g.Add(Gem1);
-                if (Gem3 is not null) g.Add(Gem2);
-                if (Gem3 is not null) g.Add(Gem3);
-                return g;
+                if (Gem1 is not null) yield return Gem1;
+                if (Gem2 is not null) yield return Gem2;
+                if (Gem3 is not null) yield return Gem3;
             }
         }
 
@@ -331,6 +391,9 @@ namespace Simulation.Library
 
         [JsonProperty("manargn")]
         public int ManaRegn { get; set; }
+
+        [JsonIgnore]
+        public Enchant Enchant { get; private set; }
 
         public void SocketGem(Gem gem, int gemslot)
         {
@@ -389,9 +452,91 @@ namespace Simulation.Library
             }
             return true;
         }
+
+        public void AddEnchant(Enchant enchant)
+        {
+            switch (enchant.EquipmentSlot)
+            {
+                case EquipmentSlot.Head:
+                    if (InvSlot == "Head") Enchant = enchant;
+                    break;
+                case EquipmentSlot.Neck:
+                    if (InvSlot == "Neck") Enchant = enchant;
+                    break;
+                case EquipmentSlot.Shoulders:
+                    if (InvSlot == "Shoulders") Enchant = enchant;
+                    break;
+                case EquipmentSlot.Back:
+                    if (InvSlot == "Back") Enchant = enchant;
+                    break;
+                case EquipmentSlot.Chest:
+                    if (InvSlot == "Chest") Enchant = enchant;
+                    break;
+                case EquipmentSlot.Wrist:
+                    if (InvSlot == "Wrist") Enchant = enchant;
+                    break;
+                case EquipmentSlot.Hands:
+                    if (InvSlot == "Hands") Enchant = enchant;
+                    break;
+                case EquipmentSlot.Waist:
+                    if (InvSlot == "Waist") Enchant = enchant;
+                    break;
+                case EquipmentSlot.Legs:
+                    if (InvSlot == "Legs") Enchant = enchant;
+                    break;
+                case EquipmentSlot.Feet:
+                    if (InvSlot == "Feet") Enchant = enchant;
+                    break;
+                case EquipmentSlot.Finger:
+                    if (InvSlot.Contains("Finger")) Enchant = enchant;
+                    break;
+                case EquipmentSlot.Trinket:
+                    if (InvSlot.Contains("Trinket")) Enchant = enchant;
+                    break;
+                case EquipmentSlot.Mainhand:
+                    if (InvSlot == "Two-Hand" || InvSlot == "Main Hand" || InvSlot == "One-Hand") Enchant = enchant;
+                    break;
+                case EquipmentSlot.Offhand:
+                    if (InvSlot == "Offhand") Enchant = enchant;
+                    break;
+                case EquipmentSlot.Ranged:
+                    if (InvSlot == "Ranged") Enchant = enchant;
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
-    public class Spell
+    public class Enchant
+    {
+        public string ID { get; set; }
+        public string Name { get; set; }
+        public EquipmentSlot EquipmentSlot { get; set; }
+        public Effect[] Effects { get; set; }
+
+    }
+
+    public enum EquipmentSlot
+    {
+        Head,
+        Neck,
+        Shoulders,
+        Back,
+        Chest,
+        Wrist,
+        Hands,
+        Waist,
+        Legs,
+        Feet,
+        Finger,
+        Trinket,
+        Mainhand,
+        Offhand,
+        Ranged
+    }
+
+    public class Spell : ICloneable
     {
         public string ToolTipText { get; set; }
         public string ID { get; set; }
@@ -451,6 +596,10 @@ namespace Simulation.Library
         {
             return double.Parse(str.Replace(",", "").Replace(".", ""));
         }
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
 
         private double ParseFromSecondsToMiliSecDouble(string str)
         {
@@ -462,9 +611,9 @@ namespace Simulation.Library
                 integers = str.Substring(0, str.IndexOf('.'));
 
             if (str.Contains(','))
-                decimals = str.Substring(str.IndexOf(',')+1);
+                decimals = str.Substring(str.IndexOf(',') + 1);
             if (str.Contains('.'))
-                decimals = str.Substring(str.IndexOf('.')+1);
+                decimals = str.Substring(str.IndexOf('.') + 1);
 
             while (decimals.Length < 3) decimals = decimals + '0';
             while (decimals.Length > 3) decimals = decimals.Remove(decimals.Length - 1);
@@ -512,7 +661,7 @@ namespace Simulation.Library
             while (decimals.Length > 3) decimals = decimals.Remove(decimals.Length - 1);
 
 
-            return double.Parse(integers + decimals) * 60 *60;
+            return double.Parse(integers + decimals) * 60 * 60;
         }
     }
 
@@ -521,7 +670,7 @@ namespace Simulation.Library
         public string SpellID { get; set; }
         public string Name { get; set; }
         public AuraType AuraType { get; set; }
-        public List<Effect> Effects { get; set; }
+        public Effect[] Effects { get; set; }
         public double Duration { get; set; }
         public double EndTimer { get; set; }
         public double NextTick { get; set; }
@@ -531,7 +680,7 @@ namespace Simulation.Library
             SpellID = spellID;
             Name = name;
             AuraType = auraType;
-            Effects = new();
+            Effects = new Effect[0];
         }
     }
 
@@ -540,14 +689,14 @@ namespace Simulation.Library
         public string ID { get; set; }
         public string Name { get; set; }
         public int Level { get; set; }
-        public List<Effect> Effects { get; set; }
+        public Effect[] Effects { get; set; }
     }
 
     public class Effect
     {
         public Modify Modify { get; set; }
         public int Value { get; set; }
-        public List<string> AffectedSpells { get; set; } = new() { "All" };
+        public string[] AffectedSpells { get; set; } = new[] { "All" };
         public double InternalCD { get; set; }
         public double ProcChance { get; set; }
         public double LastProcTimeStamp { get; set; }
