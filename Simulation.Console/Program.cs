@@ -14,7 +14,7 @@ namespace Simulation.Console
         static Dictionary<int, TimeSpan> sims = new();
         static void Main(string[] args)
         {
-            for (int i = 1; i < 10001; i++)
+            for (int i = 1; i < 3; i++)
             {
                 System.Console.WriteLine($"Running {i} tasks now");
                 Run(i);
@@ -35,31 +35,31 @@ namespace Simulation.Console
         {
             Stopwatch sw = new();
             reports.Clear();
-            //var wl = CreateWarlock();
-            //PrintWarlock(wl);
-            //Simulate(wl, 10000, 150000);
-            //System.Console.WriteLine("-----------------------");
-            //PrintWarlock(wl);
+            var wl = CreateWarlock();
+            PrintWarlock(wl);
+            Simulate(wl, 10000, 150000);
+            System.Console.WriteLine("-----------------------");
+            PrintWarlock(wl);
             sw.Start();
             //Parallel.For(0, 100, i =>
             //{
 
-            var tasks = MakeTasks(threads).ToList();
-            while (tasks.Any(t => !t.IsCompleted))
-            {
-                //System.Console.Write($"\r{reports.Count}");
-            }
+            //var tasks = MakeTasks(threads).ToList();
+            //while (tasks.Any(t => !t.IsCompleted))
+            //{
+            //    //System.Console.Write($"\r{reports.Count}");
+            //}
             System.Console.WriteLine();
             //});
             sw.Stop();
-            //double worstFight = reports.Min(r => r.DPS);
-            //double bestFight = reports.Max(r => r.DPS);
-            //double avg = reports.Average(r => r.DPS);
-            //System.Console.WriteLine($"Worst fight: {worstFight.ToString("0.###")}\nBest fight: {bestFight.ToString("0.###")}\nOn average: {avg.ToString("0.###")}\nTime elapsed: {sw.Elapsed}");
-            //Random rnd = new();
-            //Report reportToAnalyze = reports[rnd.Next(reports.Count)];
+            double worstFight = reports.Min(r => r.DPS);
+            double bestFight = reports.Max(r => r.DPS);
+            double avg = reports.Average(r => r.DPS);
+            System.Console.WriteLine($"Worst fight: {worstFight.ToString("0.###")}\nBest fight: {bestFight.ToString("0.###")}\nOn average: {avg.ToString("0.###")}\nTime elapsed: {sw.Elapsed}");
+            Random rnd = new();
+            Report reportToAnalyze = reports[rnd.Next(reports.Count)];
 
-            //PrintAReport(reportToAnalyze);
+            PrintAReport(reportToAnalyze);
 
             sims.Add(threads, sw.Elapsed);
 
