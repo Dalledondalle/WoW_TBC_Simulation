@@ -75,7 +75,7 @@ namespace StatTests
             Wowhead wh = new();
             var lifetap = wh.GetSpell(27222);
             wl.AddHasteRating(hasteRating);
-            wl.CastLifeTap(lifetap);
+            wl.CastSpell(lifetap, new Dummy(), 0, new Report());
 
             Assert.Equal(expectedWait, Math.Round(wl.WaitForNextCast()));
         }
@@ -133,7 +133,7 @@ namespace StatTests
             Wowhead wh = new();
             var lifetap = wh.GetSpell(27222);
             wl.AddHaste(haste);
-            wl.CastLifeTap(lifetap);
+            wl.CastSpell(lifetap, new Dummy(), 0, new Report());
 
             Assert.Equal(expectedWait, Math.Round(wl.WaitForNextCast()));
         }
@@ -211,7 +211,8 @@ namespace StatTests
             Aura DrumsOfBattle = new("35476", "Drums Of Battle", AuraType.Buff);
             Effect effect = new() { AuraID = "35476", Modify = Modify.SpellHasteRating, Value = 80 };
             DrumsOfBattle.Duration = 30000;
-            DrumsOfBattle.Effects.Add(effect);
+            DrumsOfBattle.Effects = new Effect[] { effect };
+            DrumsOfBattle.Effects[0] = effect;
             wl.AddAura(DrumsOfBattle,0);
 
             Assert.Equal(230, wl.SpellHasteRating);
@@ -226,7 +227,7 @@ namespace StatTests
             Aura Bloodlust = new("2825", "Bloodlust", AuraType.Buff);
             Effect effect = new() { AuraID = "35476", Modify = Modify.SpellHastePercent, Value = 30 };
             Bloodlust.Duration = 40000;
-            Bloodlust.Effects.Add(effect);
+            Bloodlust.Effects = new Effect[] { effect };
             wl.AddAura(Bloodlust, 0);
 
             Assert.Equal(40.02, Math.Round(wl.SpellHaste, 2));
@@ -241,7 +242,7 @@ namespace StatTests
             Aura BlessingOfKings = new("25898", "Greater Blessing of Kings", AuraType.Buff);
             Effect effect = new() { AuraID = "35476", Modify = Modify.IntellectPercent, Value = 10 };
             BlessingOfKings.Duration = 360000/2;
-            BlessingOfKings.Effects.Add(effect);
+            BlessingOfKings.Effects = new Effect[] { effect };
             wl.AddAura(BlessingOfKings,0);
 
             Assert.Equal(279, wl.Intellect);
@@ -256,7 +257,7 @@ namespace StatTests
             Aura FelArmor = new("28189", "Fel Armor", AuraType.Buff);
             Effect effect = new() { AuraID = "35476", Modify = Modify.SpellPower, Value = 100 };
             FelArmor.Duration = 3600000/2;
-            FelArmor.Effects.Add(effect);
+            FelArmor.Effects = new Effect[] { effect };
             wl.AddAura(FelArmor,0);
 
             Assert.Equal(223, wl.SpellPower);
@@ -271,7 +272,7 @@ namespace StatTests
             Aura BlessingOfWisdom = new("27143", "Greater Blessing of Wisdom", AuraType.Buff);
             Effect effect = new() { AuraID = "35476", Modify = Modify.MP5Flat, Value = 41 };
             BlessingOfWisdom.Duration = 3600000 / 2;
-            BlessingOfWisdom.Effects.Add(effect);
+            BlessingOfWisdom.Effects = new Effect[] { effect };
             wl.AddAura(BlessingOfWisdom,0);
 
             Assert.Equal(41, wl.MP5);
@@ -286,7 +287,7 @@ namespace StatTests
             Aura ArcaneIntellect = new("3738", "Arcane Brilliance", AuraType.Buff);
             Effect effect = new() { AuraID = "35476", Modify = Modify.IntellectFlat, Value = 40 };
             ArcaneIntellect.Duration = 3600000 / 2;
-            ArcaneIntellect.Effects.Add(effect);
+            ArcaneIntellect.Effects = new Effect[] { effect };
             wl.AddAura(ArcaneIntellect,0);
 
             Assert.Equal(294, wl.Intellect);
@@ -301,8 +302,7 @@ namespace StatTests
             Aura TotemOfWrath = new("30706", "Totem Of Wrath", AuraType.Buff);
             Effect effect1 = new() { AuraID = "35476", Modify = Modify.SpellHitChance, Value = 3 };
             Effect effect2 = new() { AuraID = "35476", Modify = Modify.SpellCritChance, Value = 3 };
-            TotemOfWrath.Effects.Add(effect1);
-            TotemOfWrath.Effects.Add(effect2);
+            TotemOfWrath.Effects = new Effect[] { effect1, effect2 };
             wl.AddAura(TotemOfWrath,0);
 
             Assert.Equal(3, wl.SpellHit);
